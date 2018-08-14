@@ -181,25 +181,36 @@ p {
   padding: 32px;
   width: 100%;
 }
+.scores .room ul li.score .details .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: bottom;
+}
 .scores .room ul li.score .container {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
 }
 .scores .room ul li.score h4 {
   font-size: 0.8em;
   color: #0FF;
 }
 .scores .room ul li.score:nth-child(1) h4 {
-  color: #0FF;
+  color: #00f000;
 }
 .scores .room ul li.score:nth-child(2) h4 {
-  color: #FF0;
+  color: #00f0f0;
 }
 .scores .room ul li.score:nth-child(3) h4 {
-  color: #0F0;
+  color: #f0a000;
 }
 .scores .room ul li.score .date {
   margin-right: 32px;
+}
+.scores .room ul li.score .no-hints {
+  font-size: 0.5em;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 .scores .room ul li.score .duration {
   text-align: right;

@@ -197,11 +197,18 @@ h1, h2, h3, h4, h5, h6, p {
                 .details {
                     padding:32px;
                     width:100%;
+                    .top {
+                        display:flex;
+                        justify-content:space-between;
+                        align-items: bottom;
+                      
+                    }
                 }
 
                 .container {
                     display:flex;
                     justify-content:space-between;
+                    align-items: flex-end;
                 }
 
                 h4 {
@@ -209,19 +216,23 @@ h1, h2, h3, h4, h5, h6, p {
                     color:#0FF;
                 }
                 &:nth-child(1) h4 {
-                    color:#0FF;
+                    color:#00f000;
                 }
                 &:nth-child(2) h4 {
-                    color:#FF0;
+                    color:#00f0f0;
                 }
                 &:nth-child(3) h4 {
-                    color:#0F0;
+                    color:#f0a000;
                 }
 
                 .date {
                     margin-right:32px;
                 }
-
+                .no-hints {
+                    font-size:.5em;
+                    flex-direction: column;
+                    margin-bottom:10px;
+                }
                 .duration {
                     text-align:right
                 }

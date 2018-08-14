@@ -33,7 +33,7 @@ class Game extends Component {
     componentDidMount() {
         this.ticker = setInterval(function() {
             this.gameLoop();
-        }.bind(this), 250);
+        }.bind(this), 800);
         document.addEventListener("keydown", this.keyboardActionDown, false);
         document.addEventListener("keyup", this.keyboardActionUp, false);
     }

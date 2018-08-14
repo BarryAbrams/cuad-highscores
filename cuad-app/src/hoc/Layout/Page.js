@@ -10,7 +10,7 @@ import Coinage from "./Elements/Coinage";
 
 class Page extends Component {
     state = {
-        action : "game",
+        action : "testscreen",
         gameStarted : false,
     }
 

@@ -115,18 +115,30 @@ class Scores extends Component {
                         lastStyle = "score right";
                     }
 
+                    let noHints = null;
+                    if (scoreObject.no_hints == "Yes") {
+                        noHints = (
+                            <div class="no-hints">
+                                No Hints!
+                            </div>
+                        )
+                    }
+
                     return (
                         <li key={scoreObject.team_name} className={lastStyle}>
                             <div className="scoreranking">
                                 <span>{count}</span>
                             </div>
                             <div className="details">
-                                <h4 className="teamname" dangerouslySetInnerHTML={{__html:scoreObject.team_name}}></h4>
+                                 <div className="top">
+                                    <h4 className="teamname" dangerouslySetInnerHTML={{__html:scoreObject.team_name}}></h4>
+                                </div>
                                 <div className="container">
                                     <div className="date">
                                         <label>Ran the room</label>
                                         <p dangerouslySetInnerHTML={{__html:scoreObject.date}}></p>
                                     </div>
+                                    {noHints}
                                     <div className="duration" >
                                         <label>Completed room in</label>
                                         <p dangerouslySetInnerHTML={{__html:scoreObject.duration}}></p>
