@@ -28,11 +28,11 @@ class Game extends Component {
         endGame : false,
         linesAmt: 0,
     }
-    // debug = true;
+    debug = false;
 
     gridSize = 80;
 
-    baseSpeed = 400;
+    baseSpeed = 300;
 
 
     componentDidMount() {
@@ -52,10 +52,10 @@ class Game extends Component {
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,2,0,0,0,0,0],
                                 [0,0,0,0,2,1,0,1,2,3],
-                                [0,0,0,0,3,1,0,6,5,4],
-                                [0,0,0,1,3,1,0,0,7,1],
-                                [0,0,1,1,1,1,1,1,1,1],
-                                [1,1,1,0,0,0,1,1,1,1]];
+                                [1,0,1,0,3,1,1,6,5,4],
+                                [1,1,1,0,3,1,1,2,7,1],
+                                [1,1,1,0,1,1,1,1,1,1],
+                                [1,1,1,0,1,2,1,1,1,1]];
             this.setState({gameGrid:debugGrid})
         }
 
@@ -82,7 +82,10 @@ class Game extends Component {
         }
 
         if (event.keyCode == 90) {
-            this.rotateActivePiece();
+            this.rotateActivePiece(+1);
+        }
+        if (event.keyCode == 88) {
+            this.rotateActivePiece(-1);
         }
     }
 
@@ -90,16 +93,19 @@ class Game extends Component {
         
     }
 
-    rotateActivePiece () {
+    rotateActivePiece (direction) {
         if (this.state.activePiece) {
             let tetromino = this.state.activePiece;
             const landed = this.state.gameGrid;
 
             let collision = null;
-            tetromino.potentialrotationInt = tetromino.rotationInt + 1;
+            tetromino.potentialrotationInt = tetromino.rotationInt + direction;
             if (tetromino.potentialrotationInt === 4) {
                 tetromino.potentialrotationInt = 0;
+            }
 
+            if (tetromino.potentialrotationInt < 0) {
+                tetromino.potentialrotationInt = 3;
             }
             // tetromino.shape = this.jTetromino_rotations[tetromino.rotationInt];
 
@@ -232,21 +238,34 @@ class Game extends Component {
 
     gameLoop() {
         const landed = this.state.gameGrid;
-
+        
         if (!this.removingRow) {
-            for (var row = 0; row < landed.length; row++) {
-            let isFilled = true;
-                for (var col = 0; col < landed[row].length; col++) {
-                    if (landed[row][col] == 0) {
-                        isFilled = false;
-                    } 
-                }
-                if (isFilled) {
+            if (this.state.theRow == null && this.state.clump == null) {
+                let filledRow = [];
+                for (var row = 0; row < landed.length; row++) {
+                    let isFilled = true;
+                    for (var col = 0; col < landed[row].length; col++) {
+                        if (landed[row][col] == 0) {
+                            isFilled = false;
+            
+                        } 
+                    }
+                    
+                    if (isFilled) {
+                        console.log("testing");
 
-                    this.setState({removingRow:true, theRow:row, removingRowInt:0})
-                
+                        filledRow.push(row);
+                    }
+                    
+                }
+
+                if (filledRow.length > 0) {
+                    console.log("filled row", filledRow[filledRow.length - 1]);
+                    this.setState({removingRow:true, theRow:filledRow[filledRow.length - 1], removingRowInt:0})
                 }
             }
+            
+            
         }
 
         if (this.state.endGame) {
@@ -285,6 +304,7 @@ class Game extends Component {
             clearInterval(this.ticker);
             const row = this.state.theRow;
 
+                console.log("remove this row: " + row)
             // doesn't know what to do with multiple lines at once
 
             if (this.state.removingRowInt === landed[row].length) {
@@ -448,7 +468,7 @@ class Game extends Component {
         let randomColumn = Math.floor(Math.random() * 7) + 1;
 
         if (this.debug) {
-            randomShape = 1;
+            randomShape = 5;
             randomColumn = 0;
         }
 
