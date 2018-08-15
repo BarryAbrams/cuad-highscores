@@ -24,11 +24,15 @@ class Game extends Component {
                     [0,0,0,0,0,0,0,0,0,0]],
         activePiece : null,
         clump : null,
-        nextPiece : null
+        nextPiece : null,
+        endGame : false,
+        linesAmt: 0,
     }
-    debug = true;
+    // debug = true;
 
     gridSize = 80;
+
+    baseSpeed = 400;
 
 
     componentDidMount() {
@@ -39,17 +43,17 @@ class Game extends Component {
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
+                                [0,2,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
-                                [0,0,0,0,0,0,0,0,0,0],
-                                [0,0,0,0,1,0,0,0,0,0],
-                                [0,0,0,0,1,1,0,1,1,1],
-                                [0,0,0,0,1,1,0,1,1,1],
-                                [0,0,0,1,1,1,0,0,1,1],
+                                [0,0,0,0,2,0,0,0,0,0],
+                                [0,0,0,0,2,1,0,1,2,3],
+                                [0,0,0,0,3,1,0,6,5,4],
+                                [0,0,0,1,3,1,0,0,7,1],
                                 [0,0,1,1,1,1,1,1,1,1],
                                 [1,1,1,0,0,0,1,1,1,1]];
             this.setState({gameGrid:debugGrid})
@@ -57,7 +61,7 @@ class Game extends Component {
 
         this.ticker = setInterval(function() {
             this.gameLoop();
-        }.bind(this), 200);
+        }.bind(this), this.baseSpeed);
         document.addEventListener("keydown", this.keyboardActionDown, false);
         document.addEventListener("keyup", this.keyboardActionUp, false);
     }
@@ -157,23 +161,25 @@ class Game extends Component {
     floodFill(data, x0, y0) {
         var minX = x0, maxX = x0;
         var minY = y0, maxY = y0;
-    
+     
         // perform a deep clone, copying data to newData
         var newData = [];
-        for (var i = 0; i < data.length; i++)
+        for (var i = 0; i < data.length; i++) {
             newData[i] = data[i].slice();
+        }
     
         // from now on we make modifications to newData, not data
         var target = newData[x0][y0];
+
         function flow(x,y) {
             if (x >= 0 && x < newData.length && y >= 0 && y < newData[x].length) {
-                if (newData[x][y] === target) {
+                if (newData[x][y] == 1 || newData[x][y] == 2  || newData[x][y] == 3 || newData[x][y] == 4 || newData[x][y] == 5 || newData[x][y] == 6 || newData[x][y] == 7)  {
                     minX = Math.min(x, minX);
                     maxX = Math.max(x, maxX);
                     minY = Math.min(y, minY);
                     maxY = Math.max(y, maxY);
     
-                    newData[x][y] = 9;
+                    newData[x][y] =  newData[x][y] + 10;
                     flow(x-1, y);
                     flow(x+1, y);
                     flow(x, y-1);
@@ -184,13 +190,44 @@ class Game extends Component {
         flow(x0,y0);
     
         // shrink array (cut out a square)
-        var result = [];
-        var count = 0;
+        var shape = [];
+
+   
+
         for (var i = minX; i < maxX + 1; i++) {
-            result.push( newData[i].slice(minY, maxY + 1) );
-            count++;
+            shape.push( newData[i].slice(minY, maxY + 1) );
         }
+
+        for (var i=0; i<shape.length; i++) {
+            for (var j=0; j<shape[i].length; j++) {
+                if (shape[i][j] !== 0) {
+                    shape[i][j] = shape[i][j] - 10;
+                }
+            }
+        }
+
+        var result = [];
+        result.shape = shape;
+        result.col = minX;
+        result.row = minY;
+        result.myIndex = minX + "-" + minY + "-" + result.shape.length + "-" + result.shape[0].length;
+
         return result;
+    }
+
+    alreadyInArray(array, index) {
+        let exists = false;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].index == index) {
+                exists = true;
+            }
+        }
+
+        if (exists) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     gameLoop() {
@@ -205,38 +242,50 @@ class Game extends Component {
                     } 
                 }
                 if (isFilled) {
-                    // console.log(row);
-
 
                     this.setState({removingRow:true, theRow:row, removingRowInt:0})
-                    // landed.splice(row, 1);
-                    // landed.unshift([0,0,0,0,0,0,0,0,0,0]);   
-                    
-                    // let clump = {};
-                    // clump.shape = [];
-                    // let count = 0;
-                    // for (var row_i = 0; row_i <= row; row_i++) {
-                    //     let isFilled_i = false;
-                    //     for (var col_i = 0; col_i < landed[row_i].length; col_i++) {
-                    //         if (landed[row_i][col_i] != 0) {
-                    //             isFilled_i = true;
-                    //         } 
-                    //     }
-                    //     if (isFilled_i) {
-                    //         clump.shape[count] = landed[row_i];
-                    //         landed[row_i] = [0,0,0,0,0,0,0,0,0,0];
-                    //         count++;
-                    //     }
-                    // }
-                    // clump.topLeft = {row:row-clump.shape.length+1,col:0}
-                    // this.setState({clump:clump, gameGrid:landed})
+                
                 }
             }
         }
 
-        if (this.state.removingRow) {
-             clearInterval(this.ticker);
+        if (this.state.endGame) {
+            if (this.state.removingCol) {
+                // landed[this.state.removingColInt] = [0,0,0,0,0,0,0,0,0,0];
+
+                if (this.state.removingColInt == -1) {
+                    landed[0] = [0,0,0,0,0,0,0,0,0,0];
+                    this.setState({gameGrid:landed, removingCol:true, removingDirection:"down", removingColInt:this.state.removingColInt-1})
+                } else if (this.state.removingColInt < -18 && this.state.removingDirection == "down") {
+                     clearInterval(this.ticker);
+                     this.setState({endGame:false, removingCol:false, removingRowInt:null})
+                     setTimeout(function() {
+                         this.ticker = setInterval(function() {
+                            this.gameLoop();
+                         }.bind(this), this.baseSpeed);
+                     }.bind(this), 1000)
+                } else if(this.state.removingDirection == "up")  {
+                    landed[this.state.removingColInt] = [1,1,1,1,1,1,1,1,1,1];
+                    this.setState({gameGrid:landed, removingCol:true,  removingColInt:this.state.removingColInt-1})
+                } else if(this.state.removingDirection == "down")  {
+                    landed[Math.abs(this.state.removingColInt +1)] = [0,0,0,0,0,0,0,0,0,0];
+                    this.setState({gameGrid:landed, removingCol:true,  removingColInt:this.state.removingColInt-1})
+                }
+
+            } else {
+                clearInterval(this.ticker);
+
+                this.setState({removingCol:true, removingDirection:"up", removingColInt:landed.length-1, activePiece:null})
+                this.ticker = setInterval(function() {
+                    this.gameLoop();
+                }.bind(this), 50);
+            }
+
+        } else if (this.state.removingRow) {
+            clearInterval(this.ticker);
             const row = this.state.theRow;
+
+            // doesn't know what to do with multiple lines at once
 
             if (this.state.removingRowInt === landed[row].length) {
                 
@@ -247,33 +296,37 @@ class Game extends Component {
                 clumpCollection.shape = [];
                 clumpCollection.clumps = [];
                 let count = 0;
+                let globalLines = this.state.linesAmt;
                 for (var row_i = 0; row_i <= row; row_i++) {
                    
                     clumpCollection.shape[count] = landed[row_i];
-                    // landed[row_i] = [0,0,0,0,0,0,0,0,0,0];
+                    landed[row_i] = [0,0,0,0,0,0,0,0,0,0];
                     count++;
-                    
                 }
+                globalLines++;
                 // clump.topLeft = {row:row-clump.shape.length+1,col:0}
-                console.log(clumpCollection);
                 for (var row_y = 0; row_y < clumpCollection.shape.length; row_y++) {
-                    console.log()
                     for (var col_x = 0; col_x < clumpCollection.shape[row_y].length; col_x++) {
                         if (clumpCollection.shape[row_y][col_x] != 0) {
                             let clump = {};
-                            clump.topLeft = {row:row_y, col:col_x};
-                            clump.shape = this.floodFill(clumpCollection.shape, row_y, col_x, 1);
-                            console.log("CLIMP", clump);
-                            clumpCollection.clumps.push(clump);
+                            var details = this.floodFill(clumpCollection.shape, row_y, col_x);
+                            clump.shape = details.shape;
+                             clump.rect = {top: details.row, left: details.col,  width:clump.shape[0].length, height:clump.shape.length};
+                             clump.topLeft = {row:details.row, col:details.col};
+                             clump.index = details.myIndex;
+
+                             if (!this.alreadyInArray(clumpCollection.clumps, clump.index)) {
+                                clumpCollection.clumps.push(clump);
+                             }
                         }
-                       
                     }
-                }
+                }    
+
+                this.setState({clump:clumpCollection, gameGrid:landed, linesAmt: globalLines})
                 
-                this.setState({clump:clumpCollection, gameGrid:landed})
                 this.ticker = setInterval(function() {
                     this.gameLoop();
-                }.bind(this),200);
+                }.bind(this),this.baseSpeed);
             } else {
                 landed[row][this.state.removingRowInt] = 0;
                 this.ticker = setInterval(function() {
@@ -283,13 +336,8 @@ class Game extends Component {
 
             this.setState({removingRowInt:this.state.removingRowInt+1, gameGrid:landed})
 
-            // this.ticker = setInterval(function() {
-            //     this.gameLoop();
-            // }.bind(this), 200);
-            // landed.splice(row, 1);
-            // landed.unshift([0,0,0,0,0,0,0,0,0,0]);  
+
         } else if (this.state.activePiece) {
-            // console.log(this.state.activePiece);
             let tetromino = this.state.activePiece;
             tetromino.potentialTopLeft = {row: tetromino.topLeft.row+1, col:tetromino.topLeft.col}
 
@@ -307,7 +355,7 @@ class Game extends Component {
                  }
             }
 
-            
+
             if (collision) {
                 for (var row = 0; row < tetromino.shape.length; row++) {
                     for (var col = 0; col < tetromino.shape[row].length; col++) {
@@ -316,29 +364,38 @@ class Game extends Component {
                         }
                      }
                 }
-
-                this.setState({gameGrid:landed, activePiece:null});
+                if (tetromino.debutLoop) {
+                    tetromino.debutLoop = false;
+                    this.setState({gameGrid:landed, endGame:true})
+                } else {
+                    this.setState({gameGrid:landed, activePiece:null});
+                }
             } else {
                 tetromino.topLeft = tetromino.potentialTopLeft;
                 this.setState({activePiece : tetromino})
             }
+
+            if (tetromino.debutLoop) {
+                tetromino.debutLoop = false;
+            }
+
         } else if (this.state.clump) {
+
             let clumpCollection = this.state.clump;
             let newClumpCollection = [];
             newClumpCollection.clumps = [];
             for (var i = 0; i < clumpCollection.clumps.length; i++) {
                 const clump = clumpCollection.clumps[i];
-
-                clump.potentialTopLeft = {row: clump.topLeft.row+1, col:0}
+                clump.potentialTopLeft = {col: clump.topLeft.col + 1, row:clump.topLeft.row}
 
                 let collision = null;
                 for (var row = 0; row < clump.shape.length; row++) {
                     for (var col = 0; col < clump.shape[row].length; col++) {
                         if (clump.shape[row][col] != 0) {
-                            if (row + clump.potentialTopLeft.row >= landed.length) {
+                            if (row + clump.potentialTopLeft.col >= landed.length) {
                                 collision = true;
-                            } else if (landed[row + clump.potentialTopLeft.row][col + clump.potentialTopLeft.col] != 0) {
-                                collision = true
+                            } else if (landed[row + clump.potentialTopLeft.col][col + clump.potentialTopLeft.row] != 0) {
+                                collision = true;
                             }
                         }
                     }
@@ -347,25 +404,24 @@ class Game extends Component {
                     for (var row = 0; row < clump.shape.length; row++) {
                         for (var col = 0; col < clump.shape[row].length; col++) {
                             if (clump.shape[row][col] != 0) {
-                                // landed[row + clump.topLeft.row][col + clump.topLeft.col] = clump.shape[row][col];
+                               landed[row+ clump.topLeft.col][col + clump.topLeft.row] = clump.shape[row][col];
                             }
                         }
                     }
                
-                    // this.setState({gameGrid:landed, clump : clumpCollection})
-
                 } else {
                     clump.topLeft = clump.potentialTopLeft;
                     newClumpCollection.clumps.push(clump);
                 }
+
             }
+
 
             if (clumpCollection.clumps.length == 0) {
                 newClumpCollection = null;
-                clearInterval(this.ticker);
-
+                // clearInterval(this.ticker);
+                this.setState({clump:newClumpCollection, gameGrid:landed})
             } else {
-
                 this.setState({clump:newClumpCollection, gameGrid:landed})
             }
 
@@ -380,6 +436,7 @@ class Game extends Component {
             this.generateNextPiece();
         }
         let tetromino = this.state.nextPiece;
+        tetromino.debutLoop = true;
         this.setState({activePiece:tetromino});
         this.generateNextPiece();
     }
@@ -394,6 +451,9 @@ class Game extends Component {
             randomShape = 1;
             randomColumn = 0;
         }
+
+        randomColumn = 4;
+
         nextPiece.shapes = this.tetrominoShapes[randomShape];
         nextPiece.shape = nextPiece.shapes[nextPiece.rotationInt];
         nextPiece.topLeft = {row: 0, col:randomColumn};
@@ -481,18 +541,20 @@ class Game extends Component {
             let active_piece_output = [];
             for (var i = 0; i < clumpCollection.clumps.length; i++) {
                 const clump = clumpCollection.clumps[i];
+                let count = 0;
                 for (var row = 0; row < clump.shape.length; row++) {
                     for (var col = 0; col < clump.shape[row].length; col++) {
                         if (clump.shape[row][col] !== 0) {
-                            const xPos = col + clump.topLeft.col;
-                            const yPos = row + clump.topLeft.row;
+                            const xPos = col + clump.topLeft.row;
+                            const yPos = row + clump.topLeft.col;
                             const style = {
                                 left: (xPos * this.gridSize) + 8,
                                 top: (yPos * this.gridSize) + 8,
                             }
-                            const key = row + " " + col;
+                            const key = xPos + " " + yPos + count;
+                            count++;
                             const colorClass = "piece number_"+clump.shape[row][col];
-                            const piece = <div className={colorClass} key={key} style={style} data-pos-x={col} data-pos-y={row}><span></span></div>;
+                            const piece = <div className={colorClass} key={key} style={style} data-pos-x={xPos} data-pos-y={yPos}><span></span></div>;
                             active_piece_output.push(piece);
                         }
                     }
@@ -547,6 +609,14 @@ class Game extends Component {
         let activeClump = this.prerender_ActiveClump();
         let nextPiece = this.prerender_NextPiece();
 
+        let lines_output = "0 Lines";
+        if (this.state.linesAmt === 1) {
+            lines_output = "1 Line"
+        }
+        if (this.state.linesAmt > 1) {
+            lines_output = this.state.linesAmt + " Lines";
+        }
+
         return (
             <div className="game">
                 <div className="game-header">
@@ -568,7 +638,7 @@ class Game extends Component {
                 </div>
                 <div className="game-footer">
                     <label>Score</label>
-                    <p>10 lines</p>
+                    <p>{lines_output}</p>
                 </div>
             </div>
         )
