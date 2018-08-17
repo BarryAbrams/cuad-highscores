@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
+import Gamepad from 'react-gamepad'
 
 class Game extends Component {
 
@@ -27,12 +28,13 @@ class Game extends Component {
         nextPiece : null,
         endGame : false,
         linesAmt: 0,
+        gamepad: 'Not connected. Try pressing a key'
     }
     debug = false;
 
     gridSize = 80;
 
-    baseSpeed = 300;
+    baseSpeed = 500;
 
 
     componentDidMount() {
@@ -58,7 +60,18 @@ class Game extends Component {
                                 [1,1,1,0,1,2,1,1,1,1]];
             this.setState({gameGrid:debugGrid})
         }
-
+        if (this.state.linesAmt >= 5) {
+            this.baseSpeed = 400;
+        }
+        if (this.state.linesAmt >= 10) {
+            this.baseSpeed = 300;
+        }
+        if (this.state.linesAmt >= 15) {
+            this.baseSpeed = 200;
+        }
+        if (this.state.linesAmt >= 20) {
+            this.baseSpeed = 100;
+        }
         this.ticker = setInterval(function() {
             this.gameLoop();
         }.bind(this), this.baseSpeed);
@@ -66,10 +79,63 @@ class Game extends Component {
         document.addEventListener("keyup", this.keyboardActionUp, false);
     }
 
+
+    connectHandler(gamepadIndex) {
+        console.log(`Gamepad ${gamepadIndex} connected!`)
+    
+        this.setState({
+          connected: true
+        })
+      }
+    
+      disconnectHandler(gamepadIndex) {
+        console.log(`Gamepad ${gamepadIndex} disconnected !`)
+    
+        this.setState({
+          connected: false
+        })
+      }
     componentWillUnmount() {
         clearInterval(this.ticker);
         document.removeEventListener("keydown", this.keyboardActionDown, false);
         document.removeEventListener("keyup", this.keyboardActionUp, false);
+    }
+    buttonChangeHandler(buttonName, down) {
+        console.log(buttonName, down)
+    }
+
+    connectHandler(gamepadIndex) {
+    console.log(`Gamepad ${gamepadIndex} connected !`)
+    }
+    
+    disconnectHandler(gamepadIndex) {
+    console.log(`Gamepad ${gamepadIndex} disconnected !`)
+    }
+    
+    buttonChangeHandler(buttonName, down) {
+        if (buttonName === "A" && down) {
+            this.rotateActivePiece(+1);
+        }
+        if (buttonName === "B" && down) {
+            this.rotateActivePiece(-1);
+        }
+    }
+    
+    axisChangeHandler(axisName, value, previousValue) {
+        if (value === 1) {
+            this.moveActivePiece(1);
+        }
+        if (value === -1) {
+            this.moveActivePiece(-1);
+        }
+    }
+    
+    buttonDownHandler(buttonName) {
+    console.log(buttonName, 'down')
+    }
+    
+    buttonUpHandler(buttonName) {
+    console.log(buttonName, 'up')
     }
 
     keyboardActionDown = (event) => {
@@ -279,9 +345,13 @@ class Game extends Component {
                      clearInterval(this.ticker);
                      this.setState({endGame:false, removingCol:false, removingRowInt:null})
                      setTimeout(function() {
-                         this.ticker = setInterval(function() {
-                            this.gameLoop();
-                         }.bind(this), this.baseSpeed);
+                         this.baseSpeed = 500;
+                         this.ticker = setTimeout(function() {
+                            this.state.linesAmt = 0;
+
+                            // this.gameLoop();
+                            this.props.nextAction(500, "winnersdrugs");
+                         }.bind(this), 1000);
                      }.bind(this), 1000)
                 } else if(this.state.removingDirection == "up")  {
                     landed[this.state.removingColInt] = [1,1,1,1,1,1,1,1,1,1];
@@ -293,7 +363,6 @@ class Game extends Component {
 
             } else {
                 clearInterval(this.ticker);
-
                 this.setState({removingCol:true, removingDirection:"up", removingColInt:landed.length-1, activePiece:null})
                 this.ticker = setInterval(function() {
                     this.gameLoop();
@@ -324,6 +393,18 @@ class Game extends Component {
                     count++;
                 }
                 globalLines++;
+                if (this.state.linesAmt >= 5) {
+                    this.baseSpeed = 400;
+                }
+                if (this.state.linesAmt >= 10) {
+                    this.baseSpeed = 300;
+                }
+                if (this.state.linesAmt >= 15) {
+                    this.baseSpeed = 200;
+                }
+                if (this.state.linesAmt >= 20) {
+                    this.baseSpeed = 100;
+                }
                 // clump.topLeft = {row:row-clump.shape.length+1,col:0}
                 for (var row_y = 0; row_y < clumpCollection.shape.length; row_y++) {
                     for (var col_x = 0; col_x < clumpCollection.shape[row_y].length; col_x++) {
@@ -637,8 +718,19 @@ class Game extends Component {
             lines_output = this.state.linesAmt + " Lines";
         }
 
+        
+
         return (
+            <Gamepad
+            gamepadIndex={this.props.playerIndex}
+            onConnect={this.connectHandler.bind(this)}
+            onDisconnect={this.disconnectHandler.bind(this)}
+            onAxisChange={this.axisChangeHandler.bind(this)}
+            onButtonChange={this.buttonChangeHandler.bind(this)}
+
+          >
             <div className="game">
+
                 <div className="game-header">
                     <div className="controls left">
                     <label>P1 Controls</label>
@@ -660,7 +752,7 @@ class Game extends Component {
                     <label>Score</label>
                     <p>{lines_output}</p>
                 </div>
-            </div>
+            </div></Gamepad>
         )
     }
 
