@@ -260,11 +260,49 @@ h1, h2, h3, h4, h5, h6, p {
         height:186px;
         display:flex;
         justify-content:space-between;
-        align-items: center;
+        align-items: top;
         .controls {
             label {
                 text-transform:uppercase;
                 font-size:.5em;
+                display:block;
+                margin-bottom:20px;
+            }
+            .current-control {
+                image-rendering: auto;
+                image-rendering: crisp-edges;
+                image-rendering: pixelated;
+                display:flex;
+                text-align:center;
+                justify-content: center;
+               
+                .control {
+                    opacity:0;
+                    transform:scaleX(.7) scaleY(.7);
+                    transition:all .5s ease-in-out;
+
+                    &.active {
+                     opacity:1;
+                     transform:scaleX(1) scaleY(1);
+                    }
+                    width:96px;
+                    height:64px;
+                    display:inline-block;
+                    background:url(../images/joystick-green.png);
+                    background-size:100% 100%;
+                    &.joystick-green {
+                        background-image:url(../images/joystick-green.png);
+                    }
+                    &.joystick-yellow {
+                        background-image:url(../images/joystick-yellow.png);
+                    }
+                    &.joystick-red {
+                        background-image:url(../images/joystick-red.png);
+                    }
+                    &.joystick-blue {
+                        background-image:url(../images/joystick-blue.png);
+                    }
+                }
             }
         }
         .nextpiece {
@@ -278,7 +316,18 @@ h1, h2, h3, h4, h5, h6, p {
         
     }
     .game-footer {
-        height:186px;
+        height:170px;
+        margin-top:16px;
+        text-align:center;
+        align-items: top;
+
+        label {
+            text-transform: uppercase;
+            margin-bottom:16px;
+            margin-top:36px;
+            font-size:.6em;
+            display:block;
+        }
     }
     .gametable-wrapper {
         border: 8px solid #fff;
@@ -288,6 +337,28 @@ h1, h2, h3, h4, h5, h6, p {
         padding: 16px;
         background-color:#262d33;
         position: relative;
+    }
+
+    .changingcontrols {
+        position:absolute;
+        font-size:1.1em;
+        text-align:center;
+        background-color:rgba(0,0,0,.5);
+        height:248px;
+        align-items:center;
+        top:568px;
+        display:flex;
+        .text {
+            margin: 0px auto;
+        }
+        width:100%;
+        line-height:120%;
+        text-transform: uppercase;
+        opacity:0;
+        transition:all .5s ease-in-out;
+        &.active {
+            opacity:1;
+        }
     }
     .gamegridtable {
         margin:0px auto;

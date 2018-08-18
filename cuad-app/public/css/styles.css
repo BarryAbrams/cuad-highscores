@@ -231,11 +231,47 @@ p {
   height: 186px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: top;
 }
 .game .game-header .controls label {
   text-transform: uppercase;
   font-size: 0.5em;
+  display: block;
+  margin-bottom: 20px;
+}
+.game .game-header .controls .current-control {
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+.game .game-header .controls .current-control .control {
+  opacity: 0;
+  transform: scaleX(0.7) scaleY(0.7);
+  transition: all 0.5s ease-in-out;
+  width: 96px;
+  height: 64px;
+  display: inline-block;
+  background: url(../images/joystick-green.png);
+  background-size: 100% 100%;
+}
+.game .game-header .controls .current-control .control.active {
+  opacity: 1;
+  transform: scaleX(1) scaleY(1);
+}
+.game .game-header .controls .current-control .control.joystick-green {
+  background-image: url(../images/joystick-green.png);
+}
+.game .game-header .controls .current-control .control.joystick-yellow {
+  background-image: url(../images/joystick-yellow.png);
+}
+.game .game-header .controls .current-control .control.joystick-red {
+  background-image: url(../images/joystick-red.png);
+}
+.game .game-header .controls .current-control .control.joystick-blue {
+  background-image: url(../images/joystick-blue.png);
 }
 .game .game-header .nextpiece {
   position: relative;
@@ -246,7 +282,17 @@ p {
   transform: scaleX(0.5) scaleY(0.5);
 }
 .game .game-footer {
-  height: 186px;
+  height: 170px;
+  margin-top: 16px;
+  text-align: center;
+  align-items: top;
+}
+.game .game-footer label {
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  margin-top: 36px;
+  font-size: 0.6em;
+  display: block;
 }
 .game .gametable-wrapper {
   border: 8px solid #fff;
@@ -256,6 +302,27 @@ p {
   padding: 16px;
   background-color: #262d33;
   position: relative;
+}
+.game .changingcontrols {
+  position: absolute;
+  font-size: 1.1em;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 248px;
+  align-items: center;
+  top: 568px;
+  display: flex;
+  width: 100%;
+  line-height: 120%;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+.game .changingcontrols .text {
+  margin: 0px auto;
+}
+.game .changingcontrols.active {
+  opacity: 1;
 }
 .game .gamegridtable {
   margin: 0px auto;

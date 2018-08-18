@@ -28,7 +28,8 @@ class Game extends Component {
         nextPiece : null,
         endGame : false,
         linesAmt: 0,
-        gamepad: 'Not connected. Try pressing a key'
+        gamepad: 'Not connected. Try pressing a key',
+        droppedItems: 0
     }
     debug = false;
 
@@ -302,6 +303,17 @@ class Game extends Component {
         }
     }
 
+     arraysEqual(arr1, arr2) {
+        if(arr1.length !== arr2.length)
+            return false;
+        for(var i = arr1.length; i--;) {
+            if(arr1[i] !== arr2[i])
+                return false;
+        }
+    
+        return true;
+    }
+
     gameLoop() {
         const landed = this.state.gameGrid;
         
@@ -334,7 +346,9 @@ class Game extends Component {
             
         }
 
-        if (this.state.endGame) {
+
+
+       if (this.state.endGame) {
             if (this.state.removingCol) {
                 // landed[this.state.removingColInt] = [0,0,0,0,0,0,0,0,0,0];
 
@@ -469,7 +483,7 @@ class Game extends Component {
                     tetromino.debutLoop = false;
                     this.setState({gameGrid:landed, endGame:true})
                 } else {
-                    this.setState({gameGrid:landed, activePiece:null});
+                    this.setState({gameGrid:landed, activePiece:null, droppedItems:this.state.droppedItems+1});
                 }
             } else {
                 tetromino.topLeft = tetromino.potentialTopLeft;
@@ -526,8 +540,34 @@ class Game extends Component {
                 this.setState({clump:newClumpCollection, gameGrid:landed})
             }
 
+       
         } else {
-            this.addNewPiece();
+            if (this.state.changingControls || !this.state.currentControls) {
+                const controls = this.changeControls();
+                $(".current-control .control").removeClass("active");
+                $(".changingcontrols").addClass("active");
+                if (this.state.currentControls) {
+                    $(".changingcontrols .text").text("Controls are Changing");
+                }
+                clearInterval(this.ticker);
+
+                setTimeout(function() {
+                    this.setState({currentControls:controls});
+
+                    setTimeout(function() {
+                        $(".changingcontrols").removeClass("active");
+
+                        $(".current-control .control").addClass("active");
+                        this.setState({changingControls:false})
+
+                        this.ticker = setInterval(function() {
+                            this.gameLoop();
+                        }.bind(this),this.baseSpeed);
+                    }.bind(this), 500);
+                }.bind(this), 500);
+            } else {
+                this.addNewPiece();
+            }
         }
     }
 
@@ -538,8 +578,44 @@ class Game extends Component {
         }
         let tetromino = this.state.nextPiece;
         tetromino.debutLoop = true;
-        this.setState({activePiece:tetromino});
+        let controls = this.changeControls();
+        if (!this.arraysEqual(controls.p1, this.state.currentControls.p1) ||
+            !this.arraysEqual(controls.p2, this.state.currentControls.p2)) {
+            this.setState({activePiece:tetromino, changingControls:true});
+        } else {
+            this.setState({activePiece:tetromino});
+
+        }
         this.generateNextPiece();
+    }
+
+    changeControls() {
+        let controls = null;
+
+        let modifier = this.state.droppedItems;
+        // modifier = Math.floor(Math.random() * 10)
+        if (modifier <= 3) {
+            controls = {p1:["joystick-blue"], p2:["joystick-blue"]}
+        } else if (modifier > 3 && modifier < 6) {
+            controls = {p1:["joystick-red"], p2:["joystick-red"]}
+        } else if (modifier > 6 && modifier < 15) {
+            let random1 = Math.floor(Math.random() * 2);
+            let random2 = Math.floor(Math.random() * 2);
+            let p1_value = ["joystick-blue"];
+            if (random1 == 1) {
+                p1_value = ["joystick-red"];
+            }
+            let p2_value = ["joystick-blue"];
+            if (random2 == 1) {
+                p2_value = ["joystick-red"];
+            }                 
+            controls = {p1:p1_value, p2:p2_value}
+         } else {
+
+            controls = {p1:["joystick-yellow"], p2:["joystick-green"]}
+        }
+
+        return controls;
     }
 
     generateNextPiece() {
@@ -702,6 +778,32 @@ class Game extends Component {
         }
     }
 
+    prerenderControls (player) {
+        if (!this.state.currentControls) {
+            return null;
+        }
+        let controls = null;
+        if (player == 1) {
+            controls = this.state.currentControls.p1;
+        }
+        if (player == 2) {
+            controls = this.state.currentControls.p2;
+        }
+
+        const output = controls.map((item, key) => {
+            let classes = [item, "control"];
+            classes = classes.join(" ");
+            const component =<div className={classes}></div>
+            return component;
+        });
+       
+        return output;
+    }
+
+    prerenderControlsChanging() {
+         return <div className="changingcontrols"><div className="text">Get Ready!</div></div>;
+    }
+
     render() {
         // console.log("render")
         let gameGridTable = this.prerender_Grid();
@@ -718,7 +820,10 @@ class Game extends Component {
             lines_output = this.state.linesAmt + " Lines";
         }
 
-        
+        let p1_controls = this.prerenderControls(1)
+        let p2_controls = this.prerenderControls(2)
+
+        let controlsChanging = this.prerenderControlsChanging();
 
         return (
             <Gamepad
@@ -734,12 +839,20 @@ class Game extends Component {
                 <div className="game-header">
                     <div className="controls left">
                     <label>P1 Controls</label>
+                        <div className="current-control">
+                            {p1_controls}
+                            
+                        </div>
                     </div>
                     <div className="nextpiece">
                         {nextPiece}
                     </div>
                     <div className="controls right">
                     <label>P2 Controls</label>
+                        <div className="current-control">
+                        {p2_controls}
+
+                        </div>
                     </div>
                 </div>
                 <div className="gametable-wrapper">
@@ -747,6 +860,7 @@ class Game extends Component {
                     {landedPieces}
                     {activePiece}
                     {activeClump}
+                    {controlsChanging}
                 </div>
                 <div className="game-footer">
                     <label>Score</label>

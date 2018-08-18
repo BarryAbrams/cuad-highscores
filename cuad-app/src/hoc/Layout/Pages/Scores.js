@@ -94,7 +94,7 @@ class Scores extends Component {
             });
 
             Object.keys(storageArray).map((item) => {
-                storageArray[item].length = 3;
+                storageArray[item].length = 5;
                 return null;
             })
 
