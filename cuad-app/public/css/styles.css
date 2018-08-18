@@ -45,6 +45,21 @@ p {
   width: 100%;
   height: 100%;
 }
+.animatedgif {
+  margin-left: -40px;
+  margin-top: -40px;
+  width: 1080px;
+  height: 1920px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.animatedgif.active {
+  opacity: 1;
+}
+.animatedgif img {
+  width: 100%;
+  height: 100%;
+}
 .coinage {
   text-align: center;
   position: absolute;
@@ -252,7 +267,7 @@ p {
   transform: scaleX(0.7) scaleY(0.7);
   transition: all 0.5s ease-in-out;
   width: 96px;
-  height: 64px;
+  height: 96px;
   display: inline-block;
   background: url(../images/joystick-green.png);
   background-size: 100% 100%;
@@ -272,6 +287,18 @@ p {
 }
 .game .game-header .controls .current-control .control.joystick-blue {
   background-image: url(../images/joystick-blue.png);
+}
+.game .game-header .controls .current-control .control.button-green {
+  background-image: url(../images/button-green.png);
+}
+.game .game-header .controls .current-control .control.button-yellow {
+  background-image: url(../images/button-yellow.png);
+}
+.game .game-header .controls .current-control .control.button-red {
+  background-image: url(../images/button-red.png);
+}
+.game .game-header .controls .current-control .control.button-blue {
+  background-image: url(../images/button-blue.png);
 }
 .game .game-header .nextpiece {
   position: relative;
@@ -313,13 +340,13 @@ p {
   top: 568px;
   display: flex;
   width: 100%;
-  line-height: 120%;
   text-transform: uppercase;
   opacity: 0;
   transition: all 0.5s ease-in-out;
 }
 .game .changingcontrols .text {
   margin: 0px auto;
+  line-height: 140%;
 }
 .game .changingcontrols.active {
   opacity: 1;

@@ -5,12 +5,13 @@ import Scores from "./Pages/Scores";
 import WinnersDrugs from "./Pages/WinnersDrugs";
 import GameStart from "./Pages/GameStart";
 import Game from "./Pages/Game";
+import AnimatedGif from "./Pages/AnimatedGif";
 
 import Coinage from "./Elements/Coinage";
 
 class Page extends Component {
     state = {
-        action : "game",
+        action : "testscreen",
         gameStarted : false,
     }
 
@@ -53,7 +54,13 @@ class Page extends Component {
 
         if (this.state.action === "winnersdrugs") {
             page = <WinnersDrugs nextAction={this.changeAction} />
-            this.changeAction(4100, "scores");
+            this.changeAction(4100, "cuadventures");
+            showCoinage = true;
+        }
+
+        if (this.state.action === "cuadventures") {
+            page = <AnimatedGif gif="cuadventures" nextAction={this.changeAction} />
+            this.changeAction(9000, "scores");
             showCoinage = true;
         }
 

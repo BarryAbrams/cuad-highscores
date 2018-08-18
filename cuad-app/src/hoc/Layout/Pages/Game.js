@@ -29,9 +29,9 @@ class Game extends Component {
         endGame : false,
         linesAmt: 0,
         gamepad: 'Not connected. Try pressing a key',
-        droppedItems: 0
     }
     debug = false;
+    droppedItems = 0;
 
     gridSize = 80;
 
@@ -351,12 +351,14 @@ class Game extends Component {
        if (this.state.endGame) {
             if (this.state.removingCol) {
                 // landed[this.state.removingColInt] = [0,0,0,0,0,0,0,0,0,0];
-
+                this.droppedItems = 0;
                 if (this.state.removingColInt == -1) {
                     landed[0] = [0,0,0,0,0,0,0,0,0,0];
                     this.setState({gameGrid:landed, removingCol:true, removingDirection:"down", removingColInt:this.state.removingColInt-1})
                 } else if (this.state.removingColInt < -18 && this.state.removingDirection == "down") {
-                     clearInterval(this.ticker);
+                    $(".changingcontrols .text").text("Game Over");
+                    $(".changingcontrols").addClass("active");
+                    clearInterval(this.ticker);
                      this.setState({endGame:false, removingCol:false, removingRowInt:null})
                      setTimeout(function() {
                          this.baseSpeed = 500;
@@ -481,9 +483,11 @@ class Game extends Component {
                 }
                 if (tetromino.debutLoop) {
                     tetromino.debutLoop = false;
+                    this.droppedItems = this.droppedItems + 1;
                     this.setState({gameGrid:landed, endGame:true})
                 } else {
-                    this.setState({gameGrid:landed, activePiece:null, droppedItems:this.state.droppedItems+1});
+                    this.droppedItems = this.droppedItems + 1;
+                    this.setState({gameGrid:landed, activePiece:null});
                 }
             } else {
                 tetromino.topLeft = tetromino.potentialTopLeft;
@@ -543,7 +547,12 @@ class Game extends Component {
        
         } else {
             if (this.state.changingControls || !this.state.currentControls) {
-                const controls = this.changeControls();
+                let controls = null;
+                if (this.state.newControls) {
+                    controls = this.state.newControls;
+                } else {
+                     controls = this.changeControls();
+                }
                 $(".current-control .control").removeClass("active");
                 $(".changingcontrols").addClass("active");
                 if (this.state.currentControls) {
@@ -581,7 +590,8 @@ class Game extends Component {
         let controls = this.changeControls();
         if (!this.arraysEqual(controls.p1, this.state.currentControls.p1) ||
             !this.arraysEqual(controls.p2, this.state.currentControls.p2)) {
-            this.setState({activePiece:tetromino, changingControls:true});
+                console.log("arrays aren't the same")
+            this.setState({activePiece:tetromino, changingControls:true, newControls:controls});
         } else {
             this.setState({activePiece:tetromino});
 
@@ -590,31 +600,93 @@ class Game extends Component {
     }
 
     changeControls() {
-        let controls = null;
+        let controls = {p1:["joystick-blue"], p2:["joystick-blue"]};
 
-        let modifier = this.state.droppedItems;
+        let modifier = this.droppedItems + 1;
         // modifier = Math.floor(Math.random() * 10)
-        if (modifier <= 3) {
+
+        if (modifier < 3) {
+
             controls = {p1:["joystick-blue"], p2:["joystick-blue"]}
-        } else if (modifier > 3 && modifier < 6) {
+            // console.log("PART 1", modifier, controls);
+
+        } else if (modifier >= 3 && modifier < 6) {
+
             controls = {p1:["joystick-red"], p2:["joystick-red"]}
-        } else if (modifier > 6 && modifier < 15) {
-            let random1 = Math.floor(Math.random() * 2);
-            let random2 = Math.floor(Math.random() * 2);
+            // console.log("PART 2", modifier, controls);
+        } else if (modifier >= 6 && modifier < 12) {
+
             let p1_value = ["joystick-blue"];
-            if (random1 == 1) {
+            let p2_value = ["joystick-red"];
+
+            const modulo = (modifier) % 4;
+            // // console.log("MODULO"x, modifier, (modifier) % 2);
+            if (modulo < 2) {
+                // console.log("switch");
                 p1_value = ["joystick-red"];
+                p2_value = ["joystick-blue"];
             }
-            let p2_value = ["joystick-blue"];
-            if (random2 == 1) {
-                p2_value = ["joystick-red"];
-            }                 
+ 
             controls = {p1:p1_value, p2:p2_value}
-         } else {
-
+            // console.log("PART 3", modifier, controls, modulo);
+        } else if (modifier >= 12 && modifier < 15) {
             controls = {p1:["joystick-yellow"], p2:["joystick-green"]}
-        }
+        } else if (modifier >= 15 && modifier < 18) {
+            controls = {p1:["joystick-green"], p2:["joystick-yellow"]}
+        } else if (modifier >= 18 && modifier < 25) {
+            let p1_value = ["joystick-green"];
+            let p2_value = ["joystick-yellow"];
 
+            const modulo = (modifier) % 2;
+            // // console.log("MODULO"x, modifier, (modifier) % 2);
+            if (modulo == 0) {
+                // console.log("switch");
+                p1_value = ["joystick-yellow"];
+                p2_value = ["joystick-green"];
+            }
+ 
+            controls = {p1:p1_value, p2:p2_value}
+        } else if (modifier >= 25 && modifier < 30) {
+            let p1_value = ["joystick-blue", "button-green"];
+            let p2_value = ["joystick-red", "button-blue"];
+
+            const modulo = (modifier) % 4;
+            // // console.log("MODULO"x, modifier, (modifier) % 2);
+            if (modulo == 1) {
+                // console.log("switch");
+                p1_value = ["joystick-red", "button-blue"];
+                p2_value = ["joystick-blue", "button-yellow"];
+            }
+ 
+            if (modulo == 2) {
+                // console.log("switch");
+                p1_value = ["joystick-red", "button-yellow"];
+                p2_value = ["joystick-blue", "button-red"];
+            }
+
+            if (modulo == 3) {
+                // console.log("switch");
+                p1_value = ["joystick-blue", "button-red"];
+                p2_value = ["joystick-red", "button-green"];
+            }
+
+            controls = {p1:p1_value, p2:p2_value}
+            // console.log("PART 3", modifier, controls, modulo);
+        } else if (modifier >= 30) {
+            const possibleJoysticks = ["joystick-blue", "joystick-red", "joystick-green", "joystick-yellow"];
+            const possibleButtons = ["button-blue", "button-red", "button-green", "button-yellow"];
+
+            const p1_joystick = possibleJoysticks[Math.floor(Math.random() * possibleJoysticks.length)];
+            const p1_button= possibleButtons[Math.floor(Math.random() * possibleButtons.length)];
+            
+            const p2_joystick = possibleJoysticks[Math.floor(Math.random() * possibleJoysticks.length)];
+            const p2_button= possibleButtons[Math.floor(Math.random() * possibleButtons.length)];
+
+            const p1_value = [p1_joystick, p1_button];
+            const p2_value = [p2_joystick, p2_button];
+
+            controls = {p1:p1_value, p2:p2_value}
+        }
         return controls;
     }
 
@@ -790,10 +862,12 @@ class Game extends Component {
             controls = this.state.currentControls.p2;
         }
 
+        let count = 0;
         const output = controls.map((item, key) => {
             let classes = [item, "control"];
             classes = classes.join(" ");
-            const component =<div className={classes}></div>
+            const component =<div key={count} className={classes}></div>
+            count++;
             return component;
         });
        
