@@ -118,7 +118,7 @@ class Scores extends Component {
                     let noHints = null;
                     if (scoreObject.no_hints == "Yes") {
                         noHints = (
-                            <div class="no-hints">
+                            <div className="no-hints">
                                 No Hints!
                             </div>
                         )
