@@ -5,25 +5,58 @@ import Scores from "./Pages/Scores";
 import WinnersDrugs from "./Pages/WinnersDrugs";
 import GameStart from "./Pages/GameStart";
 import Game from "./Pages/Game";
-import AnimatedGif from "./Pages/AnimatedGif";
+import Slide from "./Pages/Slide";
 
 import Coinage from "./Elements/Coinage";
+
+import axios from '../../config/axios';
 
 class Page extends Component {
     state = {
         action : "testscreen",
         gameStarted : false,
+        slides:null,
+        currentSlide:-1,
     }
+
+    currentSlide = 0;
 
     changeAction = (delay, newAction) => {
         this.interuptAction();
+       
         this.timeout = setTimeout(function() {
-            this.setState({action: newAction});
+            let newSlide = this.state.currentSlide;
+            if (newAction == "slide") {
+                newSlide = this.state.currentSlide+1;
+                if (newSlide > this.state.currentSlide.length) {
+                    newSlide = 0;
+                }
+                // this.setState({currentSlide:newSlide});
+            }
+            this.setState({action: newAction, currentSlide:newSlide});
         }.bind(this), delay)
+    }
+
+    componentDidMount() {
+        this.loadSlideData();
     }
 
     interuptAction = () => {
         clearTimeout(this.timeout);
+    }
+
+    loadSlideData() {
+        if ( !this.state.slides ) {
+            axios.get("/slides")
+            .then (response => {
+                
+            console.log(response.data);
+            this.setState({slides:response.data})
+            }).catch(error => {
+                console.log("can't connect to site");
+                console.log(error);
+            })
+        }
     }
     
 
@@ -54,13 +87,14 @@ class Page extends Component {
 
         if (this.state.action === "winnersdrugs") {
             page = <WinnersDrugs nextAction={this.changeAction} />
-            this.changeAction(4100, "cuadventures");
+            this.changeAction(4100, "slide");
             showCoinage = true;
         }
 
-        if (this.state.action === "cuadventures") {
-            page = <AnimatedGif gif="cuadventures" nextAction={this.changeAction} />
-            this.changeAction(9000, "scores");
+        if (this.state.action === "slide") {
+            const slide = this.state.slides[this.state.currentSlide];
+            page = <Slide gif="cuadventures" slideInfo={slide} nextAction={this.changeAction} />
+            this.changeAction(slide.duration * 1000, "scores");
             showCoinage = true;
         }
 
