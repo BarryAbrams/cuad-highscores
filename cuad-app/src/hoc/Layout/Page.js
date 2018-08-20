@@ -46,9 +46,9 @@ class Page extends Component {
         // AD FOR ROOM (1|2|3)
         // -> LOOP REPEAT
 
-        
         if (this.state.action === "testscreen") {
             page = <TestScreen nextAction={this.changeAction} />
+
             this.changeAction(500, "winnersdrugs")
         }
 
