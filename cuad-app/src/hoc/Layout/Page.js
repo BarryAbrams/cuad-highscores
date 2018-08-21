@@ -28,11 +28,13 @@ class Page extends Component {
             let newSlide = this.state.currentSlide;
             if (newAction == "slide") {
                 newSlide = this.state.currentSlide+1;
-                if (newSlide > this.state.currentSlide.length) {
+                console.log("TEST", newSlide, this.state.slides.length)
+                if (newSlide >= this.state.slides.length) {
                     newSlide = 0;
                 }
                 // this.setState({currentSlide:newSlide});
             }
+            console.log("new slide", newSlide);
             this.setState({action: newAction, currentSlide:newSlide});
         }.bind(this), delay)
     }

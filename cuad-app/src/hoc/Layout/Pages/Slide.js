@@ -19,7 +19,7 @@ class Slide extends Component {
         const videoURL = this.props.slideInfo.video + "?autoplay=1&amp;rel=0&amp;controls=0&amp;showinfo=0";
         return (
             <div className="animatedgif">
-<iframe width="1080" height="1920" src={videoURL} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>               {/* <img alt="cuadventures" src={"/images/cuadventures.gif"} /> */}
+<iframe width="240" height="320" src={videoURL} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>               {/* <img alt="cuadventures" src={"/images/cuadventures.gif"} /> */}
             </div>
         )
     }    
