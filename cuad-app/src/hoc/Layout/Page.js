@@ -13,7 +13,7 @@ import axios from '../../config/axios';
 
 class Page extends Component {
     state = {
-        action : "testscreen",
+        action : "game",
         gameStarted : false,
         slides:null,
         currentSlide:-1,

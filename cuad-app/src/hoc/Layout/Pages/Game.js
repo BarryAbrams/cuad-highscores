@@ -2,6 +2,21 @@ import React, {Component} from 'react';
 import $ from 'jquery';
 import Gamepad from 'react-gamepad'
 
+
+  var socket = new WebSocket("ws://localhost:3002");
+  function setup() {
+    socket.onopen = openSocket;
+    socket.onmessage = showData;
+  }
+  function openSocket() {
+    console.log("Socket open");
+    socket.send("Hello server");
+  }
+
+  function showData(result) {
+    console.log("showData");
+  }
+
 class Game extends Component {
 
     state = {
@@ -36,7 +51,26 @@ class Game extends Component {
     gridSize = 80;
 
     baseSpeed = 500;
+    ledOn = false;
 
+    backgroundGrid = [  [7, 3, 8, 7, 3, 7, 3, 3, 3, 3],
+                        [3, 3, 7, 3, 3, 3, 3, 3, 3, 3],
+                        [3, 3, 7, 3, 3, 3, 4, 7, 3, 7],
+                        [3, 7, 3, 3, 3, 3, 3, 3, 3, 3],
+                        [3, 3, 7, 3, 3, 3, 3, 3, 3, 3],
+                        [3, 3, 7, 3, 3, 3, 3, 3, 3, 7],
+                        [3, 3, 3, 3, 3, 3, 3, 3, 7, 4],
+                        [3, 3, 4, 3, 3, 8, 3, 3, 7, 3],
+                        [3, 3, 7, 7, 3, 3, 3, 7, 3, 3],
+                        [3, 3, 3, 3, 7, 3, 3, 3, 3, 7],
+                        [3, 3, 3, 3, 3, 3, 3, 3, 3, 4],
+                        [3, 3, 3, 7, 3, 8, 3, 7, 4, 4],
+                        [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+                        [3, 3, 7, 3, 7, 3, 7, 3, 7, 7],
+                        [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+                        [3, 3, 3, 4, 3, 7, 3, 8, 7, 7],
+                        [3, 3, 7, 3, 7, 3, 3, 3, 3, 8],
+                        [4, 3, 3, 7, 3, 3, 3, 3, 3, 7]];
 
     componentDidMount() {
 
@@ -55,9 +89,9 @@ class Game extends Component {
                                 [0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,2,0,0,0,0,0],
                                 [0,0,0,0,2,1,0,1,2,3],
-                                [1,0,1,0,3,1,1,6,5,4],
-                                [1,1,1,0,3,1,1,2,7,1],
-                                [1,1,1,0,1,1,1,1,1,1],
+                                [0,0,1,0,3,1,1,6,5,4],
+                                [0,0,1,0,3,1,1,2,7,1],
+                                [1,0,1,0,1,1,1,1,1,1],
                                 [1,1,1,0,1,2,1,1,1,1]];
             this.setState({gameGrid:debugGrid})
         }
@@ -246,13 +280,28 @@ class Game extends Component {
 
         function flow(x,y) {
             if (x >= 0 && x < newData.length && y >= 0 && y < newData[x].length) {
-                if (newData[x][y] == 1 || newData[x][y] == 2  || newData[x][y] == 3 || newData[x][y] == 4 || newData[x][y] == 5 || newData[x][y] == 6 || newData[x][y] == 7)  {
+                if (newData[x][y] == 1 || newData[x][y] == 2  || newData[x][y] == 3 || newData[x][y] == 4 || newData[x][y] == 5 || newData[x][y] == 6 || newData[x][y] == 7 ||
+                    newData[x][y] == 11 || newData[x][y] == 12  || newData[x][y] == 13 || newData[x][y] == 14 || newData[x][y] == 15 || newData[x][y] == 16 || newData[x][y] == 17 ||
+                    newData[x][y] == 21 || newData[x][y] == 22  || newData[x][y] == 23 || newData[x][y] == 24 || newData[x][y] == 25 || newData[x][y] == 26 || newData[x][y] == 27 ||
+                    newData[x][y] == 31 || newData[x][y] == 32  || newData[x][y] == 33 || newData[x][y] == 34 || newData[x][y] == 35 || newData[x][y] == 36 || newData[x][y] == 37 ||
+                    newData[x][y] == 41 || newData[x][y] == 42  || newData[x][y] == 43 || newData[x][y] == 44 || newData[x][y] == 45 || newData[x][y] == 46 || newData[x][y] == 47 ||
+                    newData[x][y] == 51 || newData[x][y] == 52  || newData[x][y] == 53 || newData[x][y] == 54 || newData[x][y] == 55 || newData[x][y] == 56 || newData[x][y] == 57 ||
+                    newData[x][y] == 61 || newData[x][y] == 62  || newData[x][y] == 63 || newData[x][y] == 64 || newData[x][y] == 65 || newData[x][y] == 66 || newData[x][y] == 67 ||
+                    newData[x][y] == 71 || newData[x][y] == 72  || newData[x][y] == 73 || newData[x][y] == 74 || newData[x][y] == 75 || newData[x][y] == 76 || newData[x][y] == 77 ||
+                    newData[x][y] == 81 || newData[x][y] == 82  || newData[x][y] == 83 || newData[x][y] == 84 || newData[x][y] == 85 || newData[x][y] == 86 || newData[x][y] == 87 ||
+                    newData[x][y] == 91 || newData[x][y] == 92  || newData[x][y] == 93 || newData[x][y] == 94 || newData[x][y] == 95 || newData[x][y] == 96 || newData[x][y] == 97 ||
+                    newData[x][y] == 101 || newData[x][y] == 102  || newData[x][y] == 103 || newData[x][y] == 104 || newData[x][y] == 105 || newData[x][y] == 106 || newData[x][y] == 107 ||
+                    newData[x][y] == 111 || newData[x][y] == 112  || newData[x][y] == 113 || newData[x][y] == 114 || newData[x][y] == 115 || newData[x][y] == 116 || newData[x][y] == 117 ||
+                    newData[x][y] == 121 || newData[x][y] == 122  || newData[x][y] == 123 || newData[x][y] == 124 || newData[x][y] == 125 || newData[x][y] == 126 || newData[x][y] == 127 ||
+                    newData[x][y] == 131 || newData[x][y] == 132  || newData[x][y] == 133 || newData[x][y] == 134 || newData[x][y] == 135 || newData[x][y] == 136 || newData[x][y] == 137 ||
+                    newData[x][y] == 141 || newData[x][y] == 142  || newData[x][y] == 143 || newData[x][y] == 144 || newData[x][y] == 145 || newData[x][y] == 146 || newData[x][y] == 147 ||
+                    newData[x][y] == 151 || newData[x][y] == 152  || newData[x][y] == 153 || newData[x][y] == 154 || newData[x][y] == 155 || newData[x][y] == 156 || newData[x][y] == 157) {
                     minX = Math.min(x, minX);
                     maxX = Math.max(x, maxX);
                     minY = Math.min(y, minY);
                     maxY = Math.max(y, maxY);
     
-                    newData[x][y] =  newData[x][y] + 10;
+                    newData[x][y] =  newData[x][y] + 1000;
                     flow(x-1, y);
                     flow(x+1, y);
                     flow(x, y-1);
@@ -265,20 +314,20 @@ class Game extends Component {
         // shrink array (cut out a square)
         var shape = [];
 
-   
+        for (var i=0; i<newData.length; i++) {
+            for (var j=0; j<newData[i].length; j++) {
+                if (newData[i][j] !== 0) {
+                    newData[i][j] = newData[i][j] - 1000;
+                }
+            }
+        }
+
 
         for (var i = minX; i < maxX + 1; i++) {
             shape.push( newData[i].slice(minY, maxY + 1) );
         }
 
-        for (var i=0; i<shape.length; i++) {
-            for (var j=0; j<shape[i].length; j++) {
-                if (shape[i][j] !== 0) {
-                    shape[i][j] = shape[i][j] - 10;
-                }
-            }
-        }
-
+     
         var result = [];
         result.shape = shape;
         result.col = minX;
@@ -581,6 +630,13 @@ class Game extends Component {
     }
 
     addNewPiece() {
+        if (this.ledOn) {
+            socket.send('2');
+            this.ledOn = false;
+        } else {
+            this.ledOn = true;
+            socket.send('1'); 
+        }
         console.log("add new piece")
         if (!this.state.nextPiece) {
             this.generateNextPiece();
@@ -591,6 +647,9 @@ class Game extends Component {
         if (!this.arraysEqual(controls.p1, this.state.currentControls.p1) ||
             !this.arraysEqual(controls.p2, this.state.currentControls.p2)) {
                 console.log("arrays aren't the same")
+
+           
+
             this.setState({activePiece:tetromino, changingControls:true, newControls:controls});
         } else {
             this.setState({activePiece:tetromino});
@@ -690,6 +749,44 @@ class Game extends Component {
         return controls;
     }
 
+    calculateShapes(shapeInt, shapes) {
+        console.log("CALCULATE SHAPES");
+        var shapeTexture_1 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
+        var shapeTexture_2 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
+        var shapeTexture_3 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
+        var shapeTexture_4 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
+
+        console.log("SHAPES:", shapeTexture_1, shapeTexture_2, shapeTexture_3, shapeTexture_4)
+
+        for (var subShape = 0; subShape<shapes.length; subShape++) {
+            for (var x = 0; x<shapes[subShape].length; x++) {
+                for (var y = 0; y<shapes[subShape][x].length; y++) {
+                    if (shapes[subShape][x][y] === 1) {
+                        shapes[subShape][x][y] = shapeTexture_1;
+                    }
+
+                    if (shapes[subShape][x][y] === 2) {
+                        shapes[subShape][x][y] = shapeTexture_2;
+                    }
+
+                    if (shapes[subShape][x][y] === 3) {
+                        shapes[subShape][x][y] = shapeTexture_3;
+                    }
+
+                    if (shapes[subShape][x][y] === 4) {
+                        shapes[subShape][x][y] = shapeTexture_4;
+                    }
+
+                   
+                }
+            }
+        }
+
+        console.log(shapes);
+
+        return shapes;
+    }
+
     generateNextPiece() {
         let nextPiece = {};
         nextPiece.rotationInt = 0;
@@ -703,7 +800,7 @@ class Game extends Component {
 
         randomColumn = 4;
 
-        nextPiece.shapes = this.tetrominoShapes[randomShape];
+        nextPiece.shapes = this.calculateShapes(randomShape, this.tetrominoShapes[randomShape]);
         nextPiece.shape = nextPiece.shapes[nextPiece.rotationInt];
         nextPiece.topLeft = {row: 0, col:randomColumn};
         this.setState({nextPiece:nextPiece});
@@ -715,7 +812,9 @@ class Game extends Component {
         for (var row = 0; row < gameGridRows.length; row++) {
             let cols_output = [];
             for (var col = 0; col < gameGridRows[row].length; col++) {
-                cols_output.push(<td key={col}><span></span></td>);
+                const backgroundColor = this.backgroundGrid[row][col];
+                const className = "number_" + backgroundColor;
+                cols_output.push(<td key={col} className={className}><span></span></td>);
             }
             rows_output.push(<tr key={row}>{cols_output}</tr>);
         }
@@ -948,145 +1047,145 @@ class Game extends Component {
         [
             [
                 [0,1],
+                [0,2],
+                [4,3],
+            ],
+            [
+                [4,0,0],
+                [3,2,1],
+            ],
+            [
+                [3,4],
+                [2,0],
+                [1,0],
+            ],
+            [
+                [1,2,3],
+                [0,0,4],
+            ],
+        ],
+        [
+            [
+                [1,0],
+                [2,0],
+                [3,4],
+            ],
+            [
+                [0,0,4],
+                [1,2,3],
+            ],
+            [
+                [4,3],
+                [0,2],
                 [0,1],
-                [1,1],
             ],
             [
-                [1,0,0],
-                [1,1,1],
+                [3,2,1],
+                [4,0,0],
             ],
+        ],
+        [
             [
-                [1,1],
                 [1,0],
-                [1,0],
-            ],
-            [
-                [1,1,1],
-                [0,0,1],
-            ],
-        ],
-        [
-            [
-                [2,0],
-                [2,0],
-                [2,2],
-            ],
-            [
-                [0,0,2],
-                [2,2,2],
-            ],
-            [
-                [2,2],
-                [0,2],
-                [0,2],
-            ],
-            [
-                [2,2,2],
-                [2,0,0],
-            ],
-        ],
-        [
-            [
-                [3,0],
-                [3,3],
-                [0,3],
-            ],
-            [
-                [0,3,3],
-                [3,3,0],
-            ],
-            [
-                [3,0],
-                [3,3],
-                [0,3],
-            ],
-            [
-                [0,3,3],
-                [3,3,0],
-            ],
-        ],
-        [
-            [
+                [2,3],
                 [0,4],
-                [4,4],
+            ],
+            [
+                [0,3,4],
+                [1,2,0],
+            ],
+            [
+                [4,0],
+                [3,2],
+                [0,1],
+            ],
+            [
+                [0,2,1],
+                [4,3,0],
+            ],
+        ],
+        [
+            [
+                [0,1],
+                [3,2],
                 [4,0],
             ],
             [
-                [4,4,0],
-                [0,4,4]
+                [1,2,0],
+                [0,3,4]
             ],
             [
                 [0,4],
-                [4,4],
+                [2,3],
+                [1,0],
+            ],
+            [
+                [4,3,0],
+                [0,2,1],
+            ],
+        ],
+        [
+            [
+                [0,1,0],
+                [2,3,4],
+            ],
+            [
+                [0,4],
+                [1,3],
+                [0,2],
+            ],
+            [
+                [4,3,2],
+                [0,1,0],
+            ],
+            [
+                [2,0],
+                [3,1],
                 [4,0],
             ],
-            [
-                [4,4,0],
-                [0,4,4],
-            ],
         ],
         [
             [
-                [0,5,0],
-                [5,5,5],
-            ],
-            [
-                [0,5],
-                [5,5],
-                [0,5],
-            ],
-            [
-                [5,5,5],
-                [0,5,0],
-            ],
-            [
-                [5,0],
-                [5,5],
-                [5,0],
-            ],
-        ],
-        [
-            [
-                [0,6,0,0],
-                [0,6,0,0],
-                [0,6,0,0],
-                [0,6,0,0],
+                [0,1,0,0],
+                [0,2,0,0],
+                [0,3,0,0],
+                [0,4,0,0],
             ],
             [
                 [0,0,0,0],
                 [0,0,0,0],
-                [6,6,6,6],
+                [1,2,3,4],
                 [0,0,0,0],
             ],
             [
-                [0,0,6,0],
-                [0,0,6,0],
-                [0,0,6,0],
-                [0,0,6,0],
+                [0,0,4,0],
+                [0,0,3,0],
+                [0,0,2,0],
+                [0,0,1,0],
             ],
             [
                 [0,0,0,0],
-                [6,6,6,6],
+                [4,3,2,1],
                 [0,0,0,0],
                 [0,0,0,0],
             ],
         ],
         [
             [
-                [7,7],
-                [7,7],
+                [1,2],
+                [4,3],
             ],
             [
-                [7,7],
-                [7,7],
+                [4,1],
+                [3,2],
             ],
             [
-                [7,7],
-                [7,7],
+                [3,4],
+                [2,1],
             ],
             [
-                [7,7],
-                [7,7],
+                [2,3],
+                [1,4],
             ],
         ]
     ]

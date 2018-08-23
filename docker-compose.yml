@@ -12,3 +12,12 @@ services:
       - ./cuad-app:/usr/src/app/
     environment:
       - NODE_ENV=development
+  socket:
+    image: nginx
+    ports:
+      - "3001:80"
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
+    volumes:
+      - ./cuad-socket:/usr/share/nginx/html

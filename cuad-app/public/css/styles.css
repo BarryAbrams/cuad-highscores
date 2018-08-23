@@ -353,27 +353,70 @@ p {
 }
 .game .gamegridtable {
   margin: 0px auto;
-  border-left: 8px solid #262d33;
-  border-bottom: 8px solid #262d33;
+  border-left: 8px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 8px solid rgba(0, 0, 0, 0.3);
   background-color: #26393d;
   position: absolute;
   top: 8px;
   left: 8px;
 }
 .game .gamegridtable tr td {
-  border-right: 8px solid #262d33;
-  border-top: 8px solid #262d33;
+  border-right: 8px solid rgba(0, 0, 0, 0.3);
+  border-top: 8px solid rgba(0, 0, 0, 0.3);
   width: 72px;
   height: 72px;
   position: relative;
+  background-image: url("/images/background-blocks.png");
+  background-size: 400% 400%;
+  image-rendering: crisp-edges;
 }
-.game .gamegridtable tr td span {
-  display: block;
-  height: 8px;
-  width: 100%;
-  background-color: #3f5465;
-  position: absolute;
-  top: 0;
+.game .gamegridtable tr td.number_1 {
+  background-position: 0% 0%;
+}
+.game .gamegridtable tr td.number_2 {
+  background-position: 0% -100%;
+}
+.game .gamegridtable tr td.number_3 {
+  background-position: 0% -200%;
+}
+.game .gamegridtable tr td.number_4 {
+  background-position: 0% -300%;
+}
+.game .gamegridtable tr td.number_5 {
+  background-position: -100% 0%;
+}
+.game .gamegridtable tr td.number_6 {
+  background-position: -100% -100%;
+}
+.game .gamegridtable tr td.number_7 {
+  background-position: -100% -200%;
+}
+.game .gamegridtable tr td.number_8 {
+  background-position: -100% -300%;
+}
+.game .gamegridtable tr td.number_9 {
+  background-position: -200% 0%;
+}
+.game .gamegridtable tr td.number_10 {
+  background-position: -200% -100%;
+}
+.game .gamegridtable tr td.number_11 {
+  background-position: -200% -200%;
+}
+.game .gamegridtable tr td.number_12 {
+  background-position: -200% -300%;
+}
+.game .gamegridtable tr td.number_13 {
+  background-position: -300% 0%;
+}
+.game .gamegridtable tr td.number_14 {
+  background-position: -300% -100%;
+}
+.game .gamegridtable tr td.number_15 {
+  background-position: -300% -200%;
+}
+.game .gamegridtable tr td.number_16 {
+  background-position: -300% -300%;
 }
 .game .landed-pieces,
 .game .active-piece,
@@ -389,54 +432,741 @@ p {
   background-color: #555;
   width: 72px;
   height: 72px;
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 .game .landed-pieces .piece span,
 .game .active-piece .piece span,
 .game .active-clump .piece span {
   width: 72px;
   height: 72px;
-  background-image: url("/images/block-overlay.png");
-  background-size: 100% 100%;
+  background-image: url("/images/yellow-blocks.png");
+  background-size: 400% 400%;
   display: block;
   position: absolute;
+  image-rendering: crisp-edges;
 }
 .game .landed-pieces .piece,
 .game .active-piece .piece,
 .game .active-clump .piece {
   background-color: #555;
 }
-.game .landed-pieces .piece.number_1,
-.game .active-piece .piece.number_1,
-.game .active-clump .piece.number_1 {
-  background-color: #0000f0;
+.game .landed-pieces .piece.number_1 span,
+.game .active-piece .piece.number_1 span,
+.game .active-clump .piece.number_1 span,
+.game .landed-pieces .piece.number_11 span,
+.game .active-piece .piece.number_11 span,
+.game .active-clump .piece.number_11 span,
+.game .landed-pieces .piece.number_21 span,
+.game .active-piece .piece.number_21 span,
+.game .active-clump .piece.number_21 span,
+.game .landed-pieces .piece.number_31 span,
+.game .active-piece .piece.number_31 span,
+.game .active-clump .piece.number_31 span,
+.game .landed-pieces .piece.number_41 span,
+.game .active-piece .piece.number_41 span,
+.game .active-clump .piece.number_41 span,
+.game .landed-pieces .piece.number_51 span,
+.game .active-piece .piece.number_51 span,
+.game .active-clump .piece.number_51 span,
+.game .landed-pieces .piece.number_61 span,
+.game .active-piece .piece.number_61 span,
+.game .active-clump .piece.number_61 span,
+.game .landed-pieces .piece.number_71 span,
+.game .active-piece .piece.number_71 span,
+.game .active-clump .piece.number_71 span,
+.game .landed-pieces .piece.number_81 span,
+.game .active-piece .piece.number_81 span,
+.game .active-clump .piece.number_81 span,
+.game .landed-pieces .piece.number_91 span,
+.game .active-piece .piece.number_91 span,
+.game .active-clump .piece.number_91 span,
+.game .landed-pieces .piece.number_101 span,
+.game .active-piece .piece.number_101 span,
+.game .active-clump .piece.number_101 span,
+.game .landed-pieces .piece.number_111 span,
+.game .active-piece .piece.number_111 span,
+.game .active-clump .piece.number_111 span,
+.game .landed-pieces .piece.number_121 span,
+.game .active-piece .piece.number_121 span,
+.game .active-clump .piece.number_121 span,
+.game .landed-pieces .piece.number_131 span,
+.game .active-piece .piece.number_131 span,
+.game .active-clump .piece.number_131 span,
+.game .landed-pieces .piece.number_141 span,
+.game .active-piece .piece.number_141 span,
+.game .active-clump .piece.number_141 span,
+.game .landed-pieces .piece.number_151 span,
+.game .active-piece .piece.number_151 span,
+.game .active-clump .piece.number_151 span {
+  background-image: url("/images/blue-blocks.png");
 }
-.game .landed-pieces .piece.number_2,
-.game .active-piece .piece.number_2,
-.game .active-clump .piece.number_2 {
-  background-color: #f0a000;
+.game .landed-pieces .piece.number_2 span,
+.game .active-piece .piece.number_2 span,
+.game .active-clump .piece.number_2 span,
+.game .landed-pieces .piece.number_12 span,
+.game .active-piece .piece.number_12 span,
+.game .active-clump .piece.number_12 span,
+.game .landed-pieces .piece.number_22 span,
+.game .active-piece .piece.number_22 span,
+.game .active-clump .piece.number_22 span,
+.game .landed-pieces .piece.number_32 span,
+.game .active-piece .piece.number_32 span,
+.game .active-clump .piece.number_32 span,
+.game .landed-pieces .piece.number_42 span,
+.game .active-piece .piece.number_42 span,
+.game .active-clump .piece.number_42 span,
+.game .landed-pieces .piece.number_52 span,
+.game .active-piece .piece.number_52 span,
+.game .active-clump .piece.number_52 span,
+.game .landed-pieces .piece.number_62 span,
+.game .active-piece .piece.number_62 span,
+.game .active-clump .piece.number_62 span,
+.game .landed-pieces .piece.number_72 span,
+.game .active-piece .piece.number_72 span,
+.game .active-clump .piece.number_72 span,
+.game .landed-pieces .piece.number_82 span,
+.game .active-piece .piece.number_82 span,
+.game .active-clump .piece.number_82 span,
+.game .landed-pieces .piece.number_92 span,
+.game .active-piece .piece.number_92 span,
+.game .active-clump .piece.number_92 span,
+.game .landed-pieces .piece.number_102 span,
+.game .active-piece .piece.number_102 span,
+.game .active-clump .piece.number_102 span,
+.game .landed-pieces .piece.number_112 span,
+.game .active-piece .piece.number_112 span,
+.game .active-clump .piece.number_112 span,
+.game .landed-pieces .piece.number_122 span,
+.game .active-piece .piece.number_122 span,
+.game .active-clump .piece.number_122 span,
+.game .landed-pieces .piece.number_132 span,
+.game .active-piece .piece.number_132 span,
+.game .active-clump .piece.number_132 span,
+.game .landed-pieces .piece.number_142 span,
+.game .active-piece .piece.number_142 span,
+.game .active-clump .piece.number_142 span,
+.game .landed-pieces .piece.number_152 span,
+.game .active-piece .piece.number_152 span,
+.game .active-clump .piece.number_152 span {
+  background-image: url("/images/orange-blocks.png");
 }
-.game .landed-pieces .piece.number_3,
-.game .active-piece .piece.number_3,
-.game .active-clump .piece.number_3 {
-  background-color: #00f000;
+.game .landed-pieces .piece.number_3 span,
+.game .active-piece .piece.number_3 span,
+.game .active-clump .piece.number_3 span,
+.game .landed-pieces .piece.number_13 span,
+.game .active-piece .piece.number_13 span,
+.game .active-clump .piece.number_13 span,
+.game .landed-pieces .piece.number_23 span,
+.game .active-piece .piece.number_23 span,
+.game .active-clump .piece.number_23 span,
+.game .landed-pieces .piece.number_33 span,
+.game .active-piece .piece.number_33 span,
+.game .active-clump .piece.number_33 span,
+.game .landed-pieces .piece.number_43 span,
+.game .active-piece .piece.number_43 span,
+.game .active-clump .piece.number_43 span,
+.game .landed-pieces .piece.number_53 span,
+.game .active-piece .piece.number_53 span,
+.game .active-clump .piece.number_53 span,
+.game .landed-pieces .piece.number_63 span,
+.game .active-piece .piece.number_63 span,
+.game .active-clump .piece.number_63 span,
+.game .landed-pieces .piece.number_73 span,
+.game .active-piece .piece.number_73 span,
+.game .active-clump .piece.number_73 span,
+.game .landed-pieces .piece.number_83 span,
+.game .active-piece .piece.number_83 span,
+.game .active-clump .piece.number_83 span,
+.game .landed-pieces .piece.number_93 span,
+.game .active-piece .piece.number_93 span,
+.game .active-clump .piece.number_93 span,
+.game .landed-pieces .piece.number_103 span,
+.game .active-piece .piece.number_103 span,
+.game .active-clump .piece.number_103 span,
+.game .landed-pieces .piece.number_113 span,
+.game .active-piece .piece.number_113 span,
+.game .active-clump .piece.number_113 span,
+.game .landed-pieces .piece.number_123 span,
+.game .active-piece .piece.number_123 span,
+.game .active-clump .piece.number_123 span,
+.game .landed-pieces .piece.number_133 span,
+.game .active-piece .piece.number_133 span,
+.game .active-clump .piece.number_133 span,
+.game .landed-pieces .piece.number_143 span,
+.game .active-piece .piece.number_143 span,
+.game .active-clump .piece.number_143 span,
+.game .landed-pieces .piece.number_153 span,
+.game .active-piece .piece.number_153 span,
+.game .active-clump .piece.number_153 span {
+  background-image: url("/images/green-blocks.png");
 }
-.game .landed-pieces .piece.number_4,
-.game .active-piece .piece.number_4,
-.game .active-clump .piece.number_4 {
-  background-color: #f00000;
+.game .landed-pieces .piece.number_4 span,
+.game .active-piece .piece.number_4 span,
+.game .active-clump .piece.number_4 span,
+.game .landed-pieces .piece.number_14 span,
+.game .active-piece .piece.number_14 span,
+.game .active-clump .piece.number_14 span,
+.game .landed-pieces .piece.number_24 span,
+.game .active-piece .piece.number_24 span,
+.game .active-clump .piece.number_24 span,
+.game .landed-pieces .piece.number_34 span,
+.game .active-piece .piece.number_34 span,
+.game .active-clump .piece.number_34 span,
+.game .landed-pieces .piece.number_44 span,
+.game .active-piece .piece.number_44 span,
+.game .active-clump .piece.number_44 span,
+.game .landed-pieces .piece.number_54 span,
+.game .active-piece .piece.number_54 span,
+.game .active-clump .piece.number_54 span,
+.game .landed-pieces .piece.number_64 span,
+.game .active-piece .piece.number_64 span,
+.game .active-clump .piece.number_64 span,
+.game .landed-pieces .piece.number_74 span,
+.game .active-piece .piece.number_74 span,
+.game .active-clump .piece.number_74 span,
+.game .landed-pieces .piece.number_84 span,
+.game .active-piece .piece.number_84 span,
+.game .active-clump .piece.number_84 span,
+.game .landed-pieces .piece.number_94 span,
+.game .active-piece .piece.number_94 span,
+.game .active-clump .piece.number_94 span,
+.game .landed-pieces .piece.number_104 span,
+.game .active-piece .piece.number_104 span,
+.game .active-clump .piece.number_104 span,
+.game .landed-pieces .piece.number_114 span,
+.game .active-piece .piece.number_114 span,
+.game .active-clump .piece.number_114 span,
+.game .landed-pieces .piece.number_124 span,
+.game .active-piece .piece.number_124 span,
+.game .active-clump .piece.number_124 span,
+.game .landed-pieces .piece.number_134 span,
+.game .active-piece .piece.number_134 span,
+.game .active-clump .piece.number_134 span,
+.game .landed-pieces .piece.number_144 span,
+.game .active-piece .piece.number_144 span,
+.game .active-clump .piece.number_144 span,
+.game .landed-pieces .piece.number_154 span,
+.game .active-piece .piece.number_154 span,
+.game .active-clump .piece.number_154 span {
+  background-image: url("/images/red-blocks.png");
 }
-.game .landed-pieces .piece.number_5,
-.game .active-piece .piece.number_5,
-.game .active-clump .piece.number_5 {
-  background-color: #a000f0;
+.game .landed-pieces .piece.number_5 span,
+.game .active-piece .piece.number_5 span,
+.game .active-clump .piece.number_5 span,
+.game .landed-pieces .piece.number_15 span,
+.game .active-piece .piece.number_15 span,
+.game .active-clump .piece.number_15 span,
+.game .landed-pieces .piece.number_25 span,
+.game .active-piece .piece.number_25 span,
+.game .active-clump .piece.number_25 span,
+.game .landed-pieces .piece.number_35 span,
+.game .active-piece .piece.number_35 span,
+.game .active-clump .piece.number_35 span,
+.game .landed-pieces .piece.number_45 span,
+.game .active-piece .piece.number_45 span,
+.game .active-clump .piece.number_45 span,
+.game .landed-pieces .piece.number_55 span,
+.game .active-piece .piece.number_55 span,
+.game .active-clump .piece.number_55 span,
+.game .landed-pieces .piece.number_65 span,
+.game .active-piece .piece.number_65 span,
+.game .active-clump .piece.number_65 span,
+.game .landed-pieces .piece.number_75 span,
+.game .active-piece .piece.number_75 span,
+.game .active-clump .piece.number_75 span,
+.game .landed-pieces .piece.number_85 span,
+.game .active-piece .piece.number_85 span,
+.game .active-clump .piece.number_85 span,
+.game .landed-pieces .piece.number_95 span,
+.game .active-piece .piece.number_95 span,
+.game .active-clump .piece.number_95 span,
+.game .landed-pieces .piece.number_105 span,
+.game .active-piece .piece.number_105 span,
+.game .active-clump .piece.number_105 span,
+.game .landed-pieces .piece.number_115 span,
+.game .active-piece .piece.number_115 span,
+.game .active-clump .piece.number_115 span,
+.game .landed-pieces .piece.number_125 span,
+.game .active-piece .piece.number_125 span,
+.game .active-clump .piece.number_125 span,
+.game .landed-pieces .piece.number_135 span,
+.game .active-piece .piece.number_135 span,
+.game .active-clump .piece.number_135 span,
+.game .landed-pieces .piece.number_145 span,
+.game .active-piece .piece.number_145 span,
+.game .active-clump .piece.number_145 span,
+.game .landed-pieces .piece.number_155 span,
+.game .active-piece .piece.number_155 span,
+.game .active-clump .piece.number_155 span {
+  background-image: url("/images/purple-blocks.png");
 }
-.game .landed-pieces .piece.number_6,
-.game .active-piece .piece.number_6,
-.game .active-clump .piece.number_6 {
-  background-color: #00f0f0;
+.game .landed-pieces .piece.number_6 span,
+.game .active-piece .piece.number_6 span,
+.game .active-clump .piece.number_6 span,
+.game .landed-pieces .piece.number_16 span,
+.game .active-piece .piece.number_16 span,
+.game .active-clump .piece.number_16 span,
+.game .landed-pieces .piece.number_26 span,
+.game .active-piece .piece.number_26 span,
+.game .active-clump .piece.number_26 span,
+.game .landed-pieces .piece.number_36 span,
+.game .active-piece .piece.number_36 span,
+.game .active-clump .piece.number_36 span,
+.game .landed-pieces .piece.number_46 span,
+.game .active-piece .piece.number_46 span,
+.game .active-clump .piece.number_46 span,
+.game .landed-pieces .piece.number_56 span,
+.game .active-piece .piece.number_56 span,
+.game .active-clump .piece.number_56 span,
+.game .landed-pieces .piece.number_66 span,
+.game .active-piece .piece.number_66 span,
+.game .active-clump .piece.number_66 span,
+.game .landed-pieces .piece.number_76 span,
+.game .active-piece .piece.number_76 span,
+.game .active-clump .piece.number_76 span,
+.game .landed-pieces .piece.number_86 span,
+.game .active-piece .piece.number_86 span,
+.game .active-clump .piece.number_86 span,
+.game .landed-pieces .piece.number_96 span,
+.game .active-piece .piece.number_96 span,
+.game .active-clump .piece.number_96 span,
+.game .landed-pieces .piece.number_106 span,
+.game .active-piece .piece.number_106 span,
+.game .active-clump .piece.number_106 span,
+.game .landed-pieces .piece.number_116 span,
+.game .active-piece .piece.number_116 span,
+.game .active-clump .piece.number_116 span,
+.game .landed-pieces .piece.number_126 span,
+.game .active-piece .piece.number_126 span,
+.game .active-clump .piece.number_126 span,
+.game .landed-pieces .piece.number_136 span,
+.game .active-piece .piece.number_136 span,
+.game .active-clump .piece.number_136 span,
+.game .landed-pieces .piece.number_146 span,
+.game .active-piece .piece.number_146 span,
+.game .active-clump .piece.number_146 span,
+.game .landed-pieces .piece.number_156 span,
+.game .active-piece .piece.number_156 span,
+.game .active-clump .piece.number_156 span {
+  background-image: url("/images/lightblue-blocks.png");
 }
-.game .landed-pieces .piece.number_7,
-.game .active-piece .piece.number_7,
-.game .active-clump .piece.number_7 {
+.game .landed-pieces .piece.number_7 span,
+.game .active-piece .piece.number_7 span,
+.game .active-clump .piece.number_7 span,
+.game .landed-pieces .piece.number_17 span,
+.game .active-piece .piece.number_17 span,
+.game .active-clump .piece.number_17 span,
+.game .landed-pieces .piece.number_27 span,
+.game .active-piece .piece.number_27 span,
+.game .active-clump .piece.number_27 span,
+.game .landed-pieces .piece.number_37 span,
+.game .active-piece .piece.number_37 span,
+.game .active-clump .piece.number_37 span,
+.game .landed-pieces .piece.number_47 span,
+.game .active-piece .piece.number_47 span,
+.game .active-clump .piece.number_47 span,
+.game .landed-pieces .piece.number_57 span,
+.game .active-piece .piece.number_57 span,
+.game .active-clump .piece.number_57 span,
+.game .landed-pieces .piece.number_67 span,
+.game .active-piece .piece.number_67 span,
+.game .active-clump .piece.number_67 span,
+.game .landed-pieces .piece.number_77 span,
+.game .active-piece .piece.number_77 span,
+.game .active-clump .piece.number_77 span,
+.game .landed-pieces .piece.number_87 span,
+.game .active-piece .piece.number_87 span,
+.game .active-clump .piece.number_87 span,
+.game .landed-pieces .piece.number_97 span,
+.game .active-piece .piece.number_97 span,
+.game .active-clump .piece.number_97 span,
+.game .landed-pieces .piece.number_107 span,
+.game .active-piece .piece.number_107 span,
+.game .active-clump .piece.number_107 span,
+.game .landed-pieces .piece.number_117 span,
+.game .active-piece .piece.number_117 span,
+.game .active-clump .piece.number_117 span,
+.game .landed-pieces .piece.number_127 span,
+.game .active-piece .piece.number_127 span,
+.game .active-clump .piece.number_127 span,
+.game .landed-pieces .piece.number_137 span,
+.game .active-piece .piece.number_137 span,
+.game .active-clump .piece.number_137 span,
+.game .landed-pieces .piece.number_147 span,
+.game .active-piece .piece.number_147 span,
+.game .active-clump .piece.number_147 span,
+.game .landed-pieces .piece.number_157 span,
+.game .active-piece .piece.number_157 span,
+.game .active-clump .piece.number_157 span {
   background-color: #f0f000;
+}
+.game .landed-pieces .piece.number_1 span,
+.game .active-piece .piece.number_1 span,
+.game .active-clump .piece.number_1 span,
+.game .landed-pieces .piece.number_2 span,
+.game .active-piece .piece.number_2 span,
+.game .active-clump .piece.number_2 span,
+.game .landed-pieces .piece.number_3 span,
+.game .active-piece .piece.number_3 span,
+.game .active-clump .piece.number_3 span,
+.game .landed-pieces .piece.number_4 span,
+.game .active-piece .piece.number_4 span,
+.game .active-clump .piece.number_4 span,
+.game .landed-pieces .piece.number_5 span,
+.game .active-piece .piece.number_5 span,
+.game .active-clump .piece.number_5 span,
+.game .landed-pieces .piece.number_6 span,
+.game .active-piece .piece.number_6 span,
+.game .active-clump .piece.number_6 span,
+.game .landed-pieces .piece.number_7 span,
+.game .active-piece .piece.number_7 span,
+.game .active-clump .piece.number_7 span {
+  background-position: 0 0;
+}
+.game .landed-pieces .piece.number_11 span,
+.game .active-piece .piece.number_11 span,
+.game .active-clump .piece.number_11 span,
+.game .landed-pieces .piece.number_12 span,
+.game .active-piece .piece.number_12 span,
+.game .active-clump .piece.number_12 span,
+.game .landed-pieces .piece.number_13 span,
+.game .active-piece .piece.number_13 span,
+.game .active-clump .piece.number_13 span,
+.game .landed-pieces .piece.number_14 span,
+.game .active-piece .piece.number_14 span,
+.game .active-clump .piece.number_14 span,
+.game .landed-pieces .piece.number_15 span,
+.game .active-piece .piece.number_15 span,
+.game .active-clump .piece.number_15 span,
+.game .landed-pieces .piece.number_16 span,
+.game .active-piece .piece.number_16 span,
+.game .active-clump .piece.number_16 span,
+.game .landed-pieces .piece.number_17 span,
+.game .active-piece .piece.number_17 span,
+.game .active-clump .piece.number_17 span {
+  background-position: -100% 0;
+}
+.game .landed-pieces .piece.number_21 span,
+.game .active-piece .piece.number_21 span,
+.game .active-clump .piece.number_21 span,
+.game .landed-pieces .piece.number_22 span,
+.game .active-piece .piece.number_22 span,
+.game .active-clump .piece.number_22 span,
+.game .landed-pieces .piece.number_23 span,
+.game .active-piece .piece.number_23 span,
+.game .active-clump .piece.number_23 span,
+.game .landed-pieces .piece.number_24 span,
+.game .active-piece .piece.number_24 span,
+.game .active-clump .piece.number_24 span,
+.game .landed-pieces .piece.number_25 span,
+.game .active-piece .piece.number_25 span,
+.game .active-clump .piece.number_25 span,
+.game .landed-pieces .piece.number_26 span,
+.game .active-piece .piece.number_26 span,
+.game .active-clump .piece.number_26 span,
+.game .landed-pieces .piece.number_27 span,
+.game .active-piece .piece.number_27 span,
+.game .active-clump .piece.number_27 span {
+  background-position: -200% -100%;
+}
+.game .landed-pieces .piece.number_31 span,
+.game .active-piece .piece.number_31 span,
+.game .active-clump .piece.number_31 span,
+.game .landed-pieces .piece.number_32 span,
+.game .active-piece .piece.number_32 span,
+.game .active-clump .piece.number_32 span,
+.game .landed-pieces .piece.number_33 span,
+.game .active-piece .piece.number_33 span,
+.game .active-clump .piece.number_33 span,
+.game .landed-pieces .piece.number_34 span,
+.game .active-piece .piece.number_34 span,
+.game .active-clump .piece.number_34 span,
+.game .landed-pieces .piece.number_35 span,
+.game .active-piece .piece.number_35 span,
+.game .active-clump .piece.number_35 span,
+.game .landed-pieces .piece.number_36 span,
+.game .active-piece .piece.number_36 span,
+.game .active-clump .piece.number_36 span,
+.game .landed-pieces .piece.number_37 span,
+.game .active-piece .piece.number_37 span,
+.game .active-clump .piece.number_37 span {
+  background-position: -300% 0;
+}
+.game .landed-pieces .piece.number_41 span,
+.game .active-piece .piece.number_41 span,
+.game .active-clump .piece.number_41 span,
+.game .landed-pieces .piece.number_42 span,
+.game .active-piece .piece.number_42 span,
+.game .active-clump .piece.number_42 span,
+.game .landed-pieces .piece.number_43 span,
+.game .active-piece .piece.number_43 span,
+.game .active-clump .piece.number_43 span,
+.game .landed-pieces .piece.number_44 span,
+.game .active-piece .piece.number_44 span,
+.game .active-clump .piece.number_44 span,
+.game .landed-pieces .piece.number_45 span,
+.game .active-piece .piece.number_45 span,
+.game .active-clump .piece.number_45 span,
+.game .landed-pieces .piece.number_46 span,
+.game .active-piece .piece.number_46 span,
+.game .active-clump .piece.number_46 span,
+.game .landed-pieces .piece.number_47 span,
+.game .active-piece .piece.number_47 span,
+.game .active-clump .piece.number_47 span {
+  background-position: 0% -100%;
+}
+.game .landed-pieces .piece.number_51 span,
+.game .active-piece .piece.number_51 span,
+.game .active-clump .piece.number_51 span,
+.game .landed-pieces .piece.number_52 span,
+.game .active-piece .piece.number_52 span,
+.game .active-clump .piece.number_52 span,
+.game .landed-pieces .piece.number_53 span,
+.game .active-piece .piece.number_53 span,
+.game .active-clump .piece.number_53 span,
+.game .landed-pieces .piece.number_54 span,
+.game .active-piece .piece.number_54 span,
+.game .active-clump .piece.number_54 span,
+.game .landed-pieces .piece.number_55 span,
+.game .active-piece .piece.number_55 span,
+.game .active-clump .piece.number_55 span,
+.game .landed-pieces .piece.number_56 span,
+.game .active-piece .piece.number_56 span,
+.game .active-clump .piece.number_56 span,
+.game .landed-pieces .piece.number_57 span,
+.game .active-piece .piece.number_57 span,
+.game .active-clump .piece.number_57 span {
+  background-position: -100% -100%;
+}
+.game .landed-pieces .piece.number_61 span,
+.game .active-piece .piece.number_61 span,
+.game .active-clump .piece.number_61 span,
+.game .landed-pieces .piece.number_62 span,
+.game .active-piece .piece.number_62 span,
+.game .active-clump .piece.number_62 span,
+.game .landed-pieces .piece.number_63 span,
+.game .active-piece .piece.number_63 span,
+.game .active-clump .piece.number_63 span,
+.game .landed-pieces .piece.number_64 span,
+.game .active-piece .piece.number_64 span,
+.game .active-clump .piece.number_64 span,
+.game .landed-pieces .piece.number_65 span,
+.game .active-piece .piece.number_65 span,
+.game .active-clump .piece.number_65 span,
+.game .landed-pieces .piece.number_66 span,
+.game .active-piece .piece.number_66 span,
+.game .active-clump .piece.number_66 span,
+.game .landed-pieces .piece.number_67 span,
+.game .active-piece .piece.number_67 span,
+.game .active-clump .piece.number_67 span {
+  background-position: -200% -100%;
+}
+.game .landed-pieces .piece.number_71 span,
+.game .active-piece .piece.number_71 span,
+.game .active-clump .piece.number_71 span,
+.game .landed-pieces .piece.number_72 span,
+.game .active-piece .piece.number_72 span,
+.game .active-clump .piece.number_72 span,
+.game .landed-pieces .piece.number_73 span,
+.game .active-piece .piece.number_73 span,
+.game .active-clump .piece.number_73 span,
+.game .landed-pieces .piece.number_74 span,
+.game .active-piece .piece.number_74 span,
+.game .active-clump .piece.number_74 span,
+.game .landed-pieces .piece.number_75 span,
+.game .active-piece .piece.number_75 span,
+.game .active-clump .piece.number_75 span,
+.game .landed-pieces .piece.number_76 span,
+.game .active-piece .piece.number_76 span,
+.game .active-clump .piece.number_76 span,
+.game .landed-pieces .piece.number_77 span,
+.game .active-piece .piece.number_77 span,
+.game .active-clump .piece.number_77 span {
+  background-position: -300% -100%;
+}
+.game .landed-pieces .piece.number_81 span,
+.game .active-piece .piece.number_81 span,
+.game .active-clump .piece.number_81 span,
+.game .landed-pieces .piece.number_82 span,
+.game .active-piece .piece.number_82 span,
+.game .active-clump .piece.number_82 span,
+.game .landed-pieces .piece.number_83 span,
+.game .active-piece .piece.number_83 span,
+.game .active-clump .piece.number_83 span,
+.game .landed-pieces .piece.number_84 span,
+.game .active-piece .piece.number_84 span,
+.game .active-clump .piece.number_84 span,
+.game .landed-pieces .piece.number_85 span,
+.game .active-piece .piece.number_85 span,
+.game .active-clump .piece.number_85 span,
+.game .landed-pieces .piece.number_86 span,
+.game .active-piece .piece.number_86 span,
+.game .active-clump .piece.number_86 span,
+.game .landed-pieces .piece.number_87 span,
+.game .active-piece .piece.number_87 span,
+.game .active-clump .piece.number_87 span {
+  background-position: 0% -200%;
+}
+.game .landed-pieces .piece.number_91 span,
+.game .active-piece .piece.number_91 span,
+.game .active-clump .piece.number_91 span,
+.game .landed-pieces .piece.number_92 span,
+.game .active-piece .piece.number_92 span,
+.game .active-clump .piece.number_92 span,
+.game .landed-pieces .piece.number_93 span,
+.game .active-piece .piece.number_93 span,
+.game .active-clump .piece.number_93 span,
+.game .landed-pieces .piece.number_94 span,
+.game .active-piece .piece.number_94 span,
+.game .active-clump .piece.number_94 span,
+.game .landed-pieces .piece.number_95 span,
+.game .active-piece .piece.number_95 span,
+.game .active-clump .piece.number_95 span,
+.game .landed-pieces .piece.number_96 span,
+.game .active-piece .piece.number_96 span,
+.game .active-clump .piece.number_96 span,
+.game .landed-pieces .piece.number_97 span,
+.game .active-piece .piece.number_97 span,
+.game .active-clump .piece.number_97 span {
+  background-position: -100% -200%;
+}
+.game .landed-pieces .piece.number_101 span,
+.game .active-piece .piece.number_101 span,
+.game .active-clump .piece.number_101 span,
+.game .landed-pieces .piece.number_102 span,
+.game .active-piece .piece.number_102 span,
+.game .active-clump .piece.number_102 span,
+.game .landed-pieces .piece.number_103 span,
+.game .active-piece .piece.number_103 span,
+.game .active-clump .piece.number_103 span,
+.game .landed-pieces .piece.number_104 span,
+.game .active-piece .piece.number_104 span,
+.game .active-clump .piece.number_104 span,
+.game .landed-pieces .piece.number_105 span,
+.game .active-piece .piece.number_105 span,
+.game .active-clump .piece.number_105 span,
+.game .landed-pieces .piece.number_106 span,
+.game .active-piece .piece.number_106 span,
+.game .active-clump .piece.number_106 span,
+.game .landed-pieces .piece.number_107 span,
+.game .active-piece .piece.number_107 span,
+.game .active-clump .piece.number_107 span {
+  background-position: -200% -200%;
+}
+.game .landed-pieces .piece.number_111 span,
+.game .active-piece .piece.number_111 span,
+.game .active-clump .piece.number_111 span,
+.game .landed-pieces .piece.number_112 span,
+.game .active-piece .piece.number_112 span,
+.game .active-clump .piece.number_112 span,
+.game .landed-pieces .piece.number_113 span,
+.game .active-piece .piece.number_113 span,
+.game .active-clump .piece.number_113 span,
+.game .landed-pieces .piece.number_114 span,
+.game .active-piece .piece.number_114 span,
+.game .active-clump .piece.number_114 span,
+.game .landed-pieces .piece.number_115 span,
+.game .active-piece .piece.number_115 span,
+.game .active-clump .piece.number_115 span,
+.game .landed-pieces .piece.number_116 span,
+.game .active-piece .piece.number_116 span,
+.game .active-clump .piece.number_116 span,
+.game .landed-pieces .piece.number_117 span,
+.game .active-piece .piece.number_117 span,
+.game .active-clump .piece.number_117 span {
+  background-position: -300% -200%;
+}
+.game .landed-pieces .piece.number_121 span,
+.game .active-piece .piece.number_121 span,
+.game .active-clump .piece.number_121 span,
+.game .landed-pieces .piece.number_122 span,
+.game .active-piece .piece.number_122 span,
+.game .active-clump .piece.number_122 span,
+.game .landed-pieces .piece.number_123 span,
+.game .active-piece .piece.number_123 span,
+.game .active-clump .piece.number_123 span,
+.game .landed-pieces .piece.number_124 span,
+.game .active-piece .piece.number_124 span,
+.game .active-clump .piece.number_124 span,
+.game .landed-pieces .piece.number_125 span,
+.game .active-piece .piece.number_125 span,
+.game .active-clump .piece.number_125 span,
+.game .landed-pieces .piece.number_126 span,
+.game .active-piece .piece.number_126 span,
+.game .active-clump .piece.number_126 span,
+.game .landed-pieces .piece.number_127 span,
+.game .active-piece .piece.number_127 span,
+.game .active-clump .piece.number_127 span {
+  background-position: 0% -300%;
+}
+.game .landed-pieces .piece.number_131 span,
+.game .active-piece .piece.number_131 span,
+.game .active-clump .piece.number_131 span,
+.game .landed-pieces .piece.number_132 span,
+.game .active-piece .piece.number_132 span,
+.game .active-clump .piece.number_132 span,
+.game .landed-pieces .piece.number_133 span,
+.game .active-piece .piece.number_133 span,
+.game .active-clump .piece.number_133 span,
+.game .landed-pieces .piece.number_134 span,
+.game .active-piece .piece.number_134 span,
+.game .active-clump .piece.number_134 span,
+.game .landed-pieces .piece.number_135 span,
+.game .active-piece .piece.number_135 span,
+.game .active-clump .piece.number_135 span,
+.game .landed-pieces .piece.number_136 span,
+.game .active-piece .piece.number_136 span,
+.game .active-clump .piece.number_136 span,
+.game .landed-pieces .piece.number_137 span,
+.game .active-piece .piece.number_137 span,
+.game .active-clump .piece.number_137 span {
+  background-position: -100% -300%;
+}
+.game .landed-pieces .piece.number_141 span,
+.game .active-piece .piece.number_141 span,
+.game .active-clump .piece.number_141 span,
+.game .landed-pieces .piece.number_142 span,
+.game .active-piece .piece.number_142 span,
+.game .active-clump .piece.number_142 span,
+.game .landed-pieces .piece.number_143 span,
+.game .active-piece .piece.number_143 span,
+.game .active-clump .piece.number_143 span,
+.game .landed-pieces .piece.number_144 span,
+.game .active-piece .piece.number_144 span,
+.game .active-clump .piece.number_144 span,
+.game .landed-pieces .piece.number_145 span,
+.game .active-piece .piece.number_145 span,
+.game .active-clump .piece.number_145 span,
+.game .landed-pieces .piece.number_146 span,
+.game .active-piece .piece.number_146 span,
+.game .active-clump .piece.number_146 span,
+.game .landed-pieces .piece.number_147 span,
+.game .active-piece .piece.number_147 span,
+.game .active-clump .piece.number_147 span {
+  background-position: -200% -300%;
+}
+.game .landed-pieces .piece.number_151 span,
+.game .active-piece .piece.number_151 span,
+.game .active-clump .piece.number_151 span,
+.game .landed-pieces .piece.number_152 span,
+.game .active-piece .piece.number_152 span,
+.game .active-clump .piece.number_152 span,
+.game .landed-pieces .piece.number_153 span,
+.game .active-piece .piece.number_153 span,
+.game .active-clump .piece.number_153 span,
+.game .landed-pieces .piece.number_154 span,
+.game .active-piece .piece.number_154 span,
+.game .active-clump .piece.number_154 span,
+.game .landed-pieces .piece.number_155 span,
+.game .active-piece .piece.number_155 span,
+.game .active-clump .piece.number_155 span,
+.game .landed-pieces .piece.number_156 span,
+.game .active-piece .piece.number_156 span,
+.game .active-clump .piece.number_156 span,
+.game .landed-pieces .piece.number_157 span,
+.game .active-piece .piece.number_157 span,
+.game .active-clump .piece.number_157 span {
+  background-position: -300% -300%;
 }

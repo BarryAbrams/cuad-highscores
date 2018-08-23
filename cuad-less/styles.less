@@ -392,8 +392,8 @@ h1, h2, h3, h4, h5, h6, p {
     }
     .gamegridtable {
         margin:0px auto;
-        border-left:8px solid #262d33;
-        border-bottom:8px solid #262d33;
+        border-left:8px solid rgba(0,0,0,.3);
+        border-bottom:8px solid rgba(0,0,0,.3);
         // border:4px solid #262d33;
         background-color:#26393d;
         position:absolute;
@@ -401,20 +401,62 @@ h1, h2, h3, h4, h5, h6, p {
         left:8px;
         tr {
             td {
-                border-right:8px solid #262d33;
-                border-top:8px solid #262d33;
+                border-right:8px solid rgba(0,0,0,.3);
+                border-top:8px solid rgba(0,0,0,.3);
                 width:72px;
                 height:72px;
                 position:relative;
-                span {
-                    display:block;
-                    height:8px;
-                    width:100%;
-                    background-color:#3f5465;
-                    position:absolute;
-                    top:0;
+                background-image:url("/images/background-blocks.png");
+                background-size:400% 400%;
+                image-rendering: crisp-edges;
+                &.number_1 {
+                    background-position:0% 0%;
                 }
-              
+                &.number_2 {
+                    background-position:0% -100%;
+                }
+                &.number_3 {
+                    background-position:0% -200%;
+                }
+                &.number_4 {
+                    background-position:0% -300%;
+                }
+                &.number_5 {
+                    background-position:-100% 0%;
+                }
+                &.number_6 {
+                    background-position:-100% -100%;
+                }
+                &.number_7 {
+                    background-position:-100% -200%;
+                }
+                &.number_8 {
+                    background-position:-100% -300%;
+                }
+                &.number_9 {
+                    background-position:-200% 0%;
+                }
+                &.number_10 {
+                    background-position:-200% -100%;
+                }
+                &.number_11 {
+                    background-position:-200% -200%;
+                }
+                &.number_12 {
+                    background-position:-200% -300%;
+                }
+                &.number_13 {
+                    background-position:-300% -0%;
+                }
+                &.number_14 {
+                    background-position:-300% -100%;
+                }
+                &.number_15 {
+                    background-position:-300% -200%;
+                }
+                &.number_16 {
+                    background-position:-300% -300%;
+                }
             }
         }
     }
@@ -427,39 +469,360 @@ h1, h2, h3, h4, h5, h6, p {
             background-color:#555;
             width:72px;
             height:72px;
+            image-rendering: auto;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
             span {
                 width:72px;
                 height:72px;
-                background-image:url("/images/block-overlay.png");
-                background-size:100% 100%;
+                background-image:url("/images/yellow-blocks.png");
+                background-size:400% 400%;
                 display:block;
                 position: absolute;
-                
+                image-rendering: crisp-edges;
             }
         }
+        
         .piece {
             background-color:#555;
             
-            &.number_1 {
-                background-color:#0000f0;
+            &.number_1, 
+            &.number_11, 
+            &.number_21, 
+            &.number_31,
+            &.number_41,
+            &.number_51,
+            &.number_61,
+            &.number_71,
+            &.number_81,
+            &.number_91,
+            &.number_101,
+            &.number_111,
+            &.number_121,
+            &.number_131,
+            &.number_141,
+            &.number_151 {
+                span {
+                    background-image:url("/images/blue-blocks.png");
+                }
+                // background-color:#0000f0;
             }
-            &.number_2 {
-                background-color:#f0a000;
+            &.number_2, 
+            &.number_12, 
+            &.number_22, 
+            &.number_32,
+            &.number_42,
+            &.number_52,
+            &.number_62,
+            &.number_72,
+            &.number_82,
+            &.number_92,
+            &.number_102,
+            &.number_112,
+            &.number_122,
+            &.number_132,
+            &.number_142,
+            &.number_152 {
+                span {
+                    background-image:url("/images/orange-blocks.png");
+                }
+                // background-color:#f0a000;
             }
-            &.number_3 {
-                background-color:#00f000;
+            &.number_3, 
+            &.number_13, 
+            &.number_23, 
+            &.number_33,
+            &.number_43,
+            &.number_53,
+            &.number_63,
+            &.number_73,
+            &.number_83,
+            &.number_93,
+            &.number_103,
+            &.number_113,
+            &.number_123,
+            &.number_133,
+            &.number_143,
+            &.number_153 {
+                span {
+                    background-image:url("/images/green-blocks.png");
+                }
+                // background-color:#00f000;
             }
-            &.number_4 {
-                background-color:#f00000;
+            &.number_4, 
+            &.number_14, 
+            &.number_24, 
+            &.number_34,
+            &.number_44,
+            &.number_54,
+            &.number_64,
+            &.number_74,
+            &.number_84,
+            &.number_94,
+            &.number_104,
+            &.number_114,
+            &.number_124,
+            &.number_134,
+            &.number_144,
+            &.number_154 {
+                span {
+                    background-image:url("/images/red-blocks.png");
+                }
+                // background-color:#f00000;
             }
-            &.number_5 {
-                background-color:#a000f0;
+            &.number_5, 
+            &.number_15, 
+            &.number_25, 
+            &.number_35,
+            &.number_45,
+            &.number_55,
+            &.number_65,
+            &.number_75,
+            &.number_85,
+            &.number_95,
+            &.number_105,
+            &.number_115,
+            &.number_125,
+            &.number_135,
+            &.number_145,
+            &.number_155 {
+                span {
+                    background-image:url("/images/purple-blocks.png");
+                }
+                // background-color:#a000f0;
             }
-            &.number_6 {
-                background-color:#00f0f0;
+            &.number_6, 
+            &.number_16, 
+            &.number_26, 
+            &.number_36,
+            &.number_46,
+            &.number_56,
+            &.number_66,
+            &.number_76,
+            &.number_86,
+            &.number_96,
+            &.number_106,
+            &.number_116,
+            &.number_126,
+            &.number_136,
+            &.number_146,
+            &.number_156 {
+                span {
+                    background-image:url("/images/lightblue-blocks.png");
+                }
+                // background-color:#00f0f0;
             }
+            &.number_7, 
+            &.number_17, 
+            &.number_27, 
+            &.number_37,
+            &.number_47,
+            &.number_57,
+            &.number_67,
+            &.number_77,
+            &.number_87,
+            &.number_97,
+            &.number_107,
+            &.number_117,
+            &.number_127,
+            &.number_137,
+            &.number_147,
+            &.number_157, {
+                span {
+                    background-color:#f0f000;
+                }
+            }
+
+            &.number_1, 
+            &.number_2, 
+            &.number_3, 
+            &.number_4, 
+            &.number_5, 
+            &.number_6, 
             &.number_7 {
-                background-color:#f0f000;
+                span {
+                    background-position:0 0;
+                }
+            }
+
+            &.number_11, 
+            &.number_12, 
+            &.number_13, 
+            &.number_14, 
+            &.number_15, 
+            &.number_16, 
+            &.number_17 {
+                span {
+                    background-position:-100% 0;
+                }
+            }
+
+            &.number_21, 
+            &.number_22, 
+            &.number_23, 
+            &.number_24, 
+            &.number_25, 
+            &.number_26, 
+            &.number_27 {
+                span {
+                    background-position:-200% -100%;
+                }
+            }
+
+            &.number_31, 
+            &.number_32, 
+            &.number_33, 
+            &.number_34, 
+            &.number_35, 
+            &.number_36, 
+            &.number_37 {
+                span {
+                    background-position:-300% 0;
+                }
+            }
+
+            &.number_41, 
+            &.number_42, 
+            &.number_43, 
+            &.number_44, 
+            &.number_45, 
+            &.number_46, 
+            &.number_47 {
+                span {
+                    background-position:0% -100%;
+                }
+            }
+
+            &.number_51, 
+            &.number_52, 
+            &.number_53, 
+            &.number_54, 
+            &.number_55, 
+            &.number_56, 
+            &.number_57 {
+                span {
+                    background-position:-100% -100%;
+                }
+            }
+
+            &.number_61, 
+            &.number_62, 
+            &.number_63, 
+            &.number_64, 
+            &.number_65, 
+            &.number_66, 
+            &.number_67 {
+                span {
+                    background-position:-200% -100%;
+                }
+            }
+
+            &.number_71, 
+            &.number_72, 
+            &.number_73, 
+            &.number_74, 
+            &.number_75, 
+            &.number_76, 
+            &.number_77 {
+                span {
+                    background-position:-300% -100%;
+                }
+            }
+
+            &.number_81, 
+            &.number_82, 
+            &.number_83, 
+            &.number_84, 
+            &.number_85, 
+            &.number_86, 
+            &.number_87 {
+                span {
+                    background-position:0% -200%;
+                }
+            }
+
+            &.number_91, 
+            &.number_92, 
+            &.number_93, 
+            &.number_94, 
+            &.number_95, 
+            &.number_96, 
+            &.number_97 {
+                span {
+                    background-position:-100% -200%;
+                }
+            }
+
+            &.number_101, 
+            &.number_102, 
+            &.number_103, 
+            &.number_104, 
+            &.number_105, 
+            &.number_106, 
+            &.number_107 {
+                span {
+                    background-position:-200% -200%;
+                }
+            }
+
+            &.number_111, 
+            &.number_112, 
+            &.number_113, 
+            &.number_114, 
+            &.number_115, 
+            &.number_116, 
+            &.number_117 {
+                span {
+                    background-position:-300% -200%;
+                }
+            }
+
+            &.number_121, 
+            &.number_122, 
+            &.number_123, 
+            &.number_124, 
+            &.number_125, 
+            &.number_126, 
+            &.number_127 {
+                span {
+                    background-position:0% -300%;
+                }
+            }
+
+            &.number_131, 
+            &.number_132, 
+            &.number_133, 
+            &.number_134, 
+            &.number_135, 
+            &.number_136, 
+            &.number_137 {
+                span {
+                    background-position:-100% -300%;
+                }
+            }
+
+            &.number_141, 
+            &.number_142, 
+            &.number_143, 
+            &.number_144, 
+            &.number_145, 
+            &.number_146, 
+            &.number_147 {
+                span {
+                    background-position:-200% -300%;
+                }
+            }
+
+            &.number_151, 
+            &.number_152, 
+            &.number_153, 
+            &.number_154, 
+            &.number_155, 
+            &.number_156, 
+            &.number_157 {
+                span {
+                    background-position:-300% -300%;
+                }
             }
         }
     }
