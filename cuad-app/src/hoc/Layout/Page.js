@@ -11,9 +11,25 @@ import Coinage from "./Elements/Coinage";
 
 import axios from '../../config/axios';
 
+var socket = new WebSocket("ws://192.168.1.15:3002/");
+function setup() {
+    socket.onopen = openSocket;
+    socket.onmessage = showData;
+}
+function openSocket() {
+    console.log("Socket open");
+    socket.send("Hello server");
+}
+
+function showData(result) {
+console.log("showData");
+}
+
+
+
 class Page extends Component {
     state = {
-        action : "game",
+        action : "testscreen",
         gameStarted : false,
         slides:null,
         currentSlide:-1,
@@ -28,13 +44,11 @@ class Page extends Component {
             let newSlide = this.state.currentSlide;
             if (newAction == "slide") {
                 newSlide = this.state.currentSlide+1;
-                console.log("TEST", newSlide, this.state.slides.length)
                 if (newSlide >= this.state.slides.length) {
                     newSlide = 0;
                 }
                 // this.setState({currentSlide:newSlide});
             }
-            console.log("new slide", newSlide);
             this.setState({action: newAction, currentSlide:newSlide});
         }.bind(this), delay)
     }
@@ -52,7 +66,6 @@ class Page extends Component {
             axios.get("/slides")
             .then (response => {
                 
-            console.log(response.data);
             this.setState({slides:response.data})
             }).catch(error => {
                 console.log("can't connect to site");
@@ -83,26 +96,39 @@ class Page extends Component {
 
         if (this.state.action === "testscreen") {
             page = <TestScreen nextAction={this.changeAction} />
-
-            this.changeAction(500, "winnersdrugs")
+            setTimeout(function() {
+                socket.send("Intro");
+            }, 100)
+            
+            this.changeAction(500, "slide")
         }
 
         if (this.state.action === "winnersdrugs") {
             page = <WinnersDrugs nextAction={this.changeAction} />
             this.changeAction(4100, "slide");
+ 
             showCoinage = true;
         }
 
         if (this.state.action === "slide") {
             const slide = this.state.slides[this.state.currentSlide];
-            page = <Slide gif="cuadventures" slideInfo={slide} nextAction={this.changeAction} />
-            this.changeAction(slide.duration * 1000, "scores");
+            console.log(slide)
+            var totalSlideLength = 0;
+            for (var i = 0; i<slide.view.length; i++) {
+                totalSlideLength += parseInt(slide.view[i].millis, 10);
+            }
+            console.log("total Slidle Length", totalSlideLength)
+            page = <Slide gif="cuadventures" slideIncrement={this.currentSlide} totalSlideLength={totalSlideLength} slideInfo={slide} nextAction={this.changeAction} />
+            this.changeAction(totalSlideLength, "scores");
+            
             showCoinage = true;
         }
 
         if (this.state.action === "scores") {
             page = <Scores nextAction={this.changeAction} />
             showCoinage = true;
+
+            
             // this.changeAction(5000, "testscreen")
         }
 
@@ -129,7 +155,6 @@ class Page extends Component {
         }
 
         if (showCoinage) {
-            console.log("Coinage?" ,this.coinage)      
             this.coinage = <Coinage nextAction={this.changeAction} startGame={this.startGame} />;
         }
 

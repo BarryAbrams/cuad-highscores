@@ -3,23 +3,41 @@ import $ from 'jquery';
 
 class Slide extends Component {
 
+    state = {
+        currentSubSlide : 0
+    }
+
+    componentDidUpdate() {
+        setTimeout(function() {
+            this.setState({currentSubSlide:this.state.currentSubSlide + 1})
+        }.bind(this), this.props.slideInfo.view[this.state.currentSubSlide].millis);
+    }
+
     componentDidMount() {
-       const duration = this.props.slideInfo.duration * 1000;
-       console.log(duration);
+    //    const duration = this.props.slideInfo.duration * 1000;
+    //    console.log(duration);
        setTimeout(function() {
            $(".animatedgif").addClass("active");
            setTimeout(function() {
-                $(".animatedgif").removeClass("active");
-           }, duration);
-       }, 100);
+                this.setState({currentSubSlide: 1})
+           }.bind(this), this.props.slideInfo.view[0].millis);
+           setTimeout(function() {
+            $(".animatedgif").removeClass("active");
+            }.bind(this), this.props.totalSlideLength-500);
+        //    setTimeout(function() {
+        //         $(".animatedgif").removeClass("active");
+        //    }, duration);
+       }.bind(this), 100);
     }
 
-    render() {  
-        console.log(this.props.slideInfo)
-        const videoURL = this.props.slideInfo.video + "?autoplay=1&amp;rel=0&amp;controls=0&amp;showinfo=0";
+    render() {
+        
+        var subslide = this.props.slideInfo.view[this.state.currentSubSlide].image;
+        
+        subslide = "http://dev-cuad-highscores.pantheonsite.io/" + subslide;
         return (
             <div className="animatedgif">
-<iframe width="240" height="320" src={videoURL} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>               {/* <img alt="cuadventures" src={"/images/cuadventures.gif"} /> */}
+                <div><img src={subslide} /></div>
             </div>
         )
     }    

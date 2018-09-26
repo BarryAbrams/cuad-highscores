@@ -69,12 +69,12 @@ class Scores extends Component {
     }
 
     render() {
-
-
         let lastStyle = "right";
 
         let output = null;
         if (this.state.scores) {
+            let icons = null;
+      
             let stateScores = [...this.state.scores];
             var storageArray = [];
             stateScores.map((item) => {
@@ -102,9 +102,16 @@ class Scores extends Component {
             
 
             output = Object.keys(storageArray).map((item) => {
-
                 let count = 0;
                 let scores = Object.keys(storageArray[item]).map((scoreitem) => {
+                    if (count == 0) {
+                        console.log(scores)
+                        if (storageArray[item][scoreitem].field_icons) {
+                            var url = "http://dev-cuad-highscores.pantheonsite.io/" + storageArray[item][scoreitem].field_icons;
+                            icons = <div className="icons"> <img src={url} /></div>;
+                        }
+                    }
+
                     var scoreObject = storageArray[item][scoreitem];
                     count++;
 
@@ -149,14 +156,16 @@ class Scores extends Component {
                     )
                 });
 
-           
+              
                 
                 return (
                         <div className="room"  key={item} >
                             <h3 dangerouslySetInnerHTML={{__html:item}}></h3>
+                            {icons}
                             <ul>
                             {scores}
                             </ul>
+                            {icons}
                         </div>
                     );
             });

@@ -130,6 +130,17 @@ p {
   width: 1000px;
   height: 1640px;
 }
+.scores .icons {
+  margin: 20px auto;
+  width: 366px;
+}
+.scores .icons img {
+  width: 366px;
+  height: 116px;
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
 .scores .room {
   opacity: 0;
   transition: opacity 0.75s ease-in-out;
@@ -184,6 +195,12 @@ p {
 }
 .scores .room ul li.score:nth-child(3) {
   transition-delay: 1.5s;
+}
+.scores .room ul li.score:nth-child(4) {
+  transition-delay: 2s;
+}
+.scores .room ul li.score:nth-child(5) {
+  transition-delay: 2.5s;
 }
 .scores .room ul li.score .scoreranking {
   width: 50px;
@@ -368,7 +385,9 @@ p {
   position: relative;
   background-image: url("/images/background-blocks.png");
   background-size: 400% 400%;
+  image-rendering: auto;
   image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 .game .gamegridtable tr td.number_1 {
   background-position: 0% 0%;

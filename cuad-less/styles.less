@@ -139,6 +139,18 @@ h1, h2, h3, h4, h5, h6, p {
     align-items:center;
     width:1000px;
     height:1640px;
+
+    .icons {
+        margin:20px auto;
+        width:366px;
+        img {
+            width:366px;
+            height:116px;
+            image-rendering: auto;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+        }
+    }
     .room {
         opacity:0;
         transition:opacity .75s ease-in-out;
@@ -197,6 +209,14 @@ h1, h2, h3, h4, h5, h6, p {
 
                 &:nth-child(3) {
                     transition-delay:1.5s;
+                }
+
+                &:nth-child(4) {
+                    transition-delay:2s;
+                }
+
+                &:nth-child(5) {
+                    transition-delay:2.5s;
                 }
                 
                 .scoreranking {
@@ -408,7 +428,9 @@ h1, h2, h3, h4, h5, h6, p {
                 position:relative;
                 background-image:url("/images/background-blocks.png");
                 background-size:400% 400%;
+                image-rendering: auto;
                 image-rendering: crisp-edges;
+                image-rendering: pixelated;
                 &.number_1 {
                     background-position:0% 0%;
                 }

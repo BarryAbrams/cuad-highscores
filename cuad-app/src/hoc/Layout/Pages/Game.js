@@ -1,21 +1,11 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
-import Gamepad from 'react-gamepad'
+import Controls from "../../Controls";
 
+var socket = new WebSocket("ws://192.168.1.15:3002/");
 
-  var socket = new WebSocket("ws://localhost:3002");
-  function setup() {
-    socket.onopen = openSocket;
-    socket.onmessage = showData;
-  }
-  function openSocket() {
-    console.log("Socket open");
-    socket.send("Hello server");
-  }
-
-  function showData(result) {
-    console.log("showData");
-  }
+let p1_heldButtons = [];
+let p2_heldButtons = [];
 
 class Game extends Component {
 
@@ -52,6 +42,8 @@ class Game extends Component {
 
     baseSpeed = 500;
     ledOn = false;
+
+   
 
     backgroundGrid = [  [7, 3, 8, 7, 3, 7, 3, 3, 3, 3],
                         [3, 3, 7, 3, 3, 3, 3, 3, 3, 3],
@@ -135,9 +127,9 @@ class Game extends Component {
         document.removeEventListener("keydown", this.keyboardActionDown, false);
         document.removeEventListener("keyup", this.keyboardActionUp, false);
     }
-    buttonChangeHandler(buttonName, down) {
-        console.log(buttonName, down)
-    }
+    // buttonChangeHandler(buttonName, down) {
+    //     console.log(buttonName, down)
+    // }
 
     connectHandler(gamepadIndex) {
     console.log(`Gamepad ${gamepadIndex} connected !`)
@@ -148,6 +140,7 @@ class Game extends Component {
     }
     
     buttonChangeHandler(buttonName, down) {
+        console.log("BUTTON", buttonName);
         if (buttonName === "A" && down) {
             this.rotateActivePiece(+1);
         }
@@ -180,6 +173,9 @@ class Game extends Component {
         }
         if (event.keyCode == 39) {
             this.moveActivePiece(+1);
+        }
+        if (event.keyCode == 40) {
+            this.moveActivePiece(0);
         }
 
         if (event.keyCode == 90) {
@@ -242,7 +238,11 @@ class Game extends Component {
     moveActivePiece(direction) {
         if (this.state.activePiece) {
             let tetromino = this.state.activePiece;
-            tetromino.potentialTopLeft = {row: tetromino.topLeft.row, col:tetromino.topLeft.col+direction}
+            if (direction == 0) {
+                tetromino.potentialTopLeft = {row: tetromino.topLeft.row + 1, col:tetromino.topLeft.col}
+            } else {
+                tetromino.potentialTopLeft = {row: tetromino.topLeft.row, col:tetromino.topLeft.col+direction}
+            }
             const landed = this.state.gameGrid;
 
             let collision = null;
@@ -252,9 +252,13 @@ class Game extends Component {
                         if (col + tetromino.potentialTopLeft.col < 0 || col + tetromino.potentialTopLeft.col >= landed[0].length) {
                             collision = true;
                         }
+                        if (row + tetromino.potentialTopLeft.row >= landed.length) {
+                            collision = true;
+                        } else 
                         if (landed[row + tetromino.potentialTopLeft.row][col + tetromino.potentialTopLeft.col] != 0) {
                             collision = true;
                         }
+                    
                     }
                 }
             }
@@ -280,22 +284,22 @@ class Game extends Component {
 
         function flow(x,y) {
             if (x >= 0 && x < newData.length && y >= 0 && y < newData[x].length) {
-                if (newData[x][y] == 1 || newData[x][y] == 2  || newData[x][y] == 3 || newData[x][y] == 4 || newData[x][y] == 5 || newData[x][y] == 6 || newData[x][y] == 7 ||
-                    newData[x][y] == 11 || newData[x][y] == 12  || newData[x][y] == 13 || newData[x][y] == 14 || newData[x][y] == 15 || newData[x][y] == 16 || newData[x][y] == 17 ||
-                    newData[x][y] == 21 || newData[x][y] == 22  || newData[x][y] == 23 || newData[x][y] == 24 || newData[x][y] == 25 || newData[x][y] == 26 || newData[x][y] == 27 ||
-                    newData[x][y] == 31 || newData[x][y] == 32  || newData[x][y] == 33 || newData[x][y] == 34 || newData[x][y] == 35 || newData[x][y] == 36 || newData[x][y] == 37 ||
-                    newData[x][y] == 41 || newData[x][y] == 42  || newData[x][y] == 43 || newData[x][y] == 44 || newData[x][y] == 45 || newData[x][y] == 46 || newData[x][y] == 47 ||
-                    newData[x][y] == 51 || newData[x][y] == 52  || newData[x][y] == 53 || newData[x][y] == 54 || newData[x][y] == 55 || newData[x][y] == 56 || newData[x][y] == 57 ||
-                    newData[x][y] == 61 || newData[x][y] == 62  || newData[x][y] == 63 || newData[x][y] == 64 || newData[x][y] == 65 || newData[x][y] == 66 || newData[x][y] == 67 ||
-                    newData[x][y] == 71 || newData[x][y] == 72  || newData[x][y] == 73 || newData[x][y] == 74 || newData[x][y] == 75 || newData[x][y] == 76 || newData[x][y] == 77 ||
-                    newData[x][y] == 81 || newData[x][y] == 82  || newData[x][y] == 83 || newData[x][y] == 84 || newData[x][y] == 85 || newData[x][y] == 86 || newData[x][y] == 87 ||
-                    newData[x][y] == 91 || newData[x][y] == 92  || newData[x][y] == 93 || newData[x][y] == 94 || newData[x][y] == 95 || newData[x][y] == 96 || newData[x][y] == 97 ||
-                    newData[x][y] == 101 || newData[x][y] == 102  || newData[x][y] == 103 || newData[x][y] == 104 || newData[x][y] == 105 || newData[x][y] == 106 || newData[x][y] == 107 ||
-                    newData[x][y] == 111 || newData[x][y] == 112  || newData[x][y] == 113 || newData[x][y] == 114 || newData[x][y] == 115 || newData[x][y] == 116 || newData[x][y] == 117 ||
-                    newData[x][y] == 121 || newData[x][y] == 122  || newData[x][y] == 123 || newData[x][y] == 124 || newData[x][y] == 125 || newData[x][y] == 126 || newData[x][y] == 127 ||
-                    newData[x][y] == 131 || newData[x][y] == 132  || newData[x][y] == 133 || newData[x][y] == 134 || newData[x][y] == 135 || newData[x][y] == 136 || newData[x][y] == 137 ||
-                    newData[x][y] == 141 || newData[x][y] == 142  || newData[x][y] == 143 || newData[x][y] == 144 || newData[x][y] == 145 || newData[x][y] == 146 || newData[x][y] == 147 ||
-                    newData[x][y] == 151 || newData[x][y] == 152  || newData[x][y] == 153 || newData[x][y] == 154 || newData[x][y] == 155 || newData[x][y] == 156 || newData[x][y] == 157) {
+                if (newData[x][y] === 1 || newData[x][y] === 2  || newData[x][y] === 3 || newData[x][y] === 4 || newData[x][y] === 5 || newData[x][y] === 6 || newData[x][y] === 7 ||
+                    newData[x][y] === 11 || newData[x][y] === 12  || newData[x][y] === 13 || newData[x][y] === 14 || newData[x][y] === 15 || newData[x][y] === 16 || newData[x][y] === 17 ||
+                    newData[x][y] === 21 || newData[x][y] === 22  || newData[x][y] === 23 || newData[x][y] === 24 || newData[x][y] === 25 || newData[x][y] === 26 || newData[x][y] === 27 ||
+                    newData[x][y] === 31 || newData[x][y] === 32  || newData[x][y] === 33 || newData[x][y] === 34 || newData[x][y] === 35 || newData[x][y] === 36 || newData[x][y] === 37 ||
+                    newData[x][y] === 41 || newData[x][y] === 42  || newData[x][y] === 43 || newData[x][y] === 44 || newData[x][y] === 45 || newData[x][y] === 46 || newData[x][y] === 47 ||
+                    newData[x][y] === 51 || newData[x][y] === 52  || newData[x][y] === 53 || newData[x][y] === 54 || newData[x][y] === 55 || newData[x][y] === 56 || newData[x][y] === 57 ||
+                    newData[x][y] === 61 || newData[x][y] === 62  || newData[x][y] === 63 || newData[x][y] === 64 || newData[x][y] === 65 || newData[x][y] === 66 || newData[x][y] === 67 ||
+                    newData[x][y] === 71 || newData[x][y] === 72  || newData[x][y] === 73 || newData[x][y] === 74 || newData[x][y] === 75 || newData[x][y] === 76 || newData[x][y] === 77 ||
+                    newData[x][y] === 81 || newData[x][y] === 82  || newData[x][y] === 83 || newData[x][y] === 84 || newData[x][y] === 85 || newData[x][y] === 86 || newData[x][y] === 87 ||
+                    newData[x][y] === 91 || newData[x][y] === 92  || newData[x][y] === 93 || newData[x][y] === 94 || newData[x][y] === 95 || newData[x][y] === 96 || newData[x][y] === 97 ||
+                    newData[x][y] === 101 || newData[x][y] === 102  || newData[x][y] === 103 || newData[x][y] === 104 || newData[x][y] === 105 || newData[x][y] === 106 || newData[x][y] === 107 ||
+                    newData[x][y] === 111 || newData[x][y] === 112  || newData[x][y] === 113 || newData[x][y] === 114 || newData[x][y] === 115 || newData[x][y] === 116 || newData[x][y] === 117 ||
+                    newData[x][y] === 121 || newData[x][y] === 122  || newData[x][y] === 123 || newData[x][y] === 124 || newData[x][y] === 125 || newData[x][y] === 126 || newData[x][y] === 127 ||
+                    newData[x][y] === 131 || newData[x][y] === 132  || newData[x][y] === 133 || newData[x][y] === 134 || newData[x][y] === 135 || newData[x][y] === 136 || newData[x][y] === 137 ||
+                    newData[x][y] === 141 || newData[x][y] === 142  || newData[x][y] === 143 || newData[x][y] === 144 || newData[x][y] === 145 || newData[x][y] === 146 || newData[x][y] === 147 ||
+                    newData[x][y] === 151 || newData[x][y] === 152  || newData[x][y] === 153 || newData[x][y] === 154 || newData[x][y] === 155 || newData[x][y] === 156 || newData[x][y] === 157) {
                     minX = Math.min(x, minX);
                     maxX = Math.max(x, maxX);
                     minY = Math.min(y, minY);
@@ -399,6 +403,7 @@ class Game extends Component {
 
        if (this.state.endGame) {
             if (this.state.removingCol) {
+                socket.send("Intro");
                 // landed[this.state.removingColInt] = [0,0,0,0,0,0,0,0,0,0];
                 this.droppedItems = 0;
                 if (this.state.removingColInt == -1) {
@@ -597,13 +602,19 @@ class Game extends Component {
         } else {
             if (this.state.changingControls || !this.state.currentControls) {
                 let controls = null;
+            
                 if (this.state.newControls) {
                     controls = this.state.newControls;
+                    this.socketControls(controls);
                 } else {
                      controls = this.changeControls();
+
+                    this.socketControls(controls);
+             
                 }
                 $(".current-control .control").removeClass("active");
                 $(".changingcontrols").addClass("active");
+                
                 if (this.state.currentControls) {
                     $(".changingcontrols .text").text("Controls are Changing");
                 }
@@ -629,14 +640,85 @@ class Game extends Component {
         }
     }
 
-    addNewPiece() {
-        if (this.ledOn) {
-            socket.send('2');
-            this.ledOn = false;
-        } else {
-            this.ledOn = true;
-            socket.send('1'); 
+    socketControls(controls) {
+        console.log("new controls");
+        let socketString = "XXXXXXXXXXXXXXXXX";
+        if (controls.p1[0] == "joystick-blue") {
+            socketString += ", P1 Blue Joystick";
         }
+
+        if (controls.p1[0] == "joystick-red") {
+            socketString += ", P1 Red Joystick";
+        }
+
+        if (controls.p1[0] == "joystick-green") {
+            socketString += ", P1 Green Joystick";
+        }
+
+        if (controls.p1[0] == "joystick-yellow") {
+            socketString += ", P1 Yellow Joystick";
+        }
+
+        if (controls.p1[1] == "button-blue") {
+            socketString += ", P1 Blue Button";
+        }
+
+        if (controls.p1[1] == "button-red") {
+            socketString += ", P1 Red Button";
+        }
+
+        if (controls.p1[1] == "button-green") {
+            socketString += ", P1 Green Button";
+        }
+
+        if (controls.p1[1] == "button-yellow") {
+            socketString += ", P1 Yellow Button";
+        }
+
+        if (controls.p2[0] == "joystick-blue") {
+            socketString += ", P2 Blue Joystick";
+        }
+
+        if (controls.p2[0] == "joystick-red") {
+            socketString += ", P2 Red Joystick";
+        }
+
+        if (controls.p2[0] == "joystick-green") {
+            socketString += ", P2 Green Joystick";
+        }
+
+        if (controls.p2[0] == "joystick-yellow") {
+            socketString += ", P2 Yellow Joystick";
+        }
+
+        if (controls.p2[1] == "button-blue") {
+            socketString += ", P2 Blue Button";
+        }
+
+        if (controls.p2[1] == "button-red") {
+            socketString += ", P2 Red Button";
+        }
+
+        if (controls.p2[1] == "button-green") {
+            socketString += ", P2 Green Button";
+        }
+
+        if (controls.p2[1] == "button-yellow") {
+            socketString += ", P2 Yellow Button";
+        }
+
+    console.log(socketString);
+    socket.send(socketString);
+    }
+
+    addNewPiece() {
+        // if (this.ledOn) {
+        //     socket.send("P1 Start Button");
+        //     this.ledOn = false;
+        // } else {
+        //     this.ledOn = true;
+        //     socket.send("P2 Start Button"); 
+        // }
         console.log("add new piece")
         if (!this.state.nextPiece) {
             this.generateNextPiece();
@@ -648,7 +730,6 @@ class Game extends Component {
             !this.arraysEqual(controls.p2, this.state.currentControls.p2)) {
                 console.log("arrays aren't the same")
 
-           
 
             this.setState({activePiece:tetromino, changingControls:true, newControls:controls});
         } else {
@@ -661,7 +742,7 @@ class Game extends Component {
     changeControls() {
         let controls = {p1:["joystick-blue"], p2:["joystick-blue"]};
 
-        let modifier = this.droppedItems + 1;
+        let modifier = this.droppedItems + 30;
         // modifier = Math.floor(Math.random() * 10)
 
         if (modifier < 3) {
@@ -746,6 +827,11 @@ class Game extends Component {
 
             controls = {p1:p1_value, p2:p2_value}
         }
+
+       // console.log("controls", controls);
+        
+    
+       
         return controls;
     }
 
@@ -977,6 +1063,99 @@ class Game extends Component {
          return <div className="changingcontrols"><div className="text">Get Ready!</div></div>;
     }
 
+    buttonHandler(player, value, action) {
+        console.log(player, value, action, this.state.currentControls);
+
+        if (player == "P2") {
+            if (value.includes("button")) {
+                if (action == "down") {
+                    // add to array
+                    p1_heldButtons.push(value);
+                } else {
+                    // remove from array
+                    var index = p1_heldButtons.indexOf(value);
+                    if (index > -1) {
+                        p1_heldButtons.splice(index, 1);
+                    }
+                }
+            }
+            if (this.state.currentControls.p1[0] == value) {
+
+                var buttonNeedsToBeHeld = false;
+                var buttonHeldDown = false;
+                if (this.state.currentControls.p1[1]) {
+                    buttonNeedsToBeHeld = true;
+                    if (p1_heldButtons.indexOf(this.state.currentControls.p1[1]) > -1) {
+                        buttonHeldDown = true;
+                    }
+                }
+                if (buttonNeedsToBeHeld == true) {
+                    if (buttonHeldDown == true) {
+                        if (action === "Right") {
+                            this.moveActivePiece(1);
+                        }
+                        if (action === "Left") {
+                            this.moveActivePiece(-1);
+                        }
+                    } else {
+                        console.log("hold button down");
+                    }
+                } else {
+                    if (action === "Right") {
+                        this.moveActivePiece(1);
+                    }
+                    if (action === "Left") {
+                        this.moveActivePiece(-1);
+                    }
+                }
+            }
+        }
+
+        if (player == "P1") {
+            if (value.includes("button")) {
+                if (action == "down") {
+                    // add to array
+                    p2_heldButtons.push(value);
+                } else {
+                    // remove from array
+                    var index = p2_heldButtons.indexOf(value);
+                    if (index > -1) {
+                        p2_heldButtons.splice(index, 1);
+                    }
+                }
+            }
+            if (this.state.currentControls.p2[0] == value) {
+                var buttonNeedsToBeHeld = false;
+                var buttonHeldDown = false;
+                if (this.state.currentControls.p2[1]) {
+                    buttonNeedsToBeHeld = true;
+                    if (p2_heldButtons.indexOf(this.state.currentControls.p2[1]) > -1) {
+                        buttonHeldDown = true;
+                    }
+                }
+                if (buttonNeedsToBeHeld == true) {
+                    if (buttonHeldDown == true) {
+                        if (action === "Right") {
+                            this.rotateActivePiece(1);
+                        }
+                        if (action === "Left") {
+                            this.rotateActivePiece(-1);
+                        }
+                    } else {
+                        console.log("hold button down");
+                    }
+                } else {
+                    if (action === "Right") {
+                        this.rotateActivePiece(1);
+                    }
+                    if (action === "Left") {
+                        this.rotateActivePiece(-1);
+                    }
+                }
+            }
+        }
+    }
+    
     render() {
         // console.log("render")
         let gameGridTable = this.prerender_Grid();
@@ -998,17 +1177,12 @@ class Game extends Component {
 
         let controlsChanging = this.prerenderControlsChanging();
 
+        
+
         return (
-            <Gamepad
-            gamepadIndex={this.props.playerIndex}
-            onConnect={this.connectHandler.bind(this)}
-            onDisconnect={this.disconnectHandler.bind(this)}
-            onAxisChange={this.axisChangeHandler.bind(this)}
-            onButtonChange={this.buttonChangeHandler.bind(this)}
-
-          >
+            <Controls buttonHandler={this.buttonHandler.bind(this)}>
             <div className="game">
-
+                
                 <div className="game-header">
                     <div className="controls left">
                     <label>P1 Controls</label>
@@ -1039,7 +1213,8 @@ class Game extends Component {
                     <label>Score</label>
                     <p>{lines_output}</p>
                 </div>
-            </div></Gamepad>
+            </div>
+            </Controls>
         )
     }
 
