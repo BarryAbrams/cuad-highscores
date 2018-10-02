@@ -305,6 +305,9 @@ p {
 .game .game-header .controls .current-control .control.joystick-blue {
   background-image: url(../images/joystick-blue.png);
 }
+.game .game-header .controls .current-control .control.joystick-black {
+  background-image: url(../images/joystick-storm.png);
+}
 .game .game-header .controls .current-control .control.button-green {
   background-image: url(../images/button-green.png);
 }
@@ -316,6 +319,9 @@ p {
 }
 .game .game-header .controls .current-control .control.button-blue {
   background-image: url(../images/button-blue.png);
+}
+.game .game-header .controls.right .current-control .control.joystick-black {
+  background-image: url(../images/joystick-vamp.png);
 }
 .game .game-header .nextpiece {
   position: relative;

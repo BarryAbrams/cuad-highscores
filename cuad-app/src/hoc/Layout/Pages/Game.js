@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
 import Controls from "../../Controls";
+import {Howl, Howler} from 'howler';
 
-var socket = new WebSocket("ws://192.168.1.15:3002/");
+var socket = new WebSocket("ws://localhost:3002/");
 
 let p1_heldButtons = [];
 let p2_heldButtons = [];
@@ -33,6 +34,7 @@ class Game extends Component {
         nextPiece : null,
         endGame : false,
         linesAmt: 0,
+        score:0,
         gamepad: 'Not connected. Try pressing a key',
     }
     debug = false;
@@ -41,10 +43,9 @@ class Game extends Component {
     gridSize = 80;
 
     baseSpeed = 500;
-    ledOn = false;
+    ledOn = false;   
 
-   
-
+    startOffset = 1;
     backgroundGrid = [  [7, 3, 8, 7, 3, 7, 3, 3, 3, 3],
                         [3, 3, 7, 3, 3, 3, 3, 3, 3, 3],
                         [3, 3, 7, 3, 3, 3, 4, 7, 3, 7],
@@ -64,8 +65,10 @@ class Game extends Component {
                         [3, 3, 7, 3, 7, 3, 3, 3, 3, 8],
                         [4, 3, 3, 7, 3, 3, 3, 3, 3, 7]];
 
+    p1_interval = null;
+    p2_interval = null;
+    newConcept = false;
     componentDidMount() {
-
         if (this.debug) {
             const debugGrid = [[0,0,0,0,0,0,0,0,0,0],
                                 [0,0,0,0,0,0,0,0,0,0],
@@ -102,30 +105,10 @@ class Game extends Component {
         this.ticker = setInterval(function() {
             this.gameLoop();
         }.bind(this), this.baseSpeed);
-        document.addEventListener("keydown", this.keyboardActionDown, false);
-        document.addEventListener("keyup", this.keyboardActionUp, false);
     }
 
-
-    connectHandler(gamepadIndex) {
-        console.log(`Gamepad ${gamepadIndex} connected!`)
-    
-        this.setState({
-          connected: true
-        })
-      }
-    
-      disconnectHandler(gamepadIndex) {
-        console.log(`Gamepad ${gamepadIndex} disconnected !`)
-    
-        this.setState({
-          connected: false
-        })
-      }
     componentWillUnmount() {
         clearInterval(this.ticker);
-        document.removeEventListener("keydown", this.keyboardActionDown, false);
-        document.removeEventListener("keyup", this.keyboardActionUp, false);
     }
     // buttonChangeHandler(buttonName, down) {
     //     console.log(buttonName, down)
@@ -166,28 +149,23 @@ class Game extends Component {
     console.log(buttonName, 'up')
     }
 
-    keyboardActionDown = (event) => {
-        // 37 left, 39 right
-        if (event.keyCode == 37) {
-            this.moveActivePiece(-1);
-        }
-        if (event.keyCode == 39) {
-            this.moveActivePiece(+1);
-        }
-        if (event.keyCode == 40) {
-            this.moveActivePiece(0);
-        }
 
-        if (event.keyCode == 90) {
-            this.rotateActivePiece(+1);
-        }
-        if (event.keyCode == 88) {
-            this.rotateActivePiece(-1);
-        }
+    triggerHardMode = () => {
+        this.props.hardMode();
+        clearInterval(this.ticker);
+        this.baseSpeed = this.baseSpeed/2;
+        this.ticker = setInterval(function() {
+            this.gameLoop();
+        }.bind(this), this.baseSpeed);
     }
 
-    keyboardActionUp = (event) => {
-        
+    playSound(effectString) {
+        var effectString = "/sounds/"+effectString+".mp3";
+        const sound = new Howl({
+            src: [effectString]
+        });
+        sound.volume(1);
+        sound.play();
     }
 
     rotateActivePiece (direction) {
@@ -226,6 +204,9 @@ class Game extends Component {
                     }
                  }
             }
+            this.playSound("whoosh");
+
+            // this.thisSound = null;
 
             if (!collision) {
                 tetromino.rotationInt = tetromino.potentialrotationInt;
@@ -258,13 +239,15 @@ class Game extends Component {
                         if (landed[row + tetromino.potentialTopLeft.row][col + tetromino.potentialTopLeft.col] != 0) {
                             collision = true;
                         }
-                    
                     }
                 }
             }
             if (!collision) {
                 tetromino.topLeft = tetromino.potentialTopLeft;
+                this.playSound("slow-hit");
                 this.setState({activePiece :tetromino})
+            } else {
+                this.playSound("force-hit");
             }
         }
     }
@@ -369,7 +352,7 @@ class Game extends Component {
 
     gameLoop() {
         const landed = this.state.gameGrid;
-        
+
         if (!this.removingRow) {
             if (this.state.theRow == null && this.state.clump == null) {
                 let filledRow = [];
@@ -413,18 +396,24 @@ class Game extends Component {
                     $(".changingcontrols .text").text("Game Over");
                     $(".changingcontrols").addClass("active");
                     clearInterval(this.ticker);
-                     this.setState({endGame:false, removingCol:false, removingRowInt:null})
+
+                    this.playSound("gameover");
+                    this.props.stopMusic();
+                    this.setState({endGame:false, removingCol:false, removingRowInt:null})
+                     
                      setTimeout(function() {
                          this.baseSpeed = 500;
                          this.ticker = setTimeout(function() {
                             this.state.linesAmt = 0;
 
                             // this.gameLoop();
-                            this.props.nextAction(500, "winnersdrugs");
+                            this.props.nextAction(5000, "winnersdrugs");
                          }.bind(this), 1000);
                      }.bind(this), 1000)
                 } else if(this.state.removingDirection == "up")  {
                     landed[this.state.removingColInt] = [1,1,1,1,1,1,1,1,1,1];
+                    this.playSound("slow-hit");
+
                     this.setState({gameGrid:landed, removingCol:true,  removingColInt:this.state.removingColInt-1})
                 } else if(this.state.removingDirection == "down")  {
                     landed[Math.abs(this.state.removingColInt +1)] = [0,0,0,0,0,0,0,0,0,0];
@@ -435,6 +424,7 @@ class Game extends Component {
                 clearInterval(this.ticker);
                 this.setState({removingCol:true, removingDirection:"up", removingColInt:landed.length-1, activePiece:null})
                 this.ticker = setInterval(function() {
+
                     this.gameLoop();
                 }.bind(this), 50);
             }
@@ -442,6 +432,7 @@ class Game extends Component {
         } else if (this.state.removingRow) {
             clearInterval(this.ticker);
             const row = this.state.theRow;
+                this.playSound("line-drop");
 
                 console.log("remove this row: " + row)
             // doesn't know what to do with multiple lines at once
@@ -464,16 +455,16 @@ class Game extends Component {
                 }
                 globalLines++;
                 if (this.state.linesAmt >= 5) {
-                    this.baseSpeed = 400;
+                    this.baseSpeed = this.baseSpeed * .80;
                 }
                 if (this.state.linesAmt >= 10) {
-                    this.baseSpeed = 300;
+                    this.baseSpeed = this.baseSpeed * .80;
                 }
                 if (this.state.linesAmt >= 15) {
-                    this.baseSpeed = 200;
+                    this.baseSpeed = this.baseSpeed * .60;
                 }
                 if (this.state.linesAmt >= 20) {
-                    this.baseSpeed = 100;
+                    this.baseSpeed = this.baseSpeed * .50;
                 }
                 // clump.topLeft = {row:row-clump.shape.length+1,col:0}
                 for (var row_y = 0; row_y < clumpCollection.shape.length; row_y++) {
@@ -505,7 +496,7 @@ class Game extends Component {
                 }.bind(this), 50);
             }            
 
-            this.setState({removingRowInt:this.state.removingRowInt+1, gameGrid:landed})
+            this.setState({removingRowInt:this.state.removingRowInt+1, gameGrid:landed, score:this.state.score+10})
 
 
         } else if (this.state.activePiece) {
@@ -622,17 +613,26 @@ class Game extends Component {
 
                 setTimeout(function() {
                     this.setState({currentControls:controls});
+                    setTimeout(function() {
+                        $(".current-control .control").addClass("active");
+
+                    }.bind(this), 100);
+
+                    let transitionTime = 500;
+                    if (this.newConcept) {
+                        transitionTime = 4000;
+                        this.newConcept = false;
+                    }
 
                     setTimeout(function() {
                         $(".changingcontrols").removeClass("active");
 
-                        $(".current-control .control").addClass("active");
                         this.setState({changingControls:false})
 
                         this.ticker = setInterval(function() {
                             this.gameLoop();
                         }.bind(this),this.baseSpeed);
-                    }.bind(this), 500);
+                    }.bind(this), transitionTime);
                 }.bind(this), 500);
             } else {
                 this.addNewPiece();
@@ -657,6 +657,10 @@ class Game extends Component {
 
         if (controls.p1[0] == "joystick-yellow") {
             socketString += ", P1 Yellow Joystick";
+        }
+
+        if (controls.p1[0] == "joystick-black") {
+            socketString += ", P1 Black Joystick";
         }
 
         if (controls.p1[1] == "button-blue") {
@@ -689,6 +693,10 @@ class Game extends Component {
 
         if (controls.p2[0] == "joystick-yellow") {
             socketString += ", P2 Yellow Joystick";
+        }
+
+        if (controls.p2[0] == "joystick-black") {
+            socketString += ", P2 Black Joystick";
         }
 
         if (controls.p2[1] == "button-blue") {
@@ -731,9 +739,9 @@ class Game extends Component {
                 console.log("arrays aren't the same")
 
 
-            this.setState({activePiece:tetromino, changingControls:true, newControls:controls});
+            this.setState({activePiece:tetromino, changingControls:true, newControls:controls, score:this.state.score+10});
         } else {
-            this.setState({activePiece:tetromino});
+            this.setState({activePiece:tetromino, score:this.state.score+10});
 
         }
         this.generateNextPiece();
@@ -742,7 +750,7 @@ class Game extends Component {
     changeControls() {
         let controls = {p1:["joystick-blue"], p2:["joystick-blue"]};
 
-        let modifier = this.droppedItems + 30;
+        let modifier = this.droppedItems + this.startOffset;
         // modifier = Math.floor(Math.random() * 10)
 
         if (modifier < 3) {
@@ -751,11 +759,15 @@ class Game extends Component {
             // console.log("PART 1", modifier, controls);
 
         } else if (modifier >= 3 && modifier < 6) {
-
+            if (modifier == 3) {
+                this.newConcept = true;
+            }
             controls = {p1:["joystick-red"], p2:["joystick-red"]}
             // console.log("PART 2", modifier, controls);
         } else if (modifier >= 6 && modifier < 12) {
-
+            if (modifier == 6) {
+                this.newConcept = true;
+            }
             let p1_value = ["joystick-blue"];
             let p2_value = ["joystick-red"];
 
@@ -770,10 +782,13 @@ class Game extends Component {
             controls = {p1:p1_value, p2:p2_value}
             // console.log("PART 3", modifier, controls, modulo);
         } else if (modifier >= 12 && modifier < 15) {
+            if (modifier == 12) {
+                this.newConcept = true;
+            }
             controls = {p1:["joystick-yellow"], p2:["joystick-green"]}
         } else if (modifier >= 15 && modifier < 18) {
             controls = {p1:["joystick-green"], p2:["joystick-yellow"]}
-        } else if (modifier >= 18 && modifier < 25) {
+        } else if (modifier >= 18 && modifier < 23) {
             let p1_value = ["joystick-green"];
             let p2_value = ["joystick-yellow"];
 
@@ -786,7 +801,10 @@ class Game extends Component {
             }
  
             controls = {p1:p1_value, p2:p2_value}
-        } else if (modifier >= 25 && modifier < 30) {
+        } else if (modifier >= 23 && modifier < 28) {
+            if (modifier == 23) {
+                this.newConcept = true;
+            }
             let p1_value = ["joystick-blue", "button-green"];
             let p2_value = ["joystick-red", "button-blue"];
 
@@ -812,8 +830,37 @@ class Game extends Component {
 
             controls = {p1:p1_value, p2:p2_value}
             // console.log("PART 3", modifier, controls, modulo);
-        } else if (modifier >= 30) {
-            const possibleJoysticks = ["joystick-blue", "joystick-red", "joystick-green", "joystick-yellow"];
+        } else if (modifier >= 28 && modifier < 32) {
+            if (modifier == 28) {
+                this.newConcept = true;
+            }
+            let p1_value = ["joystick-blue"];
+            let p2_value = ["joystick-black"];
+
+            const modulo = (modifier) % 4;
+            // // console.log("MODULO"x, modifier, (modifier) % 2);
+            if (modulo == 1) {
+                // console.log("switch");
+                p1_value = ["joystick-black"];
+                p2_value = ["joystick-red"];
+            }
+ 
+            if (modulo == 2) {
+                // console.log("switch");
+                p1_value = ["joystick-red"];
+                p2_value = ["joystick-black"];
+            }
+
+            if (modulo == 3) {
+                // console.log("switch");
+                p1_value = ["joystick-black"];
+                p2_value = ["joystick-black"];
+            }
+
+            controls = {p1:p1_value, p2:p2_value}
+
+        } else if (modifier >= 32) {
+            const possibleJoysticks = ["joystick-black", "joystick-blue", "joystick-red", "joystick-green", "joystick-yellow"];
             const possibleButtons = ["button-blue", "button-red", "button-green", "button-yellow"];
 
             const p1_joystick = possibleJoysticks[Math.floor(Math.random() * possibleJoysticks.length)];
@@ -1063,10 +1110,26 @@ class Game extends Component {
          return <div className="changingcontrols"><div className="text">Get Ready!</div></div>;
     }
 
+
     buttonHandler(player, value, action) {
         console.log(player, value, action, this.state.currentControls);
 
         if (player == "P2") {
+            if (value.includes("button-pedal")) {
+                if (action == "down") {
+                    if (this.p1_interval == null) {
+                        this.p2_interval = setInterval(function() {
+                            this.moveActivePiece(0);
+                        }.bind(this), 100);
+                    }
+                }
+
+                if (action == "up") {
+                    clearInterval(this.p2_interval);
+                    this.p2_interval = null;
+                }
+            }
+
             if (value.includes("button")) {
                 if (action == "down") {
                     // add to array
@@ -1078,40 +1141,58 @@ class Game extends Component {
                         p1_heldButtons.splice(index, 1);
                     }
                 }
-            }
-            if (this.state.currentControls.p1[0] == value) {
+                console.log("held buttons", p1_heldButtons)
 
-                var buttonNeedsToBeHeld = false;
-                var buttonHeldDown = false;
-                if (this.state.currentControls.p1[1]) {
-                    buttonNeedsToBeHeld = true;
-                    if (p1_heldButtons.indexOf(this.state.currentControls.p1[1]) > -1) {
-                        buttonHeldDown = true;
+            }
+            if (this.state.currentControls) {
+                if (this.state.currentControls.p1[0] == value) {
+
+                    var buttonNeedsToBeHeld = false;
+                    var buttonHeldDown = false;
+                    if (this.state.currentControls.p1[1]) {
+                        buttonNeedsToBeHeld = true;
+                        if (p1_heldButtons.indexOf(this.state.currentControls.p1[1]) > -1) {
+                            buttonHeldDown = true;
+                        }
                     }
-                }
-                if (buttonNeedsToBeHeld == true) {
-                    if (buttonHeldDown == true) {
+                    if (buttonNeedsToBeHeld == true) {
+                        if (buttonHeldDown == true) {
+                            if (action === "Right") {
+                                this.moveActivePiece(1);
+                            }
+                            if (action === "Left") {
+                                this.moveActivePiece(-1);
+                            }
+                        } else {
+                            console.log("hold button down");
+                        }
+                    } else {
                         if (action === "Right") {
                             this.moveActivePiece(1);
                         }
                         if (action === "Left") {
                             this.moveActivePiece(-1);
                         }
-                    } else {
-                        console.log("hold button down");
-                    }
-                } else {
-                    if (action === "Right") {
-                        this.moveActivePiece(1);
-                    }
-                    if (action === "Left") {
-                        this.moveActivePiece(-1);
                     }
                 }
             }
         }
 
         if (player == "P1") {
+            if (value.includes("button-pedal")) {
+                if (action == "down") {
+                    if (this.p2_interval == null) {
+                        this.p1_interval = setInterval(function() {
+                            this.moveActivePiece(0);
+                        }.bind(this), 100);
+                    }
+                }
+
+                if (action == "up") {
+                    clearInterval(this.p1_interval);
+                    this.p1_interval = null;
+                }
+            }
             if (value.includes("button")) {
                 if (action == "down") {
                     // add to array
@@ -1123,8 +1204,11 @@ class Game extends Component {
                         p2_heldButtons.splice(index, 1);
                     }
                 }
+                console.log("held buttons", p2_heldButtons)
+
             }
             if (this.state.currentControls.p2[0] == value) {
+
                 var buttonNeedsToBeHeld = false;
                 var buttonHeldDown = false;
                 if (this.state.currentControls.p2[1]) {
@@ -1155,6 +1239,18 @@ class Game extends Component {
             }
         }
     }
+
+    finishedPlaying() {
+        console.log("finished playing")
+        this.thisSound = null;
+    }
+
+    playSong = () => {
+        this.audio.play();
+        this.setState({
+            isLoaded: true,
+        });
+    }
     
     render() {
         // console.log("render")
@@ -1172,15 +1268,18 @@ class Game extends Component {
             lines_output = this.state.linesAmt + " Lines";
         }
 
+        let score_output = this.state.score;
+    
+
         let p1_controls = this.prerenderControls(1)
         let p2_controls = this.prerenderControls(2)
 
         let controlsChanging = this.prerenderControlsChanging();
 
-        
-
         return (
-            <Controls buttonHandler={this.buttonHandler.bind(this)}>
+            <div>
+            <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+
             <div className="game">
                 
                 <div className="game-header">
@@ -1211,10 +1310,12 @@ class Game extends Component {
                 </div>
                 <div className="game-footer">
                     <label>Score</label>
-                    <p>{lines_output}</p>
+                    {/* <p>{lines_output}</p> */}
+                    <p>{score_output} Points</p>
                 </div>
             </div>
             </Controls>
+            </div>
         )
     }
 

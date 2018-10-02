@@ -6,12 +6,14 @@ import WinnersDrugs from "./Pages/WinnersDrugs";
 import GameStart from "./Pages/GameStart";
 import Game from "./Pages/Game";
 import Slide from "./Pages/Slide";
+import Calibrate from "./Pages/Calibrate";
 
 import Coinage from "./Elements/Coinage";
 
 import axios from '../../config/axios';
+import {Howl, Howler} from 'howler';
 
-var socket = new WebSocket("ws://192.168.1.15:3002/");
+var socket = new WebSocket("ws://localhost:3002/");
 function setup() {
     socket.onopen = openSocket;
     socket.onmessage = showData;
@@ -22,21 +24,21 @@ function openSocket() {
 }
 
 function showData(result) {
-console.log("showData");
+    console.log("showData");
 }
-
-
 
 class Page extends Component {
     state = {
-        action : "testscreen",
+        action : "calibrate",
         gameStarted : false,
         slides:null,
         currentSlide:-1,
     }
 
     currentSlide = 0;
-
+    musicPlaying = false;
+    globalMusic = null;
+    controllerOrder = [0, 2, 3, 1];
     changeAction = (delay, newAction) => {
         this.interuptAction();
        
@@ -83,9 +85,41 @@ class Page extends Component {
        this.setState({gameStarted:true});
     }
 
+    stopMusic = () => {
+        if (this.globalMusic) {
+            this.globalMusic.stop();
+            this.globalMusic = null;
+            this.musicPlaying = false;
+        }
+    }
+
+    hardMode = () => {
+        if (this.globalMusic) {
+            this.globalMusic.stop();
+            this.globalMusic = null;
+            this.musicPlaying = false;
+        }
+
+        this.musicPlaying = true;
+        const music = new Howl({
+            src: [ '/sounds/21.mp3']
+        });
+        music.volume(.35);
+        music.loop(true);
+        music.play();
+        this.globalMusic = music;
+    }
+
+    setGlobalControllerValue = (data) => {
+        this.controllerOrder = data;
+        console.log("CONTROLLER ORDER", data);
+    }
+
     render() {
         let page = null;
         let showCoinage = false;
+   
+
         // TEST SCREEN
         // -> LOOP START
         // WINNERS DON'T USE DRUGS
@@ -93,12 +127,29 @@ class Page extends Component {
         // DEMO MODE
         // AD FOR ROOM (1|2|3)
         // -> LOOP REPEAT
+        let music = null;
+        if (this.state.action === "calibrate") {
+            page = <Calibrate nextAction={this.changeAction} setGlobalControllerValue={this.setGlobalControllerValue} />
+            
+            let interval = setInterval(function() {
+                if (socket.readyState) {
+                    clearInterval(interval);
+                    socket.send("P1 Start Button, P2 Start Button");
+                }
+            }, 300)
+            
+            // this.changeAction(500, "testscreen")
+        }
 
         if (this.state.action === "testscreen") {
             page = <TestScreen nextAction={this.changeAction} />
-            setTimeout(function() {
-                socket.send("Intro");
-            }, 100)
+            
+            let interval = setInterval(function() {
+                if (socket.readyState) {
+                    clearInterval(interval);
+                    socket.send("P1 Start Button, P2 Start Button");
+                }
+            }, 300)
             
             this.changeAction(500, "slide")
         }
@@ -106,7 +157,9 @@ class Page extends Component {
         if (this.state.action === "winnersdrugs") {
             page = <WinnersDrugs nextAction={this.changeAction} />
             this.changeAction(4100, "slide");
- 
+            if (this.state.gameStarted) {
+            this.setState({gameStarted:false})
+            }
             showCoinage = true;
         }
 
@@ -138,6 +191,7 @@ class Page extends Component {
             coinAction={this.coinAction}
             gameStarted={this.state.gameStarted}
             startGame={this.startGame}
+            controllers={this.controllerOrder}
             />
             if (this.state.gameStarted) {
                 showCoinage = false;
@@ -149,14 +203,27 @@ class Page extends Component {
         }
 
         if (this.state.action === "game") {
-            page = <Game nextAction={this.changeAction}  />
+            page = <Game nextAction={this.changeAction} controllers={this.controllerOrder} stopMusic={this.stopMusic} hardMode={this.hardMode} playSoundCallback={this.playSound} />
             showCoinage = false;
             this.coinage = null;
+            
+            if (!this.musicPlaying) {
+                this.musicPlaying = true;
+                const music = new Howl({
+                    src: [ '/sounds/19.mp3']
+                });
+                music.volume(.25);
+                music.loop(true);
+                music.play();
+                this.globalMusic = music;
+           }
         }
 
         if (showCoinage) {
-            this.coinage = <Coinage nextAction={this.changeAction} startGame={this.startGame} />;
+            this.coinage = <Coinage nextAction={this.changeAction} startGame={this.startGame} controller={this.controllerOrder[3]}/>;
         }
+        
+        
 
         return (
             <div className="layout">
