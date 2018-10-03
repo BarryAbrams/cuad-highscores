@@ -134,7 +134,7 @@ class Page extends Component {
             let interval = setInterval(function() {
                 if (socket.readyState) {
                     clearInterval(interval);
-                    socket.send("Intro");
+                    // socket.send("Intro");
                 }
             }, 300)
             
@@ -147,7 +147,8 @@ class Page extends Component {
             let interval = setInterval(function() {
                 if (socket.readyState) {
                     clearInterval(interval);
-                    socket.send("P1 Start Button, P2 Start Button");
+                    // socket.send("P1 Start Button, P2 Start Button");
+                    socket.send("Intro");
                 }
             }, 300)
             
