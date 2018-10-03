@@ -5,7 +5,6 @@ import {Howl, Howler} from 'howler';
 
 var socket = new WebSocket("ws://localhost:3002/");
 
-
 class GameStart extends Component {
 
 

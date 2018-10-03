@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Gamepad from 'react-gamepad'
 
+var socket = new WebSocket("ws://localhost:3002/");
+
 class Calibrate extends Component {
 
     state = {
@@ -87,13 +89,20 @@ class Calibrate extends Component {
         // insert coin
 
         let instructions = "press player 1 start";
+        if (socket.readyState == 1) {
+            socket.send("P1 Start Button");
+        }
         if (this.state.stage == 1) {
+            
+            socket.send("P2 Start Button");
             instructions = "press player 2 start"; 
         } else if (this.state.stage == 2) {
+            socket.send("None");
             instructions = "wiggle vampire"; 
         } else if (this.state.stage == 3) {
             instructions = "insert coin"; 
         } else if (this.state.stage == 4) {
+            socket.send("Intro");
             instructions = "ALL DONE"; 
             this.props.setGlobalControllerValue(this.controllerOrder);
             this.props.nextAction(2000, "testscreen");
