@@ -41,7 +41,7 @@ class Game extends Component {
     droppedItems = 0;
 
     gridSize = 80;
-
+    hardModeTriggered = false;
     baseSpeed = 500;
     ledOn = false;   
 
@@ -1113,6 +1113,18 @@ class Game extends Component {
 
     buttonHandler(player, value, action) {
         console.log(player, value, action, this.state.currentControls);
+
+        if (player == "P3" && value == "button-hard") {
+            if (!this.hardModeTriggered) {
+                this.hardModeTriggered = true;
+                this.props.hardMode();
+                clearInterval(this.ticker);
+                this.baseSpeed = this.baseSpeed/2;
+                this.ticker = setInterval(function() {
+                    this.gameLoop();
+                }.bind(this), this.baseSpeed);
+            }
+        }
 
         if (player == "P2") {
             if (value.includes("button-pedal")) {

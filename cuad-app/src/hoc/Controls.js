@@ -240,9 +240,11 @@ class Controls extends Component {
     }
 
     buttonChangeHandler_player3(buttonName, down) {
+        console.log(buttonName, down)
         let player = null;
         let buttonColor = null;
         let joystickDirection = null;
+
         // ABXY
         if (buttonName == "A") {
             buttonColor = "black";
@@ -269,14 +271,68 @@ class Controls extends Component {
             buttonColor = "black";
             player = "P1";
             joystickDirection = "Right";
-
         }
+
+        
 
         if (player !== null) {
             if (down) {
                 this.joystickAction(player, buttonColor, joystickDirection);
             }
         }
+
+        if (buttonName == "LB") {
+            if (down) {
+                this.buttonAction("P3", "hard", "down");
+            }
+        }
+    }
+
+    buttonChangeHandler_player4(buttonName, down) {
+        console.log(buttonName, down)
+
+        if (buttonName == "B") {
+            if (down) {
+                this.buttonAction("P3", "hard", "down");
+            }
+        }
+        // let player = null;
+        // let buttonColor = null;
+        // let joystickDirection = null;
+        // // ABXY
+        // if (buttonName == "A") {
+        //     buttonColor = "black";
+        //     player = "P2";
+        //     joystickDirection = "Right";
+
+        // }
+
+        // if (buttonName == "B") {
+        //     buttonColor = "black";
+        //     player = "P2";
+        //     joystickDirection = "Left";
+
+        // }
+
+        // if (buttonName == "X") {
+        //     buttonColor = "black";
+        //     player = "P1";
+        //     joystickDirection = "Left";
+
+        // }
+
+        // if (buttonName == "Y") {
+        //     buttonColor = "black";
+        //     player = "P1";
+        //     joystickDirection = "Right";
+
+        // }
+
+        // if (player !== null) {
+        //     if (down) {
+        //         this.joystickAction(player, buttonColor, joystickDirection);
+        //     }
+        // }
     }
 
     keyboardActionUp = (event) => {
@@ -332,7 +388,12 @@ class Controls extends Component {
             onDisconnect={this.disconnectHandler.bind(this)}
             onButtonChange={this.buttonChangeHandler_player3.bind(this)}
              ><div /></Gamepad>
-            
+            <Gamepad
+            gamepadIndex={this.props.controllers[3]}
+            onConnect={this.connectHandler.bind(this)}
+            onDisconnect={this.disconnectHandler.bind(this)}
+            onButtonChange={this.buttonChangeHandler_player4.bind(this)}
+             ><div /></Gamepad>
             </div>
         )
     }    
