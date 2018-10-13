@@ -14,9 +14,9 @@ gulp.task('less', function () {
 });
 
 gulp.task('browser-sync', function() {
-    browserSync.init({
-        proxy: "192.168.99.100:3000/"
-    });
+    // browserSync.init({
+    //     proxy: "192.168.99.100:3003/"
+    // });
     gulp.watch("./cuad-less/*.less", ['less']).on('change', browserSync.reload);
 
     

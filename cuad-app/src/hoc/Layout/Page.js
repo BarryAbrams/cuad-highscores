@@ -29,7 +29,7 @@ function showData(result) {
 
 class Page extends Component {
     state = {
-        action : "calibrate",
+        action : "game",
         gameStarted : false,
         slides:null,
         currentSlide:-1,
@@ -211,7 +211,7 @@ class Page extends Component {
             if (!this.musicPlaying) {
                 this.musicPlaying = true;
                 const music = new Howl({
-                    src: [ '/sounds/19.mp3']
+                    src: [ '/sounds/Tetris.mp3']
                 });
                 music.volume(.25);
                 music.loop(true);

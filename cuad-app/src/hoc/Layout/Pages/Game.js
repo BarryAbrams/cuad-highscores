@@ -45,6 +45,8 @@ class Game extends Component {
     baseSpeed = 500;
     ledOn = false;   
 
+    swapsises = false;
+
     startOffset = 1;
     backgroundGrid = [  [7, 3, 8, 7, 3, 7, 3, 3, 3, 3],
                         [3, 3, 7, 3, 3, 3, 3, 3, 3, 3],
@@ -611,6 +613,12 @@ class Game extends Component {
                 }
                 clearInterval(this.ticker);
 
+
+                if ((this.droppedItems) % 2) {
+                    this.swapsises = true;
+                } else {
+                    this.swapsises = false;
+                }
                 setTimeout(function() {
                     this.setState({currentControls:controls});
                     setTimeout(function() {
@@ -743,6 +751,11 @@ class Game extends Component {
         } else {
             this.setState({activePiece:tetromino, score:this.state.score+10});
 
+        }
+        if ((this.droppedItems) % 2) {
+            this.swapsises = true;
+        } else {
+            this.swapsises = false;
         }
         this.generateNextPiece();
     }
@@ -1170,20 +1183,36 @@ class Game extends Component {
                     if (buttonNeedsToBeHeld == true) {
                         if (buttonHeldDown == true) {
                             if (action === "Right") {
-                                this.moveActivePiece(1);
+                                if (!this.swapsises) {
+                                    this.moveActivePiece(1);
+                                } else {
+                                    this.rotateActivePiece(1);
+                                }
                             }
                             if (action === "Left") {
-                                this.moveActivePiece(-1);
+                                if (!this.swapsises) {
+                                    this.moveActivePiece(-1);
+                                } else {
+                                    this.rotateActivePiece(-1);
+                                }
                             }
                         } else {
                             console.log("hold button down");
                         }
                     } else {
                         if (action === "Right") {
-                            this.moveActivePiece(1);
+                            if (!this.swapsises) {
+                                this.moveActivePiece(1);
+                            } else {
+                                this.rotateActivePiece(1);
+                            }
                         }
                         if (action === "Left") {
-                            this.moveActivePiece(-1);
+                            if (!this.swapsises) {
+                                this.moveActivePiece(-1);
+                            } else {
+                                this.rotateActivePiece(-1);
+                            }
                         }
                     }
                 }
@@ -1232,20 +1261,37 @@ class Game extends Component {
                 if (buttonNeedsToBeHeld == true) {
                     if (buttonHeldDown == true) {
                         if (action === "Right") {
-                            this.rotateActivePiece(1);
+                            // this.rotateActivePiece(1);
+                            if (!this.swapsises) {
+                                this.rotateActivePiece(1);
+                            } else {
+                                this.moveActivePiece(1);
+                            }
                         }
                         if (action === "Left") {
-                            this.rotateActivePiece(-1);
+                            if (!this.swapsises) {
+                                this.rotateActivePiece(-1);
+                            } else {
+                                this.moveActivePiece(-1);
+                            }
                         }
                     } else {
                         console.log("hold button down");
                     }
                 } else {
                     if (action === "Right") {
-                        this.rotateActivePiece(1);
+                        if (!this.swapsises) {
+                            this.rotateActivePiece(1);
+                        } else {
+                            this.moveActivePiece(1);
+                        }
                     }
                     if (action === "Left") {
-                        this.rotateActivePiece(-1);
+                        if (!this.swapsises) {
+                            this.rotateActivePiece(-1);
+                        } else {
+                            this.moveActivePiece(-1);
+                        }
                     }
                 }
             }
@@ -1286,6 +1332,14 @@ class Game extends Component {
         let p1_controls = this.prerenderControls(1)
         let p2_controls = this.prerenderControls(2)
 
+        let p1_control_label = "MOVE PIECE";
+        let p2_control_label = "ROTATE PIECE";
+
+        if (this.swapsises) {
+            p1_control_label = "ROTATE PIECE";
+            p2_control_label = "MOVE PIECE";
+        }
+
         let controlsChanging = this.prerenderControlsChanging();
 
         return (
@@ -1298,9 +1352,9 @@ class Game extends Component {
                     <div className="controls left">
                     <label>P1 Controls</label>
                         <div className="current-control">
-                            {p1_controls}
-                            
+                        {p2_controls}
                         </div>
+                        <div className="control-label">{p2_control_label}</div>
                     </div>
                     <div className="nextpiece">
                         {nextPiece}
@@ -1308,9 +1362,9 @@ class Game extends Component {
                     <div className="controls right">
                     <label>P2 Controls</label>
                         <div className="current-control">
-                        {p2_controls}
-
+                        {p1_controls}
                         </div>
+                        <div className="control-label">{p1_control_label}</div>
                     </div>
                 </div>
                 <div className="gametable-wrapper">
