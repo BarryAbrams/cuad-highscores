@@ -93,9 +93,7 @@ class Coinage extends Component {
                 this.props.nextAction(1000, "restart");
             }.bind(this), 10000);
 
-        } else {
-
-        }
+        } 
         // this.setState({credits:props.coinage});
         // this.setState({ open: props.drawerOpen })
      }
