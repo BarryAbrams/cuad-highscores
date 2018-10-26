@@ -86,11 +86,11 @@ class Coinage extends Component {
     componentWillReceiveProps(props) {
         console.log("recieve PROPS", props)
 
-        if (!this.state.credits && props.credits) {
+        if (this.state.credits) {
 
             this.timerout = setTimeout(function() {
-                this.setState({credits:false})
                 this.props.nextAction(1000, "restart");
+                this.setState({credits:false})
             }.bind(this), 10000);
 
         } 

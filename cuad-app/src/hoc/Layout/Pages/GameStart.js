@@ -66,11 +66,11 @@ class GameStart extends Component {
         if (!this.gameTriggerStart) {
             if(event.keyCode === 49) {
                 this.buttonDownStart_left = false;
-                $(".button.left").removeClass("pushed");
+                $(".button.right").removeClass("pushed");
             }
             if(event.keyCode === 50) {
                 this.buttonDownStart_right = false;
-                $(".button.right").removeClass("pushed");
+                $(".button.left").removeClass("pushed");
             }
         }
     }
@@ -85,7 +85,7 @@ class GameStart extends Component {
                 });
                 coinSound.volume(1);
                 coinSound.play();
-             $(".button.left").addClass("pushed");
+             $(".button.right").addClass("pushed");
              this.buttonDownStart_left = true;
              if (this.buttonDownStart_right && !this.gameTriggerStart) {
                 this.startGame();
@@ -93,7 +93,7 @@ class GameStart extends Component {
             } else {
               if (!this.gameTriggerStart) {
 
-              $(".button.left").removeClass("pushed");
+              $(".button.right").removeClass("pushed");
                 this.buttonDownStart_left = false;
               }
             }
@@ -107,14 +107,14 @@ class GameStart extends Component {
             });
             coinSound.volume(1);
             coinSound.play();
-             $(".button.right").addClass("pushed");
+             $(".button.left").addClass("pushed");
              this.buttonDownStart_right = true;
              if (this.buttonDownStart_left && !this.gameTriggerStart) {
                 this.startGame();
              }
             } else {
               if (!this.gameTriggerStart) {
-              $(".button.right").removeClass("pushed");
+              $(".button.left").removeClass("pushed");
               this.buttonDownStart_right = false;
               }
             }
