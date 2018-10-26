@@ -25,33 +25,33 @@ class Coinage extends Component {
         console.log(player, value, action);
     }
 
-    // keyboardActionDown = (event) => {
-    //     // #5
-    //     if(event.keyCode === 53 && !this.buttonDownCredit) {
-    //         this.buttonDownCredit = true;
-    //         const coinSound = new Howl({
-    //             src: [ '/sounds/Frogger_Coin.wav']
-    //         });
-    //         coinSound.volume(1);
-    //         coinSound.play();
-    //         this.setState({credits:true});
-    //         this.props.nextAction(500, "gamestart");
-    //     }
+    keyboardActionDown(event) {
+        // #5
+        if(event.keyCode === 53 && !this.buttonDownCredit) {
+            this.buttonDownCredit = true;
+            const coinSound = new Howl({
+            src: [ '/sounds/Frogger_Coin.wav']
+            });
+            coinSound.volume(1);
+            coinSound.play();
+            this.setState({credits:true});
+            this.props.nextAction(500, "gamestart");
+        }
 
-    //     if(event.keyCode === 49 && !this.buttonDownStart_left) {
-    //         this.buttonDownStart_left = true;
-    //         if (this.buttonDownStart_right) {
-    //             //5this.decrementCoin();   
-    //        }
-    //     }
+        // if(event.keyCode === 49 && !this.buttonDownStart_left) {
+        //     this.buttonDownStart_left = true;
+        //     if (this.buttonDownStart_right) {
+        //         //5this.decrementCoin();   
+        //    }
+        // }
 
-    //     if(event.keyCode === 50 && !this.buttonDownStart_right) {
-    //         this.buttonDownStart_right = true;
-    //         if (this.buttonDownStart_left) {
-    //             //this.decrementCoin();   
-    //        }
-    //     }
-    // }
+        // if(event.keyCode === 50 && !this.buttonDownStart_right) {
+        //     this.buttonDownStart_right = true;
+        //     if (this.buttonDownStart_left) {
+        //         //this.decrementCoin();   
+        //    }
+        // }
+    }
 
     connectHandler(gamepadIndex) {
         console.log(`Gamepad ${gamepadIndex} connected !`)
@@ -119,8 +119,9 @@ class Coinage extends Component {
             onConnect={this.connectHandler.bind(this)}
             onDisconnect={this.disconnectHandler.bind(this)}
             onButtonChange={this.buttonCredit.bind(this)}
+            
              >
-            <div className="coinage">
+            <div className="coinage" >
 
                  {coinage}
             </div>

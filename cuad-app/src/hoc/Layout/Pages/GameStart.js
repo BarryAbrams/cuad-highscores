@@ -18,10 +18,13 @@ class GameStart extends Component {
 
         let interval = setInterval(function() {
             if (socket.readyState) {
+                setTimeout(function() {
+                    this.props.nextAction(1000, "winnersdrugs");
+                }.bind(this), 10000);
                 clearInterval(interval);
                 socket.send("P1 Start Button, P2 Start Button");
             }
-        }, 300)
+        }.bind(this), 300)
     }
 
     componentWillUnmount(){
@@ -91,7 +94,7 @@ class GameStart extends Component {
               if (!this.gameTriggerStart) {
 
               $(".button.left").removeClass("pushed");
-              this.buttonDownStart_left = false;
+                this.buttonDownStart_left = false;
               }
             }
         }

@@ -39,6 +39,7 @@ class Page extends Component {
     musicPlaying = false;
     globalMusic = null;
     controllerOrder = [0, 2, 3, 1];
+    idleTimeout = null;
     changeAction = (delay, newAction) => {
         this.interuptAction();
        
@@ -119,7 +120,6 @@ class Page extends Component {
         let page = null;
         let showCoinage = false;
    
-
         // TEST SCREEN
         // -> LOOP START
         // WINNERS DON'T USE DRUGS
@@ -159,8 +159,9 @@ class Page extends Component {
             page = <WinnersDrugs nextAction={this.changeAction} />
             this.changeAction(4100, "slide");
             if (this.state.gameStarted) {
-            this.setState({gameStarted:false})
+                this.setState({gameStarted:false})
             }
+            this.coinage = null;
             showCoinage = true;
         }
 
@@ -182,7 +183,7 @@ class Page extends Component {
             page = <Scores nextAction={this.changeAction} />
             showCoinage = true;
 
-            
+         
             // this.changeAction(5000, "testscreen")
         }
 
@@ -199,11 +200,17 @@ class Page extends Component {
                 this.coinage = null;
             } else {
                 showCoinage = true;
-
             }
+
+            this.idleTimeout = setTimeout(function() {
+                this.changeAction(totalSlideLength, "winnersdrugs");
+            }.bind(this),120000)
         }
 
         if (this.state.action === "game") {
+            if (this.idleTimeout) {
+                clearTimeout(this.idleTimeout);
+            }
             page = <Game nextAction={this.changeAction} controllers={this.controllerOrder} stopMusic={this.stopMusic} hardMode={this.hardMode} playSoundCallback={this.playSound} />
             showCoinage = false;
             this.coinage = null;
@@ -224,8 +231,6 @@ class Page extends Component {
             this.coinage = <Coinage nextAction={this.changeAction} startGame={this.startGame} controller={this.controllerOrder[3]}/>;
         }
         
-        
-
         return (
             <div className="layout">
                 <div className="layout-container">
