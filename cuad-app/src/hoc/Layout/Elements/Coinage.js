@@ -89,6 +89,7 @@ class Coinage extends Component {
         if (!this.state.credits && props.credits) {
 
             this.timerout = setTimeout(function() {
+                this.setState({credits:false})
                 this.props.nextAction(1000, "restart");
             }.bind(this), 10000);
 
