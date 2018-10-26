@@ -11,6 +11,8 @@ class Coinage extends Component {
     buttonDownStart_left = false;
     buttonDownStart_right = false;
 
+    timerout = false;
+
     // componentDidMount(){
     //     document.addEventListener("keydown", this.keyboardActionDown, false);
     //     document.addEventListener("keyup", this.keyboardActionUp, false);
@@ -83,6 +85,16 @@ class Coinage extends Component {
 
     componentWillReceiveProps(props) {
         console.log("recieve PROPS", props)
+
+        if (!this.state.credits && props.credits) {
+
+            this.timerout = setTimeout(function() {
+                this.props.nextAction(1000, "restart");
+            }.bind(this), 10000);
+
+        } else {
+
+        }
         // this.setState({credits:props.coinage});
         // this.setState({ open: props.drawerOpen })
      }
@@ -97,6 +109,7 @@ class Coinage extends Component {
             coinSound.play();
             this.setState({credits:true});
             this.props.nextAction(500, "gamestart");
+            clearTimeout(this.timerout);
         }
     }
 
@@ -117,10 +130,8 @@ class Coinage extends Component {
             onConnect={this.connectHandler.bind(this)}
             onDisconnect={this.disconnectHandler.bind(this)}
             onButtonChange={this.buttonCredit.bind(this)}
-            
              >
             <div className="coinage" >
-
                  {coinage}
             </div>
             </Gamepad>

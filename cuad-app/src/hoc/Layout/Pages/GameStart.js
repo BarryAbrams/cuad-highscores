@@ -12,7 +12,7 @@ class GameStart extends Component {
     buttonDownStart_right = false;
     gameTriggerStart = false;
     
-    timerout = null;
+    // timerout = null;
 
     componentDidMount(){
         // document.addEventListener("keydown", this.keyboardActionDown, false);
@@ -20,9 +20,7 @@ class GameStart extends Component {
 
         let interval = setInterval(function() {
             if (socket.readyState) {
-                this.timerout = setTimeout(function() {
-                    this.props.nextAction(1000, "restart");
-                }.bind(this), 10000);
+ 
                 clearInterval(interval);
                 socket.send("P1 Start Button, P2 Start Button");
             }
@@ -125,7 +123,7 @@ class GameStart extends Component {
 
 
     startGame = () => {
-        clearTimeout(this.timerout);
+        // clearTimeout(this.timerout);
         const coinSound = new Howl({
             src: [ '/sounds/start.mp3']
         });
