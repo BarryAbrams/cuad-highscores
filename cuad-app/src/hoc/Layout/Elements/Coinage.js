@@ -107,8 +107,6 @@ class Coinage extends Component {
         )
         if (this.state.credits) {
 
-
-
             coinage = (
                 <div> COIN INSERTED! 1 CREDIT </div>
             );

@@ -40,6 +40,7 @@ class Page extends Component {
     globalMusic = null;
     controllerOrder = [0, 2, 3, 1];
     idleTimeout = null;
+
     changeAction = (delay, newAction) => {
         this.interuptAction();
        
@@ -153,6 +154,13 @@ class Page extends Component {
             }, 300)
             
             this.changeAction(500, "slide")
+        }
+
+        if (this.state.action === "restart") {
+            showCoinage = false;
+            this.coinage = null;
+            this.changeAction(100, "winnersdrugs");
+
         }
 
         if (this.state.action === "winnersdrugs") {
