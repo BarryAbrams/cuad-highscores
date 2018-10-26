@@ -131,6 +131,15 @@ class Scores extends Component {
                         )
                     }
 
+                    let bonusPuzzle = null;
+                    if (scoreObject.bonus_puzzle == "True") {
+                        bonusPuzzle = (
+                            <div className="no-hints">
+                                Bonus Puzzle!
+                            </div>
+                        )
+                    }
+
                     return (
                         <li key={scoreObject.team_name} className={lastStyle}>
                             <div className="scoreranking">
@@ -146,6 +155,7 @@ class Scores extends Component {
                                         <p dangerouslySetInnerHTML={{__html:scoreObject.date}}></p>
                                     </div>
                                     {noHints}
+                                    {bonusPuzzle}
                                     <div className="duration" >
                                         <label>Completed room in</label>
                                         <p dangerouslySetInnerHTML={{__html:scoreObject.duration}}></p>

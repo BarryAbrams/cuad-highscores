@@ -88,7 +88,7 @@ class Calibrate extends Component {
         // rotate storm trooper
         // insert coin
 
-        let instructions = "press player 1 start";
+        let instructions = "press hallway player start";
         if (socket.readyState == 1) {
             socket.send("P1 Start Button");
         }
@@ -96,12 +96,12 @@ class Calibrate extends Component {
             if (socket.readyState == 1) {
                 socket.send("P2 Start Button");
             }
-            instructions = "press player 2 start"; 
+            instructions = "press window player start"; 
         } else if (this.state.stage == 2) {
             if (socket.readyState == 1) {
                 socket.send("None");
             }
-            instructions = "wiggle vampire"; 
+            instructions = "wiggle storm trooper"; 
         } else if (this.state.stage == 3) {
             instructions = "insert coin"; 
         } else if (this.state.stage == 4) {
