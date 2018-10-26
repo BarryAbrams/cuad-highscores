@@ -29,7 +29,7 @@ function showData(result) {
 
 class Page extends Component {
     state = {
-        action : "scores",
+        action : "calibrate",
         gameStarted : false,
         slides:null,
         currentSlide:-1,
