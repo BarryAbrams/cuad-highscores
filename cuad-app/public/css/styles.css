@@ -256,6 +256,9 @@ p {
 .scores .room ul li.score p {
   font-size: 0.5em;
 }
+*:focus {
+  outline: none;
+}
 .game {
   position: relative;
 }

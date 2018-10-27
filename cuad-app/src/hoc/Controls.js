@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Gamepad from 'react-gamepad'
+import $ from 'jquery';
 
 class Controls extends Component {
 
@@ -296,6 +297,12 @@ class Controls extends Component {
                 this.buttonAction("P3", "hard", "down");
             }
         }
+
+        if (buttonName == "A") {
+            if (down) {
+                this.buttonAction("P3", "coin", "down");
+            }
+        }
         // let player = null;
         // let buttonColor = null;
         // let joystickDirection = null;
@@ -353,6 +360,7 @@ class Controls extends Component {
         console.log("gamepad", navigator.getGamepads());
         document.addEventListener("keydown", this.keyboardActionDown, false);
         document.addEventListener("keyup", this.keyboardActionUp, false);
+        $("#myControls").focus();
     }
 
     componentWillUnmount() {
@@ -364,10 +372,62 @@ class Controls extends Component {
         console.log(buttonName, down)
     }
 
+    firedArray = [];
+
+    handleKeyDown = (event) => {
+        console.log(event.key)
+            
+        if(event.key == '1'){
+            if (this.firedArray.indexOf('P1 Start') == -1) {
+                this.firedArray.push('P1 Start');
+                this.buttonAction("P1", "start", "down");
+            }
+        }
+        if(event.key == '2'){
+            if (this.firedArray.indexOf('P2 Start') == -1) {
+                this.firedArray.push('P2 Start');
+                this.buttonAction("P2", "start", "down");
+            }
+        }
+
+        if(event.key == '5'){
+            if (this.firedArray.indexOf('P3 Coin') == -1) {
+                this.firedArray.push('P3 Coin');
+                this.buttonAction("P3", "coin", "down");
+            }
+        }
+    }
+
+    handleKeyUp = (event) => {
+        if(event.key == '1'){
+            this.removeA(this.firedArray, "P1 Start");
+            this.buttonAction("P1", "start", "up");
+        }
+        if(event.key == '2'){
+            this.removeA(this.firedArray, "P2 Start");
+            this.buttonAction("P2", "start", "up");
+        }
+        if(event.key == '3'){
+            this.removeA(this.firedArray, "P3 Coin");
+            this.buttonAction("P3", "coin", "up");
+        }
+    }
+
+    removeA(arr) {
+        var what, a = arguments, L = a.length, ax;
+        while (L > 1 && arr.length) {
+            what = a[--L];
+            while ((ax= arr.indexOf(what)) !== -1) {
+                arr.splice(ax, 1);
+            }
+        }
+        return arr;
+    }
+
     render() {  
        
         return (
-            <div>
+            <div id='myControls' onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabindex="0">
             <Gamepad
             gamepadIndex={this.props.controllers[0]}
             onConnect={this.connectHandler.bind(this)}
