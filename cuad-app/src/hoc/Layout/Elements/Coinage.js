@@ -11,7 +11,7 @@ class Coinage extends Component {
     buttonDownStart_left = false;
     buttonDownStart_right = false;
 
-    timerout = false;
+    // timerout = false;
 
     // componentDidMount(){
     //     document.addEventListener("keydown", this.keyboardActionDown, false);
@@ -88,10 +88,10 @@ class Coinage extends Component {
 
         if (this.state.credits) {
 
-            this.timerout = setTimeout(function() {
-                this.props.nextAction(10, "restart");
-                this.setState({credits:false})
-            }.bind(this), 120000);
+            // this.timerout = setTimeout(function() {
+            //     this.props.nextAction(10, "restart");
+            //     this.setState({credits:false})
+            // }.bind(this), 120000);
 
         } 
         // this.setState({credits:props.coinage});
@@ -108,7 +108,7 @@ class Coinage extends Component {
             coinSound.play();
             this.setState({credits:true});
             this.props.nextAction(500, "gamestart");
-            clearTimeout(this.timerout);
+            // clearTimeout(this.timerout);
         }
     }
 
