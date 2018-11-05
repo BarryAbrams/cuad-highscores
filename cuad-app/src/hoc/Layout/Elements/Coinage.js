@@ -113,12 +113,10 @@ class Coinage extends Component {
     }
 
     render() {
-
         let coinage = (
             <div className="blinking">INSERT COIN</div>
         )
         if (this.state.credits) {
-
             coinage = (
                 <div> COIN INSERTED! 1 CREDIT </div>
             );
