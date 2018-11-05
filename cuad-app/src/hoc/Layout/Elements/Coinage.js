@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Howl, Howler} from 'howler';
-import Gamepad from 'react-gamepad'
+import Controls from '../../Controls';
 
 class Coinage extends Component {
     state = {
@@ -24,43 +24,12 @@ class Coinage extends Component {
     // }
 
     buttonHandler(player, value, action) {
-        console.log(player, value, action);
-    }
-
-    keyboardActionDown(event) {
-        // #5
-        if(event.keyCode === 53 && !this.buttonDownCredit) {
-            this.buttonDownCredit = true;
-            const coinSound = new Howl({
-            src: [ '/sounds/Frogger_Coin.wav']
-            });
-            coinSound.volume(1);
-            coinSound.play();
-            this.setState({credits:true});
-            this.props.nextAction(500, "gamestart");
+        console.log("BUTTON HANDLER", player, value, action)
+        if (player == "P3" && value == "button-coin" && action == "down") {
+            this.buttonCredit();
+            this.props.toggleCoinageOn();
         }
-
-        // if(event.keyCode === 49 && !this.buttonDownStart_left) {
-        //     this.buttonDownStart_left = true;
-        //     if (this.buttonDownStart_right) {
-        //         //5this.decrementCoin();   
-        //    }
-        // }
-
-        // if(event.keyCode === 50 && !this.buttonDownStart_right) {
-        //     this.buttonDownStart_right = true;
-        //     if (this.buttonDownStart_left) {
-        //         //this.decrementCoin();   
-        //    }
-        // }
-    }
-
-    connectHandler(gamepadIndex) {
-        console.log(`Gamepad ${gamepadIndex} connected !`)
-    }
         
-    disconnectHandler(gamepadIndex) {
-        console.log(`Gamepad ${gamepadIndex} disconnected !`)
     }
 
     decrementCoin = () => {
@@ -68,20 +37,7 @@ class Coinage extends Component {
             this.setState({credits:false});
         }
     }
-    // keyboardActionUp = (event) => {
-    //     // #5
-    //     if(event.keyCode === 53) {
-    //         this.buttonDownCredit = false;
-    //     }
 
-    //     if(event.keyCode === 49) {
-    //         this.buttonDownStart_left = false;
-    //     }
-
-    //     if(event.keyCode === 50) {
-    //         this.buttonDownStart_right = false;
-    //     }
-    // }
 
     componentWillReceiveProps(props) {
         console.log("recieve PROPS", props)
@@ -98,8 +54,7 @@ class Coinage extends Component {
         // this.setState({ open: props.drawerOpen })
      }
 
-    buttonCredit(buttonName, down) {
-        if (buttonName == "A" && down) {
+    buttonCredit() {
             this.buttonDownCredit = true;
             const coinSound = new Howl({
             src: [ '/sounds/Frogger_Coin.wav']
@@ -108,8 +63,9 @@ class Coinage extends Component {
             coinSound.play();
             this.setState({credits:true});
             this.props.nextAction(500, "gamestart");
+            this.props.toggleCoinageOff();
+
             // clearTimeout(this.timerout);
-        }
     }
 
     render() {
@@ -122,16 +78,11 @@ class Coinage extends Component {
             );
         }
         return (
-            <Gamepad
-            gamepadIndex={this.props.controller}
-            onConnect={this.connectHandler.bind(this)}
-            onDisconnect={this.disconnectHandler.bind(this)}
-            onButtonChange={this.buttonCredit.bind(this)}
-             >
-            <div className="coinage" >
+            <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+            <div className="coinage">
                  {coinage}
             </div>
-            </Gamepad>
+            </Controls>
         )
     }    
 }

@@ -40,6 +40,7 @@ class Page extends Component {
     globalMusic = null;
     controllerOrder = [0, 2, 3, 1];
     idleTimeout = null;
+    globalCoinage = false;
 
     changeAction = (delay, newAction) => {
         this.interuptAction();
@@ -112,6 +113,15 @@ class Page extends Component {
         this.globalMusic = music;
     }
 
+    toggleGlobalCoinageOn = () => {
+       this.globalCoinage = true; 
+    }
+
+    toggleGlobalCoinageOff = () => {
+        this.globalCoinage = false;
+       
+    }
+
     setGlobalControllerValue = (data) => {
         this.controllerOrder = data;
         console.log("CONTROLLER ORDER", data);
@@ -156,20 +166,24 @@ class Page extends Component {
             this.changeAction(500, "slide")
         }
 
-        if (this.state.action === "restart") {
-            showCoinage = false;
-            this.coinage = null;
-            this.changeAction(100, "winnersdrugs");
-
-        }
+        // if (this.state.action === "restart") {
+        //     showCoinage = false;
+        //     this.coinage = null;
+        //     this.changeAction(100, "winnersdrugs");
+        // }
 
         if (this.state.action === "winnersdrugs") {
+            console.log("WINNDER DRUGS")
             page = <WinnersDrugs nextAction={this.changeAction} />
+            
+         
             this.changeAction(4100, "slide");
+            
             if (this.state.gameStarted) {
+                this.toggleGlobalCoinageOff();
                 this.setState({gameStarted:false})
             }
-            this.coinage = null;
+            //this.coinage = null;
             showCoinage = true;
         }
 
@@ -182,7 +196,11 @@ class Page extends Component {
             }
             console.log("total Slidle Length", totalSlideLength)
             page = <Slide gif="cuadventures" slideIncrement={this.currentSlide} totalSlideLength={totalSlideLength} slideInfo={slide} nextAction={this.changeAction} />
-            this.changeAction(totalSlideLength, "scores");
+            if (this.globalCoinage) {
+                this.changeAction(totalSlideLength, "gamestart");
+            } else {
+                this.changeAction(totalSlideLength, "scores");
+            }
             
             showCoinage = true;
         }
@@ -202,17 +220,18 @@ class Page extends Component {
             gameStarted={this.state.gameStarted}
             startGame={this.startGame}
             controllers={this.controllerOrder}
+            
             />
-            if (this.state.gameStarted) {
-                showCoinage = false;
-                this.coinage = null;
-            } else {
-                showCoinage = true;
-            }
+            // if (this.state.gameStarted) {
+            //     showCoinage = false;
+            //     this.coinage = null;
+            // } else {
+            //     showCoinage = true;
+            // }
 
-            this.idleTimeout = setTimeout(function() {
-                this.changeAction(totalSlideLength, "winnersdrugs");
-            }.bind(this),120000)
+            // this.idleTimeout = setTimeout(function() {
+            //     this.changeAction(totalSlideLength, "winnersdrugs");
+            // }.bind(this),120000)
         }
 
         if (this.state.action === "game") {
@@ -236,7 +255,13 @@ class Page extends Component {
         }
 
         if (showCoinage) {
-            this.coinage = <Coinage nextAction={this.changeAction} startGame={this.startGame} controller={this.controllerOrder[3]}/>;
+            this.coinage = <Coinage 
+            nextAction={this.changeAction} 
+            toggleCoinageOn={this.toggleGlobalCoinageOn}
+            toggleCoinageOff={this.toggleGlobalCoinageOff}
+            controllers={this.controllerOrder} 
+            startGame={this.startGame} 
+            controller={this.controllerOrder[3]}/>;
         }
         
         return (

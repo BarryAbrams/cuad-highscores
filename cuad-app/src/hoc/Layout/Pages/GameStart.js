@@ -12,7 +12,7 @@ class GameStart extends Component {
     buttonDownStart_right = false;
     gameTriggerStart = false;
     
-    // timerout = null;
+    timerout = null;
 
     componentDidMount(){
         // document.addEventListener("keydown", this.keyboardActionDown, false);
@@ -20,11 +20,18 @@ class GameStart extends Component {
 
         let interval = setInterval(function() {
             if (socket.readyState) {
- 
                 clearInterval(interval);
                 socket.send("P1 Start Button, P2 Start Button");
+
+                this.timerout = setTimeout(function() {
+                    console.log("TIMED OUT");
+                    this.props.nextAction(100, "scores");
+
+                }.bind(this), 30000);
             }
-        }.bind(this), 300)
+        }.bind(this), 300);
+
+
     }
 
     componentWillUnmount(){
@@ -75,6 +82,8 @@ class GameStart extends Component {
         }
     }
 
+    
+
     buttonHandler(player, value, action) {
         console.log(player, value, action);
         if (player == "P2" && value == "button-start") {
@@ -123,7 +132,7 @@ class GameStart extends Component {
 
 
     startGame = () => {
-        // clearTimeout(this.timerout);
+        clearTimeout(this.timerout);
         const coinSound = new Howl({
             src: [ '/sounds/start.mp3']
         });
@@ -132,8 +141,9 @@ class GameStart extends Component {
         this.gameTriggerStart = true;
         console.log("START GAME")
         this.props.startGame();
-
     }
+
+
 
     render() {
         console.log("game triggered", this.gameTriggerStart)

@@ -81,6 +81,12 @@ class Calibrate extends Component {
         console.log(this.controllerOrder);
     }
 
+    handleKeyPress = (event) => {
+        if(event.key == 's'){
+            this.setState({stage:this.state.stage+1})
+        }
+    }
+
     render() {  
         
         // press player 1 start
@@ -113,7 +119,7 @@ class Calibrate extends Component {
             this.props.nextAction(2000, "testscreen");
         }
         return (
-            <div className="calibrate">
+            <div className="calibrate" onKeyDown={this.handleKeyPress} tabIndex="0">
             <Gamepad
             gamepadIndex="0"
             onConnect={this.connectHandler.bind(this)}
