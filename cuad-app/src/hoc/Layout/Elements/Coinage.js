@@ -41,7 +41,6 @@ class Coinage extends Component {
 
     componentWillReceiveProps(props) {
         console.log("recieve PROPS", props)
-
         if (this.state.credits) {
 
             // this.timerout = setTimeout(function() {
@@ -64,7 +63,6 @@ class Coinage extends Component {
             this.setState({credits:true});
             this.props.nextAction(500, "gamestart");
             this.props.toggleCoinageOff();
-
             // clearTimeout(this.timerout);
     }
 
@@ -72,10 +70,15 @@ class Coinage extends Component {
         let coinage = (
             <div className="blinking">INSERT COIN</div>
         )
-        if (this.state.credits) {
-            coinage = (
-                <div> COIN INSERTED! 1 CREDIT </div>
-            );
+        if (this.props.coinageVisible) {
+   
+            if (this.state.credits) {
+                coinage = (
+                    <div> COIN INSERTED! 1 CREDIT </div>
+                );
+            }
+        } else {
+            coinage = <div></div>;
         }
         return (
             <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>

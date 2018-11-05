@@ -23,11 +23,11 @@ class GameStart extends Component {
                 clearInterval(interval);
                 socket.send("P1 Start Button, P2 Start Button");
 
-                this.timerout = setTimeout(function() {
-                    console.log("TIMED OUT");
-                    this.props.nextAction(100, "scores");
+                // this.timerout = setTimeout(function() {
+                //     console.log("TIMED OUT");
+                //     this.props.nextAction(100, "scores");
 
-                }.bind(this), 30000);
+                // }.bind(this), 30000);
             }
         }.bind(this), 300);
 
@@ -132,7 +132,7 @@ class GameStart extends Component {
 
 
     startGame = () => {
-        clearTimeout(this.timerout);
+        // clearTimeout(this.timerout);
         const coinSound = new Howl({
             src: [ '/sounds/start.mp3']
         });

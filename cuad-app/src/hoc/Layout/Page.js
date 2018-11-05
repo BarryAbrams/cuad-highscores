@@ -240,7 +240,7 @@ class Page extends Component {
             }
             page = <Game nextAction={this.changeAction} controllers={this.controllerOrder} stopMusic={this.stopMusic} hardMode={this.hardMode} playSoundCallback={this.playSound} />
             showCoinage = false;
-            this.coinage = null;
+            // this.coinage = null;
             
             if (!this.musicPlaying) {
                 this.musicPlaying = true;
@@ -254,15 +254,16 @@ class Page extends Component {
            }
         }
 
-        if (showCoinage) {
+        // if (showCoinage) {
             this.coinage = <Coinage 
             nextAction={this.changeAction} 
             toggleCoinageOn={this.toggleGlobalCoinageOn}
             toggleCoinageOff={this.toggleGlobalCoinageOff}
+            coinageVisible={showCoinage}
             controllers={this.controllerOrder} 
             startGame={this.startGame} 
             controller={this.controllerOrder[3]}/>;
-        }
+        // }
         
         return (
             <div className="layout">
