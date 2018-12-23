@@ -30,8 +30,6 @@ class GameStart extends Component {
                 // }.bind(this), 30000);
             }
         }.bind(this), 300);
-
-
     }
 
     componentWillUnmount(){
@@ -141,6 +139,7 @@ class GameStart extends Component {
         this.gameTriggerStart = true;
         console.log("START GAME")
         this.props.startGame();
+        // this.props.decrementGlobalCoinage();
     }
 
 

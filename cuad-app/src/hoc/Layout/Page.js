@@ -41,6 +41,7 @@ class Page extends Component {
     controllerOrder = [0, 2, 3, 1];
     idleTimeout = null;
     globalCoinage = false;
+    globalCoinCount = 0;
 
     changeAction = (delay, newAction) => {
         this.interuptAction();
@@ -78,7 +79,8 @@ class Page extends Component {
             })
         }
     }
-    
+
+
 
     callChildFunction = () => {
         this.child.handleActionParent();  ///calling a child function here
@@ -130,7 +132,8 @@ class Page extends Component {
     render() {
         let page = null;
         let showCoinage = false;
-   
+        let  buttonDisabled = false;
+
         // TEST SCREEN
         // -> LOOP START
         // WINNERS DON'T USE DRUGS
@@ -148,7 +151,8 @@ class Page extends Component {
                     // socket.send("Intro");
                 }
             }, 300)
-            
+            buttonDisabled = true;
+
             // this.changeAction(500, "testscreen")
         }
 
@@ -162,7 +166,8 @@ class Page extends Component {
                     socket.send("Intro");
                 }
             }, 300)
-            
+            buttonDisabled = true;
+
             this.changeAction(500, "slide")
         }
 
@@ -183,6 +188,8 @@ class Page extends Component {
                 this.toggleGlobalCoinageOff();
                 this.setState({gameStarted:false})
             }
+            buttonDisabled = false;
+
             //this.coinage = null;
             showCoinage = true;
         }
@@ -201,7 +208,8 @@ class Page extends Component {
             } else {
                 this.changeAction(totalSlideLength, "scores");
             }
-            
+            buttonDisabled = false;
+
             showCoinage = true;
         }
 
@@ -209,7 +217,7 @@ class Page extends Component {
             page = <Scores nextAction={this.changeAction} />
             showCoinage = true;
 
-         
+            buttonDisabled = false;
             // this.changeAction(5000, "testscreen")
         }
 
@@ -220,8 +228,10 @@ class Page extends Component {
             gameStarted={this.state.gameStarted}
             startGame={this.startGame}
             controllers={this.controllerOrder}
-            
             />
+            showCoinage = false;
+            buttonDisabled = true;
+
             // if (this.state.gameStarted) {
             //     showCoinage = false;
             //     this.coinage = null;
@@ -241,6 +251,8 @@ class Page extends Component {
             page = <Game nextAction={this.changeAction} controllers={this.controllerOrder} stopMusic={this.stopMusic} hardMode={this.hardMode} playSoundCallback={this.playSound} />
             showCoinage = false;
             // this.coinage = null;
+
+            buttonDisabled = true;
             
             if (!this.musicPlaying) {
                 this.musicPlaying = true;
@@ -260,8 +272,9 @@ class Page extends Component {
             toggleCoinageOn={this.toggleGlobalCoinageOn}
             toggleCoinageOff={this.toggleGlobalCoinageOff}
             coinageVisible={showCoinage}
-            controllers={this.controllerOrder} 
-            startGame={this.startGame} 
+            controllers={this.controllerOrder}
+            startGame={this.startGame}
+            disableButton={buttonDisabled}
             controller={this.controllerOrder[3]}/>;
         // }
         

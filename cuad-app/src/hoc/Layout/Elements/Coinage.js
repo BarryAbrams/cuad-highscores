@@ -38,7 +38,6 @@ class Coinage extends Component {
         }
     }
 
-
     componentWillReceiveProps(props) {
         console.log("recieve PROPS", props)
         if (this.state.credits) {
