@@ -24,12 +24,14 @@ class Coinage extends Component {
     // }
 
     buttonHandler(player, value, action) {
-        console.log("BUTTON HANDLER", player, value, action)
-        if (player == "P3" && value == "button-coin" && action == "down") {
-            this.buttonCredit();
-            this.props.toggleCoinageOn();
+        if (!this.props.disableButton) {
+            console.log("BUTTON HANDLER", player, value, action)
+            if (player == "P3" && value == "button-coin" && action == "down") {
+                this.buttonCredit();
+                this.props.toggleCoinageOn();
+            }
         }
-        
+            
     }
 
     decrementCoin = () => {
@@ -40,6 +42,13 @@ class Coinage extends Component {
 
     componentWillReceiveProps(props) {
         console.log("recieve PROPS", props)
+
+        if (this.props.disableButton) {
+            // alert("here")
+            this.setState({credits:false});
+
+        }
+
         if (this.state.credits) {
 
             // this.timerout = setTimeout(function() {
@@ -62,10 +71,15 @@ class Coinage extends Component {
             this.setState({credits:true});
             this.props.nextAction(500, "gamestart");
             this.props.toggleCoinageOff();
+
+           
             // clearTimeout(this.timerout);
     }
 
     render() {
+
+     
+
         let coinage = (
             <div className="blinking">INSERT COIN</div>
         )
@@ -79,6 +93,7 @@ class Coinage extends Component {
         } else {
             coinage = <div></div>;
         }
+
         return (
             <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
             <div className="coinage">
