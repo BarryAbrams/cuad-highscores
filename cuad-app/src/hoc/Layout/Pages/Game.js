@@ -38,7 +38,7 @@ class Game extends Component {
         gamepad: 'Not connected. Try pressing a key',
     }
     debug = false;
-    droppedItems = 0;
+    droppedItems = 23;
 
     gridSize = 80;
     hardModeTriggered = false;
