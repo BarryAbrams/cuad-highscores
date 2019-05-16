@@ -4,6 +4,8 @@ import $ from 'jquery';
 
 class Controls extends Component {
 
+    timeout = null;
+
     connectHandler(gamepadIndex) {
         console.log(`Gamepad ${gamepadIndex} connected !`)
     }
@@ -349,11 +351,24 @@ class Controls extends Component {
     buttonAction(player, color, action) {
         this.props.buttonHandler(player, "button-"+color, action);
         console.log(player + " Button: " + action);
+
+        this.resetTimeout();
     }
 
     joystickAction(player, color, direction) {
         this.props.buttonHandler(player, "joystick-"+color, direction);
         console.log(player + " " + color + " Joystick: " + direction);
+
+        this.resetTimeout();
+    }
+
+    resetTimeout() {
+        clearTimeout(this.timeout);
+        var controlelrs = this.props.controllers;
+        this.timeout = setTimeout(function() {
+            var controllerOrderString = controlelrs.join("")
+            window.location.href = '/?order='+controllerOrderString; 
+        }, 1000*60*15)
     }
 
     componentDidMount() {
@@ -361,6 +376,7 @@ class Controls extends Component {
         document.addEventListener("keydown", this.keyboardActionDown, false);
         document.addEventListener("keyup", this.keyboardActionUp, false);
         $("#myControls").focus();
+        this.resetTimeout();
     }
 
     componentWillUnmount() {
@@ -425,7 +441,6 @@ class Controls extends Component {
     }
 
     render() {  
-       
         return (
             <div id='myControls' onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabindex="0">
             <Gamepad

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Gamepad from 'react-gamepad'
+import queryString from 'query-string'
 
 var socket = new WebSocket("ws://localhost:3002/");
 
@@ -10,6 +11,7 @@ class Calibrate extends Component {
     }
 
     controllerOrder = [];
+
     connectHandler(gamepadIndex) {
         console.log(`Gamepad ${gamepadIndex} connected !`)
     }
@@ -83,6 +85,7 @@ class Calibrate extends Component {
 
     handleKeyPress = (event) => {
         if(event.key == 's'){
+            this.controllerOrder.push(9);
             this.setState({stage:this.state.stage+1})
         }
     }

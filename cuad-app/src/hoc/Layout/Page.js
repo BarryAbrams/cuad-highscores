@@ -142,6 +142,23 @@ class Page extends Component {
         // AD FOR ROOM (1|2|3)
         // -> LOOP REPEAT
         let music = null;
+
+
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        var existingOrder = null;
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == "order"){
+                existingOrder = pair[1];
+            }
+        }
+
+        if (existingOrder != null && this.state.action === "calibrate") {
+            this.controllerOrder = existingOrder.split("").map(Number);
+            this.setState({action: "testscreen"});
+        }
+        
         if (this.state.action === "calibrate") {
             page = <Calibrate nextAction={this.changeAction} setGlobalControllerValue={this.setGlobalControllerValue} />
             
@@ -241,7 +258,7 @@ class Page extends Component {
 
             // this.idleTimeout = setTimeout(function() {
             //     this.changeAction(totalSlideLength, "winnersdrugs");
-            // }.bind(this),120000)
+            // }.bind(this),3000)
         }
 
         if (this.state.action === "game") {
