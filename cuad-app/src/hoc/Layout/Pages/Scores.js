@@ -107,7 +107,7 @@ class Scores extends Component {
                     if (count == 0) {
                         console.log(scores)
                         if (storageArray[item][scoreitem].field_icons) {
-                            var url = "http://dev-cuad-highscores.pantheonsite.io/" + storageArray[item][scoreitem].field_icons;
+                            var url = "https://cuadventures.com/" + storageArray[item][scoreitem].field_icons;
                             icons = <div className="icons"> <img src={url} /></div>;
                         }
                     }
