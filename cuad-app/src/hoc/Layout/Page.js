@@ -6,7 +6,7 @@ import WinnersDrugs from "./Pages/WinnersDrugs";
 import GameStart from "./Pages/GameStart";
 import Game from "./Pages/Game";
 import Slide from "./Pages/Slide";
-import Calibrate from "./Pages/Calibrate";
+// import Calibrate from "./Pages/Calibrate";
 
 import Coinage from "./Elements/Coinage";
 
@@ -154,24 +154,24 @@ class Page extends Component {
             }
         }
 
-        if (existingOrder != null && this.state.action === "calibrate") {
-            this.controllerOrder = existingOrder.split("").map(Number);
-            this.setState({action: "testscreen"});
-        }
+        // if (existingOrder != null && this.state.action === "calibrate") {
+        //     this.controllerOrder = existingOrder.split("").map(Number);
+        //     this.setState({action: "testscreen"});
+        // }
         
-        if (this.state.action === "calibrate") {
-            page = <Calibrate nextAction={this.changeAction} setGlobalControllerValue={this.setGlobalControllerValue} />
+        // if (this.state.action === "calibrate") {
+        //     page = <Calibrate nextAction={this.changeAction} setGlobalControllerValue={this.setGlobalControllerValue} />
             
-            let interval = setInterval(function() {
-                if (socket.readyState) {
-                    clearInterval(interval);
-                    // socket.send("Intro");
-                }
-            }, 300)
-            buttonDisabled = true;
+        //     let interval = setInterval(function() {
+        //         if (socket.readyState) {
+        //             clearInterval(interval);
+        //             // socket.send("Intro");
+        //         }
+        //     }, 300)
+        //     buttonDisabled = true;
 
-            // this.changeAction(500, "testscreen")
-        }
+        //     // this.changeAction(500, "testscreen")
+        // }
 
         if (this.state.action === "testscreen") {
             page = <TestScreen nextAction={this.changeAction} />

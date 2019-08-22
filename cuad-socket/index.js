@@ -32,7 +32,7 @@ function broadcast(data) {
     }
    }
 
-var portName = "/dev/tty.usbmodem145241";
+var portName = "/dev/cu.usbmodemHIDNB1";
 
 var myPort = new SerialPort(portName, 9600);
 
