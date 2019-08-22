@@ -14,7 +14,7 @@ class Controls extends Component {
         console.log(`Gamepad ${gamepadIndex} disconnected !`)
     }
     
-    buttonChangeHandler_player1(buttonName, down) {        
+    buttonChangeHandler_player1(buttonName, down) {     
         let buttonColor = null;
         // ABXY
         if (buttonName == "A") {
