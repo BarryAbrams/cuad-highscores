@@ -47,7 +47,7 @@ class Game extends Component {
 
     swapsises = false;
 
-    startOffset = 1;
+    startOffset = 21;
     backgroundGrid = [  [7, 3, 8, 7, 3, 7, 3, 3, 3, 3],
                         [3, 3, 7, 3, 3, 3, 3, 3, 3, 3],
                         [3, 3, 7, 3, 3, 3, 4, 7, 3, 7],
@@ -407,9 +407,11 @@ class Game extends Component {
                          this.baseSpeed = 500;
                          this.ticker = setTimeout(function() {
                             this.state.linesAmt = 0;
-
+                            setTimeout(function()  {
+                                window.location.reload();
+                            },5000);
                             // this.gameLoop();
-                            this.props.nextAction(5000, "winnersdrugs");
+                            // this.props.nextAction(5000, "winnersdrugs");
                          }.bind(this), 1000);
                      }.bind(this), 1000)
                 } else if(this.state.removingDirection == "up")  {
