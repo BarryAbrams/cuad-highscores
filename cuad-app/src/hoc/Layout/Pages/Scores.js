@@ -124,20 +124,20 @@ class Scores extends Component {
 
                     let noHints = null;
                     if (scoreObject.no_hints === "Yes") {
-                        noHints = (
-                            <div className="no-hints">
-                                No Hints!
-                            </div>
-                        )
+                        // noHints = (
+                        //     <div className="no-hints">
+                        //         No Hints!
+                        //     </div>
+                        // )
                     }
 
                     let bonusPuzzle = null;
                     if (scoreObject.bonus_puzzle === "True") {
-                        bonusPuzzle = (
-                            <div className="no-hints">
-                                Bonus Puzzle!
-                            </div>
-                        )
+                        // bonusPuzzle = (
+                        //     <div className="no-hints">
+                        //         Bonus Puzzle!
+                        //     </div>
+                        // )
                     }
 
                     return (
@@ -154,8 +154,8 @@ class Scores extends Component {
                                         <label>Ran the room</label>
                                         <p dangerouslySetInnerHTML={{__html:scoreObject.date}}></p>
                                     </div>
-                                    {noHints}
-                                    {bonusPuzzle}
+                                    {/* {noHints} */}
+                                    {/* {bonusPuzzle} */}
                                     <div className="duration" >
                                         <label>Completed room in</label>
                                         <p dangerouslySetInnerHTML={{__html:scoreObject.duration}}></p>
