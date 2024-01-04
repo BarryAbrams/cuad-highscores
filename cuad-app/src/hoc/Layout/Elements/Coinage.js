@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 import Controls from '../../Controls';
 
 class Coinage extends Component {
@@ -24,13 +24,22 @@ class Coinage extends Component {
     // }
 
     buttonHandler(player, value, action) {
-        if (!this.props.disableButton) {
-            console.log("BUTTON HANDLER", player, value, action)
-            if (player == "P3" && value == "button-coin" && action == "down") {
+        // if (!this.props.disableButton) {
+            // console.log("BUTTON HANDLER", player, value, action)
+            if (player === "P3" && value === "button-coin" && action === "down") {
                 this.buttonCredit();
                 this.props.toggleCoinageOn();
             }
-        }
+
+            console.log(value)
+
+            if (player === "P3" && value === "button-calibrate" && action === "down") {
+                console.log("HEYYY")
+                this.buttonCalibrate();
+
+            }
+
+        // }
             
     }
 
@@ -41,7 +50,7 @@ class Coinage extends Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log("recieve PROPS", props)
+        // console.log("recieve PROPS", props)
 
         if (this.props.disableButton) {
             // alert("here")
@@ -50,36 +59,35 @@ class Coinage extends Component {
         }
 
         if (this.state.credits) {
-
             // this.timerout = setTimeout(function() {
             //     this.props.nextAction(10, "restart");
             //     this.setState({credits:false})
             // }.bind(this), 120000);
-
         } 
         // this.setState({credits:props.coinage});
         // this.setState({ open: props.drawerOpen })
-     }
+    }
 
     buttonCredit() {
-            this.buttonDownCredit = true;
-            const coinSound = new Howl({
+        this.buttonDownCredit = true;
+        const coinSound = new Howl({
             src: [ '/sounds/Frogger_Coin.wav']
-            });
-            coinSound.volume(1);
-            coinSound.play();
-            this.setState({credits:true});
-            this.props.nextAction(500, "gamestart");
-            this.props.toggleCoinageOff();
+        });
+        coinSound.volume(1);
+        coinSound.play();
+        this.setState({credits:true});
+        this.props.nextAction(500, "gamestart");
+        this.props.toggleCoinageOff();
 
-           
-            // clearTimeout(this.timerout);
+        // clearTimeout(this.timerout);
+    }
+
+    buttonCalibrate() {
+        this.props.nextAction(500, "calibrate");
+        // clearTimeout(this.timerout);
     }
 
     render() {
-
-     
-
         let coinage = (
             <div className="blinking">INSERT COIN</div>
         )

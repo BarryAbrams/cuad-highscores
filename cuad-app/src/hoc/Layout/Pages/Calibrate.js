@@ -1,16 +1,30 @@
 import React, {Component} from 'react';
-import Gamepad from 'react-gamepad'
-import queryString from 'query-string'
+import Controls from '../../Controls';
 
-var socket = new WebSocket("ws://localhost:3002/");
+function toCamelCase(str) {
+    return str
+        .split('-')
+        .map((word, index) => {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        })
+        .join('');
+}
 
 class Calibrate extends Component {
-
     state = {
-        stage : 0
+        stage : 0,
+        lastInput: '',
+        inputs: {
+
+        },
     }
 
     controllerOrder = [];
+
+    constructor(props) {
+        super(props);
+        this.controlsRef = React.createRef(); // Creating a ref
+    }
 
     connectHandler(gamepadIndex) {
         console.log(`Gamepad ${gamepadIndex} connected !`)
@@ -20,144 +34,172 @@ class Calibrate extends Component {
         console.log(`Gamepad ${gamepadIndex} disconnected !`)
     }
 
-    buttonChangeHandler_0(buttonName, down) {
-        console.log(buttonName, down)
-        if (down) {
-            this.registerController(0)
-        }
-    }
+    callControlFunction = (player, buttonName, down) => {
+        const modifiedButtonName = buttonName.replace("button-", "");
+        if (this.controlsRef.current) {
+            console.log("LED", player, modifiedButtonName, down)
 
-    buttonChangeHandler_1(buttonName, down) {
-        console.log(buttonName, down)
-        if (down) {
-            this.registerController(1)
-        }
-    }
+            if (down == "down") {
+                this.controlsRef.current.switchLED(player, modifiedButtonName, true); // Calling the function
 
-    buttonChangeHandler_2(buttonName, down) {
-        console.log(buttonName, down)
-        if (down) {
-            this.registerController(2)
-        }
-    }
+            } else {
+                this.controlsRef.current.switchLED(player, modifiedButtonName, false); // Calling the function
 
-    buttonChangeHandler_3(buttonName, down) {
-        console.log(buttonName, down)
-        if (down) {
-            this.registerController(3)
-        }
-    }
-
-    joystickChangeHandler_0(axisName, value, previousValue) {
-        console.log(axisName, value)
-    }
-
-    joystickChangeHandler_1(axisName, value, previousValue) {
-        console.log(axisName, value)
-    }
-
-    joystickChangeHandler_2(axisName, value, previousValue) {
-        console.log(axisName, value)
-    }
-
-    joystickChangeHandler_3(axisName, value, previousValue) {
-        console.log(axisName, value)
-    }
-
-
-    registerController(controllerIndex) {
-        // if already in array, show warning
-        let valueExistsInArray = false;
-        for (var i =0; i<this.controllerOrder.length; i++) {
-            if (this.controllerOrder[i] === controllerIndex) {
-                valueExistsInArray = true;
             }
-        }
-        if (!valueExistsInArray) {
-            this.controllerOrder.push(controllerIndex);
-            this.setState({stage:this.state.stage+1})
-        } else {
 
         }
+    }  
+
+    buttonHandler(player, buttonName, down) {
+        const camelCaseButtonName = toCamelCase(buttonName);
+        this.setState({ lastInput: `${player}: Button ${camelCaseButtonName} ${down}` }); // Update the state
         
-        console.log(this.controllerOrder);
+        this.callControlFunction(player, buttonName, down);
+      
+
+        var value = false;
+        if (down === "down") {
+            value = true;
+        }
+
+        if (buttonName.includes("joystick")) {
+            value = true;
+
+            this.setState(prevState => ({
+                inputs: {
+                    ...prevState.inputs,
+                    [`${player}_${camelCaseButtonName}`]: down
+                }
+            }));
+        } else {
+            this.setState(prevState => ({
+                inputs: {
+                    ...prevState.inputs,
+                    [`${player}_${camelCaseButtonName}`]: value
+                }
+            }));
+        }
+
+
+
+        console.log(this.state)
     }
 
     handleKeyPress = (event) => {
-        if(event.key == 's'){
+        if(event.key === 's'){
             this.controllerOrder.push(9);
             this.setState({stage:this.state.stage+1})
         }
     }
 
-    render() {  
-        
-        // press player 1 start
-        // press player 2 start
-        // rotate storm trooper
-        // insert coin
-
-        let instructions = "press hallway player start";
-        if (socket.readyState == 1) {
-            socket.send("P1 Start Button");
-        }
-        if (this.state.stage == 1) {
-            if (socket.readyState == 1) {
-                socket.send("P2 Start Button");
-            }
-            instructions = "press window player start"; 
-        } else if (this.state.stage == 2) {
-            if (socket.readyState == 1) {
-                socket.send("None");
-            }
-            instructions = "wiggle storm trooper"; 
-        } else if (this.state.stage == 3) {
-            instructions = "insert coin"; 
-        } else if (this.state.stage == 4) {
-            if (socket.readyState == 1) {
-                socket.send("Intro");
-            }
-            instructions = "ALL DONE"; 
-            this.props.setGlobalControllerValue(this.controllerOrder);
-            this.props.nextAction(2000, "testscreen");
-        }
+    renderInputTable() {
+        const { inputs } = this.state;
         return (
             <div className="calibrate" onKeyDown={this.handleKeyPress} tabIndex="0">
-            <Gamepad
-            gamepadIndex="0"
-            onConnect={this.connectHandler.bind(this)}
-            onDisconnect={this.disconnectHandler.bind(this)}
-            onAxisChange={this.joystickChangeHandler_0.bind(this)}
-            onButtonChange={this.buttonChangeHandler_0.bind(this)}
-             >
-             <div>
-                <p>CALIBRATE</p>
-                <p className="instructions">{instructions}</p>
+                <div className='controls'>
+    
+                    <div>
+                        <h3>Window:</h3>
+                        <table>
+                        <tbody>
+                                <tr>
+                                <td><div className={`joystick blue ${inputs.P1_JoystickBlue}`}></div></td>
+                                <td><div className={`joystick red ${inputs.P1_JoystickRed}`}></div></td>
+                                </tr>
+                                <tr>
+                                <td><div className={`joystick green ${inputs.P1_JoystickGreen}`}></div></td>
+
+                                <td><div className={`joystick yellow ${inputs.P1_JoystickYellow}`}></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+        
+                        <br/>
+
+                        <div className={inputs.P1_ButtonStart ? 'highlight' : ''}>
+                            <div className='button start'></div>
+                        </div>
+
+                        <div className='buttons'> 
+                            <div className={inputs.P1_ButtonBlue ? 'highlight' : ''}><div className='button blue'></div></div>
+                            <div className={inputs.P1_ButtonRed ? 'highlight' : ''}><div className='button red'></div></div>
+                            <div className={inputs.P1_ButtonGreen ? 'highlight' : ''}><div className='button green'></div></div>
+                            <div className={inputs.P1_ButtonYellow ? 'highlight' : ''}><div className='button yellow'></div></div>
+                        </div>
+
+                        <div className='buttons'> 
+                            <div className={inputs.P1_ButtonPedal ? 'highlight' : ''}><div className='button pedal'></div></div>
+                        </div>
+
+                        <div className='buttons'> 
+                            <div className={`joystick black ${inputs.P1_JoystickBlack}`}></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Hallway:</h3>
+                        <table>
+                        <tbody>
+                                <tr>
+                                <td><div className={`joystick blue ${inputs.P2_JoystickBlue}`}></div></td>
+                                <td><div className={`joystick red ${inputs.P2_JoystickRed}`}></div></td>
+                                </tr>
+                                <tr>
+                                <td><div className={`joystick green ${inputs.P2_JoystickGreen}`}></div></td>
+                                <td><div className={`joystick yellow ${inputs.P2_JoystickYellow}`}></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+        
+                        <br/>
+
+                        <div className={inputs.P2_ButtonStart ? 'highlight' : ''}>
+                            <div className='button start'></div>
+                        </div>
+
+                        <div className='buttons'> 
+                            <div className={inputs.P2_ButtonBlue ? 'highlight' : ''}><div className='button blue'></div></div>
+                            <div className={inputs.P2_ButtonRed ? 'highlight' : ''}><div className='button red'></div></div>
+                            <div className={inputs.P2_ButtonGreen ? 'highlight' : ''}><div className='button green'></div></div>
+                            <div className={inputs.P2_ButtonYellow ? 'highlight' : ''}><div className='button yellow'></div></div>
+                        </div>
+
+                        <div className='buttons'> 
+                            <div className={inputs.P2_ButtonPedal ? 'highlight' : ''}><div className='button pedal'></div></div>
+                        </div>
+
+                        <div className='buttons'> 
+                            <div className={`joystick black ${inputs.P2_JoystickBlack}`}></div>
+                        </div>
+
+                        <br/>
+                    </div>
+
+                </div>
+            </div>
+        );
+    }
+
+    render() {  
+    
+        return (
+            <div>
+            <Controls ref={this.controlsRef} buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+
+              
+                <div className="calibrate" onKeyDown={this.handleKeyPress} tabIndex="0">
+                    <div>
+                        {this.renderInputTable()} {/* Render the input table */}
+
+                        <p className="instructions"> Last: { this.state.lastInput } </p>
+                       
+                    
+                    </div>
+                </div>
+            </Controls>
+             
+
              </div>
-            </Gamepad>
-            <Gamepad
-            gamepadIndex="1"
-            onConnect={this.connectHandler.bind(this)}
-            onDisconnect={this.disconnectHandler.bind(this)}
-            onAxisChange={this.buttonChangeHandler_1.bind(this)}
-            onButtonChange={this.buttonChangeHandler_1.bind(this)}
-             ><div /></Gamepad>
-            <Gamepad
-            gamepadIndex="2"
-            onConnect={this.connectHandler.bind(this)}
-            onDisconnect={this.disconnectHandler.bind(this)}
-            onAxisChange={this.buttonChangeHandler_2.bind(this)}
-            onButtonChange={this.buttonChangeHandler_2.bind(this)}
-             ><div /></Gamepad>
-             <Gamepad
-            gamepadIndex="3"
-            onConnect={this.connectHandler.bind(this)}
-            onDisconnect={this.disconnectHandler.bind(this)}
-            onAxisChange={this.buttonChangeHandler_3.bind(this)}
-            onButtonChange={this.buttonChangeHandler_3.bind(this)}
-             ><div /></Gamepad>
-             </div>
-            
         )
     }    
 }

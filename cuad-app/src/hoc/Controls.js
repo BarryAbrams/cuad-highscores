@@ -1,59 +1,59 @@
 import React, {Component} from 'react';
-import Gamepad from 'react-gamepad'
+// import Gamepad from 'react-gamepad'
 import $ from 'jquery';
 
+
 class Controls extends Component {
-
     timeout = null;
-
     keycodes = 
         {
-            "4" : {"player":"P3", "button":"hard"},
-            "5" : {"player":"P3", "button":"coin"},
-            "6" : {"player":"P3", "button":"refresh"},
-            "7" : {"player":"P2", "joystick":"black", "direction":"Left"},
-            "8" : {"player":"P2", "joystick":"black", "direction":"Right"},
-            "9" : {"player":"P1", "joystick":"black", "direction":"Left"},
-            "0" : {"player":"P1", "joystick":"black", "direction":"Right"},
+            "1" : {"pin":0, "player":"P3", "button":"calibrate"},
+            "4" : {"pin":0, "player":"P3", "button":"hard"},
+            "5" : {"pin":11, "player":"P3", "button":"coin"},
+            "6" : {"pin":0, "player":"P3", "button":"refresh"},
+            "7" : {"pin":33, "player":"P2", "joystick":"black", "direction":"Left"},
+            "8" : {"pin":31, "player":"P2", "joystick":"black", "direction":"Right"},
+            "9" : {"pin":35, "player":"P1", "joystick":"black", "direction":"Left"},
+            "0" : {"pin":37, "player":"P1", "joystick":"black", "direction":"Right"},
 
-            "q" : {"player":"P2", "button":"start"},
-            "w" : {"player":"P2", "button":"blue"},
-            "e" : {"player":"P2", "button":"red"},
-            "r" : {"player":"P2", "button":"green"},
-            "t" : {"player":"P2", "button":"yellow"},
-            "y" : {"player":"P2", "button":"pedal"},
-            "u" : {"player":"P2", "joystick":"blue", "direction":"Right"},
-            "i" : {"player":"P2", "joystick":"blue", "direction":"Left"},
-            "o" : {"player":"P2", "joystick":"red", "direction":"Left"},
-            "p" : {"player":"P2", "joystick":"red", "direction":"Right"},
-            "[" : {"player":"P2", "joystick":"green", "direction":"Right"},
-            "]" : {"player":"P2", "joystick":"green", "direction":"Left"},
-            "a" : {"player":"P2", "joystick":"yellow", "direction":"Right"},
-            "s" : {"player":"P2", "joystick":"yellow", "direction":"Left"},
 
-            "d" : {"player":"P1", "button":"start"},
-            "f" : {"player":"P1", "button":"blue"},
-            "g" : {"player":"P1", "button":"red"},
-            "h" : {"player":"P1", "button":"green"},
-            "j" : {"player":"P1", "button":"yellow"},
-            "k" : {"player":"P1", "button":"pedal"},
-            "l" : {"player":"P1", "joystick":"blue", "direction":"Right"},
-            "z" : {"player":"P1", "joystick":"blue", "direction":"Left"},
-            "x" : {"player":"P1", "joystick":"red", "direction":"Left"},
-            "c" : {"player":"P1", "joystick":"red", "direction":"Right"},
-            "v" : {"player":"P1", "joystick":"green", "direction":"Right"},
-            "b" : {"player":"P1", "joystick":"green", "direction":"Left"},
-            "n" : {"player":"P1", "joystick":"yellow", "direction":"Right"},
-            "m" : {"player":"P1", "joystick":"yellow", "direction":"Left"},
-        };5
+            "q" : {"pin":3, "output_led":26, "player":"P2", "button":"start"},
+            "w" : {"pin":4, "output_led":59, "player":"P2", "button":"blue"},
+            "e" : {"pin":6, "output_led":60, "player":"P2", "button":"red"},
+            "r" : {"pin":7, "output_led":19, "player":"P2", "button":"green"},
+            "t" : {"pin":5, "output_led":58, "player":"P2", "button":"yellow"},
+            "y" : {"pin":10, "player":"P2", "button":"pedal"},
+            "u" : {"pin":23, "player":"P2", "joystick":"blue", "direction":"Right"},
+            "i" : {"pin":25, "player":"P2", "joystick":"blue", "direction":"Left"},
+            "o" : {"pin":30, "player":"P2", "joystick":"red", "direction":"Left"},
+            "p" : {"pin":32, "player":"P2", "joystick":"red", "direction":"Right"},
+            "[" : {"pin":8, "player":"P2", "joystick":"green", "direction":"Right"},
+            "]" : {"pin":9, "player":"P2", "joystick":"green", "direction":"Left"},
+            "a" : {"pin":15, "player":"P2", "joystick":"yellow", "direction":"Right"},
+            "s" : {"pin":12, "player":"P2", "joystick":"yellow", "direction":"Left"},
+
+            "d" : {"pin":50, "output_led":43, "player":"P1", "button":"start"},
+            "f" : {"pin":67, "output_led":57, "player":"P1", "button":"blue"},
+            "g" : {"pin":46, "output_led":39, "player":"P1", "button":"red"},
+            "h" : {"pin":27, "output_led":41, "player":"P1", "button":"green"},
+            "j" : {"pin":48, "output_led":42, "player":"P1", "button":"yellow"},
+            "k" : {"pin":62, "player":"P1", "button":"pedal"},
+            "l" : {"pin":68, "player":"P1", "joystick":"blue", "direction":"Right"},
+            "z" : {"pin":69, "player":"P1", "joystick":"blue", "direction":"Left"},
+            "x" : {"pin":29, "player":"P1", "joystick":"red", "direction":"Left"},
+            "c" : {"pin":52, "player":"P1", "joystick":"red", "direction":"Right"},
+            "v" : {"pin":65, "player":"P1", "joystick":"green", "direction":"Right"},
+            "b" : {"pin":55, "player":"P1", "joystick":"green", "direction":"Left"},
+            "n" : {"pin":64, "player":"P1", "joystick":"yellow", "direction":"Right"},
+            "m" : {"pin":63, "player":"P1", "joystick":"yellow", "direction":"Left"},
+    };
     
-
     connectHandler(gamepadIndex) {
-        console.log(`Gamepad ${gamepadIndex} connected !`)
+        // console.log(`Gamepad ${gamepadIndex} connected !`)
     }
         
     disconnectHandler(gamepadIndex) {
-        console.log(`Gamepad ${gamepadIndex} disconnected !`)
+        // console.log(`Gamepad ${gamepadIndex} disconnected !`)
     }
     
     buttonChangeHandler_player1(buttonName, down) {  
@@ -61,23 +61,23 @@ class Controls extends Component {
         
         let buttonColor = null;
         // ABXY
-        if (buttonName == "A") {
+        if (buttonName === "A") {
             buttonColor = "blue";
         }
 
-        if (buttonName == "B") {
+        if (buttonName === "B") {
             buttonColor = "yellow";
         }
 
-        if (buttonName == "X") {
+        if (buttonName === "X") {
             buttonColor = "red";
         }
 
-        if (buttonName == "Y") {
+        if (buttonName === "Y") {
             buttonColor = "green";
         }
 
-        if (buttonName == "RS") {
+        if (buttonName === "RS") {
             buttonColor = "start";
         }
 
@@ -89,8 +89,7 @@ class Controls extends Component {
             }
         }
 
-        
-        if (buttonName == "LS") {
+        if (buttonName === "LS") {
             if (down) {
                 this.buttonAction("P1", "pedal", "down");
             } else {
@@ -100,43 +99,34 @@ class Controls extends Component {
 
         let joystickColor = null;
         let joystickDirection = null;
-        if (buttonName == "RB") {
-            // Red Left
+        if (buttonName === "RB") {
             joystickColor = "red"
             joystickDirection = "Left"
         }
 
-        if (buttonName == "LB") {
-            // Red Right
+        if (buttonName === "LB") {
             joystickColor = "red"
             joystickDirection = "Right"
-
         }
 
-        if (buttonName == "Start") {
-            // Red Left
+        if (buttonName === "Start") {
             joystickColor = "green"
             joystickDirection = "Left"
         }
 
-        if (buttonName == "Back") {
-            // Red Right
+        if (buttonName === "Back") {
             joystickColor = "green"
             joystickDirection = "Right"
-
         }
 
-        if (buttonName == "RT") {
-            // Red Left
+        if (buttonName === "RT") {
             joystickColor = "yellow"
             joystickDirection = "Right"
         }
 
-        if (buttonName == "LT") {
-            // Red Right
+        if (buttonName === "LT") {
             joystickColor = "yellow"
             joystickDirection = "Left"
-
         }
 
         if (down && joystickColor !== null) {
@@ -148,11 +138,11 @@ class Controls extends Component {
         if (axisName === "LeftStickY") {
             let joystickColor = "blue";
             let joystickDirection = null;
-            if (value == -1) {
+            if (value === -1) {
                 joystickDirection = "Right"
             }
     
-            if (value == 1) {
+            if (value === 1) {
                 joystickDirection = "Left"
             }
             if (value !== 0 && joystickColor !== null) {
@@ -164,23 +154,23 @@ class Controls extends Component {
     buttonChangeHandler_player2(buttonName, down) {
         let buttonColor = null;
         // ABXY
-        if (buttonName == "A") {
+        if (buttonName === "A") {
             buttonColor = "blue";
         }
 
-        if (buttonName == "B") {
+        if (buttonName === "B") {
             buttonColor = "red";
         }
 
-        if (buttonName == "X") {
+        if (buttonName === "X") {
             buttonColor = "green";
         }
 
-        if (buttonName == "Y") {
+        if (buttonName === "Y") {
             buttonColor = "yellow";
         }
 
-        if (buttonName == "RS") {
+        if (buttonName === "RS") {
             buttonColor = "start";
         }
 
@@ -192,7 +182,7 @@ class Controls extends Component {
             }
         }
 
-        if (buttonName == "LS") {
+        if (buttonName === "LS") {
             if (down) {
                 this.buttonAction("P2", "pedal", "down");
             } else {
@@ -202,39 +192,39 @@ class Controls extends Component {
         
         let joystickColor = null;
         let joystickDirection = null;
-        if (buttonName == "RB") {
+        if (buttonName === "RB") {
             // Red Left
             joystickColor = "red"
             joystickDirection = "Left"
         }
 
-        if (buttonName == "LB") {
+        if (buttonName === "LB") {
             // Red Right
             joystickColor = "red"
             joystickDirection = "Right"
 
         }
 
-        if (buttonName == "Start") {
+        if (buttonName === "Start") {
             // Red Left
             joystickColor = "green"
             joystickDirection = "Left"
         }
 
-        if (buttonName == "Back") {
+        if (buttonName === "Back") {
             // Red Right
             joystickColor = "green"
             joystickDirection = "Right"
 
         }
 
-        if (buttonName == "RT") {
+        if (buttonName === "RT") {
             // Red Left
             joystickColor = "yellow"
             joystickDirection = "Left"
         }
 
-        if (buttonName == "LT") {
+        if (buttonName === "LT") {
             // Red Right
             joystickColor = "yellow"
             joystickDirection = "Right"
@@ -250,11 +240,11 @@ class Controls extends Component {
         if (axisName === "LeftStickX") {
             let joystickColor = "blue";
             let joystickDirection = null;
-            if (value == -1) {
+            if (value === -1) {
                 joystickDirection = "Left"
             }
     
-            if (value == 1) {
+            if (value === 1) {
                 joystickDirection = "Right"
             }
             if (value !== 0 && joystickColor !== null) {
@@ -267,21 +257,21 @@ class Controls extends Component {
         // 76
         // 75
 
-        // if (event.keyCode == 75) {
+        // if (event.keyCode === 75) {
         //     this.joystickAction("P2", "black", "Left")
         // }
-        // if (event.keyCode == 76) {
+        // if (event.keyCode === 76) {
         //     this.joystickAction("P2", "black", "Right")
         // }
 
         // // 73
         // // 79
 
-        // if (event.keyCode == 73) {
+        // if (event.keyCode === 73) {
         //     this.joystickAction("P1", "black", "Left")
         // }
 
-        // if (event.keyCode == 79) {
+        // if (event.keyCode === 79) {
         //     this.joystickAction("P1", "black", "Right")
         // }
     }
@@ -293,28 +283,28 @@ class Controls extends Component {
         let joystickDirection = null;
 
         // ABXY
-        if (buttonName == "A") {
+        if (buttonName === "A") {
             buttonColor = "black";
             player = "P2";
             joystickDirection = "Right";
 
         }
 
-        if (buttonName == "B") {
+        if (buttonName === "B") {
             buttonColor = "black";
             player = "P2";
             joystickDirection = "Left";
 
         }
 
-        if (buttonName == "X") {
+        if (buttonName === "X") {
             buttonColor = "black";
             player = "P1";
             joystickDirection = "Left";
 
         }
 
-        if (buttonName == "Y") {
+        if (buttonName === "Y") {
             buttonColor = "black";
             player = "P1";
             joystickDirection = "Right";
@@ -328,7 +318,7 @@ class Controls extends Component {
             }
         }
 
-        if (buttonName == "LB") {
+        if (buttonName === "LB") {
             if (down) {
                 this.buttonAction("P3", "hard", "down");
             }
@@ -336,15 +326,15 @@ class Controls extends Component {
     }
 
     buttonChangeHandler_player4(buttonName, down) {
-        console.log(buttonName, down)
+        // console.log(buttonName, down)
 
-        if (buttonName == "B") {
+        if (buttonName === "B") {
             if (down) {
                 this.buttonAction("P3", "hard", "down");
             }
         }
 
-        if (buttonName == "A") {
+        if (buttonName === "A") {
             if (down) {
                 this.buttonAction("P3", "coin", "down");
             }
@@ -353,28 +343,28 @@ class Controls extends Component {
         // let buttonColor = null;
         // let joystickDirection = null;
         // // ABXY
-        // if (buttonName == "A") {
+        // if (buttonName === "A") {
         //     buttonColor = "black";
         //     player = "P2";
         //     joystickDirection = "Right";
 
         // }
 
-        // if (buttonName == "B") {
+        // if (buttonName === "B") {
         //     buttonColor = "black";
         //     player = "P2";
         //     joystickDirection = "Left";
 
         // }
 
-        // if (buttonName == "X") {
+        // if (buttonName === "X") {
         //     buttonColor = "black";
         //     player = "P1";
         //     joystickDirection = "Left";
 
         // }
 
-        // if (buttonName == "Y") {
+        // if (buttonName === "Y") {
         //     buttonColor = "black";
         //     player = "P1";
         //     joystickDirection = "Right";
@@ -389,19 +379,22 @@ class Controls extends Component {
     }
 
     keyboardActionUp = (event) => {
-
+        if (event.key === 1) {
+            
+        }
     }
 
     buttonAction(player, color, action) {
+
         this.props.buttonHandler(player, "button-"+color, action);
-        console.log(player + " Button: " + action);
+        // console.log(player + " Button: " + action);
 
         this.resetTimeout();
     }
 
     joystickAction(player, color, direction) {
         this.props.buttonHandler(player, "joystick-"+color, direction);
-        console.log(player + " " + color + " Joystick: " + direction);
+        // console.log(player + " " + color + " Joystick: " + direction);
 
         this.resetTimeout();
     }
@@ -416,35 +409,130 @@ class Controls extends Component {
     }
 
     componentDidMount() {
-        console.log("gamepad", navigator.getGamepads());
+        // console.log("gamepad", navigator.getGamepads());
         document.addEventListener("keydown", this.keyboardActionDown, false);
         document.addEventListener("keyup", this.keyboardActionUp, false);
         $("#myControls").focus();
         this.resetTimeout();
+
+        this.ws = new WebSocket('ws://localhost:3002');
+
+        this.ws.onopen = () => {
+            console.log('Connected to the WebSocket');
+        };
+    
+        this.ws.onmessage = (event) => {
+            const message = event.data;
+            console.log('Message from server:', message);
+            this.handleArduinoData(message);
+        };
+    
+        this.ws.onclose = () => {
+            console.log('Disconnected from the WebSocket');
+        };
+    }
+
+    getPinMappings() {
+        const pinMappings = {};
+        Object.keys(this.keycodes).forEach(key => {
+            const control = this.keycodes[key];
+            if (control.pin) {
+                pinMappings[control.pin] = { ...control, key };
+            }
+        });
+        return pinMappings;
+    }
+
+    handleArduinoData(message) {
+        const parts = message.split(' '); // ["B67", "1"]
+        const pinNumber = parts[0].substring(1); // "67"
+        const action = parts[1] == 1 ? "down" : "up"; // "down" or "up"
+    
+        const pinMappings = this.getPinMappings();
+
+    
+        if (pinMappings.hasOwnProperty(pinNumber)) {
+            const control = pinMappings[pinNumber];
+            if (control.button) {
+                this.buttonAction(control.player, control.button, action);
+                // if (action == "down") {
+                //     this.switchLED(control.player, control.button, true);
+                // } else {
+                //     this.switchLED(control.player, control.button, false);
+                // }
+
+            } else if (control.joystick) {
+                if (action == "up") {
+                    this.joystickAction(control.player, control.joystick, "up");
+                } else {
+                    this.joystickAction(control.player, control.joystick, control.direction);
+                }
+            }
+        }
+    }
+
+    switchLED(player, button, state) {
+        Object.keys(this.keycodes).forEach(key => {
+            const keycode = this.keycodes[key];
+            if (keycode.player === player && keycode.button === button && keycode.output_led) {
+                this.sendLEDCommand(keycode.output_led, state);
+            }
+        });
+    }
+
+    sendLEDCommand(pin, state) {
+        console.log("SEND", pin, state)
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            const command = `L${pin.toString().padStart(2, '0')} ${state ? '1' : '0'}`;
+            this.ws.send(command);
+        } else {
+            console.log("WebSocket is not open.");
+        }
     }
 
     componentWillUnmount() {
         document.removeEventListener("keydown", this.keyboardActionDown, false);
         document.removeEventListener("keyup", this.keyboardActionUp, false);
+
+        if (this.ws) {
+            this.ws.close();
+        }
     }
 
     buttonChangeHandler_test(buttonName, down) {
-        console.log(buttonName, down)
+        // console.log(buttonName, down)
     }
 
     firedArray = [];
 
+    turnOffLEDS() {
+        this.sendLEDCommand(26, false);
+        this.sendLEDCommand(59, false);
+        this.sendLEDCommand(60, false);
+        this.sendLEDCommand(19, false);
+        this.sendLEDCommand(58, false);
+
+        this.sendLEDCommand(43, false);
+        this.sendLEDCommand(57, false);
+        this.sendLEDCommand(39, false);
+        this.sendLEDCommand(41, false);
+        this.sendLEDCommand(42, false);
+    }
+
     handleKeyDown = (event) => {
-        console.log(event.key)
+        // console.log(event.key)
 
         if (this.keycodes.hasOwnProperty(event.key)) {
             var keycodeValue = this.keycodes[event.key];
             if (keycodeValue.button) {
-                if (this.firedArray.indexOf(keycodeValue.player+' '+keycodeValue.button) == -1) {
+                if (this.firedArray.indexOf(keycodeValue.player+' '+keycodeValue.button) === -1) {
                     this.firedArray.push(keycodeValue.player+' '+keycodeValue.button);
                     this.buttonAction(keycodeValue.player, keycodeValue.button, "down");
                 }
+
+                // this.switchLED(keycodeValue.player, keycodeValue.button, true);
             } else if (keycodeValue.joystick) {
+
                 
                     this.firedArray.push(keycodeValue.player+' '+keycodeValue.joystick + ' ' + keycodeValue.direction);
 
@@ -454,21 +542,21 @@ class Controls extends Component {
             }
         }
             
-        // if(event.key == '1'){
-        //     if (this.firedArray.indexOf('P1 Start') == -1) {
+        // if(event.key === '1'){
+        //     if (this.firedArray.indexOf('P1 Start') === -1) {
         //         this.firedArray.push('P1 Start');
         //         this.buttonAction("P1", "start", "down");
         //     }
         // }
-        // if(event.key == '2'){
-        //     if (this.firedArray.indexOf('P2 Start') == -1) {
+        // if(event.key === '2'){
+        //     if (this.firedArray.indexOf('P2 Start') === -1) {
         //         this.firedArray.push('P2 Start');
         //         this.buttonAction("P2", "start", "down");
         //     }
         // }
 
-        // if(event.key == '5'){
-        //     if (this.firedArray.indexOf('P3 Coin') == -1) {
+        // if(event.key === '5'){
+        //     if (this.firedArray.indexOf('P3 Coin') === -1) {
         //         this.firedArray.push('P3 Coin');
         //         this.buttonAction("P3", "coin", "down");
         //     }
@@ -483,21 +571,29 @@ class Controls extends Component {
                 this.removeA(this.firedArray, keycodeValue.player+' '+keycodeValue.button);
                 this.buttonAction(keycodeValue.player, keycodeValue.button, "up");
 
-                if (keycodeValue.player == "P3" && keycodeValue.button == "refresh") {
+                if (keycodeValue.player === "P3" && keycodeValue.button === "refresh") {
                     window.location.reload();
                 }
-            }
-        }
+                // this.switchLED(keycodeValue.player, keycodeValue.button, false);
+            } else if (keycodeValue.joystick) {
 
-        // if(event.key == '1'){
+                
+                this.firedArray.push(keycodeValue.player+' '+keycodeValue.joystick + ' ' + keycodeValue.direction);
+    
+                this.joystickAction(keycodeValue.player, keycodeValue.joystick, "up")
+    
+            }
+        } 
+
+        // if(event.key === '1'){
         //     this.removeA(this.firedArray, "P1 Start");
         //     this.buttonAction("P1", "start", "up");
         // }
-        // if(event.key == '2'){
+        // if(event.key === '2'){
         //     this.removeA(this.firedArray, "P2 Start");
         //     this.buttonAction("P2", "start", "up");
         // }
-        // if(event.key == '3'){
+        // if(event.key === '3'){
         //     this.removeA(this.firedArray, "P3 Coin");
         //     this.buttonAction("P3", "coin", "up");
         // }
@@ -515,8 +611,11 @@ class Controls extends Component {
     }
 
     render() {  
+
+
+
         return (
-            <div id='myControls' onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabindex="0">
+            <div id='myControls' onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} tabIndex="0">
            {this.props.children}
             </div>
         )

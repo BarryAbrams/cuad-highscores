@@ -23,7 +23,7 @@ class Slide extends Component {
            }.bind(this), this.props.slideInfo.view[0].millis);
            setTimeout(function() {
             $(".animatedgif").removeClass("active");
-            }.bind(this), this.props.totalSlideLength-500);
+            }, this.props.totalSlideLength-500);
         //    setTimeout(function() {
         //         $(".animatedgif").removeClass("active");
         //    }, duration);
@@ -37,7 +37,7 @@ class Slide extends Component {
         subslide = "https://cuadventures.com/" + subslide;
         return (
             <div className="animatedgif">
-                <div><img src={subslide} /></div>
+                <div><img alt="gif" src={subslide} /></div>
             </div>
         )
     }    

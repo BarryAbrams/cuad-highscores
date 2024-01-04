@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
 import Controls from "../../Controls";
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 
-var socket = new WebSocket("ws://localhost:3002/");
+// var socket = new WebSocket("ws://localhost:3002/");
 
 class GameStart extends Component {
 
@@ -18,18 +18,18 @@ class GameStart extends Component {
         // document.addEventListener("keydown", this.keyboardActionDown, false);
         // document.addEventListener("keyup", this.keyboardActionUp, false);
 
-        let interval = setInterval(function() {
-            if (socket.readyState) {
-                clearInterval(interval);
-                socket.send("P1 Start Button, P2 Start Button");
+        // let interval = setInterval(function() {
+        //     // if (socket.readyState) {
+        //     //     clearInterval(interval);
+        //     //     socket.send("P1 Start Button, P2 Start Button");
 
-                // this.timerout = setTimeout(function() {
-                //     console.log("TIMED OUT");
-                //     this.props.nextAction(100, "scores");
+        //     //     // this.timerout = setTimeout(function() {
+        //     //     //     console.log("TIMED OUT");
+        //     //     //     this.props.nextAction(100, "scores");
 
-                // }.bind(this), 30000);
-            }
-        }.bind(this), 300);
+        //     //     // }.bind(this), 30000);
+        //     // }
+        // }, 300);
     }
 
     componentWillUnmount(){
@@ -83,10 +83,10 @@ class GameStart extends Component {
     
 
     buttonHandler(player, value, action) {
-        console.log(player, value, action);
-        if (player == "P2" && value == "button-start") {
+        // console.log(player, value, action);
+        if (player === "P2" && value === "button-start") {
             
-            if (action == "down") {
+            if (action === "down") {
                 const coinSound = new Howl({
                     src: [ '/sounds/select.mp3']
                 });
@@ -106,9 +106,9 @@ class GameStart extends Component {
             }
         }
 
-        if (player == "P1" && value == "button-start") {
+        if (player === "P1" && value === "button-start") {
             
-            if (action == "down") {
+            if (action === "down") {
             const coinSound = new Howl({
                 src: [ '/sounds/select.mp3']
             });
@@ -145,7 +145,7 @@ class GameStart extends Component {
 
 
     render() {
-        console.log("game triggered", this.gameTriggerStart)
+        // console.log("game triggered", this.gameTriggerStart)
         let message = <div className="message">LOCATE and PRESS the two start buttons SIMULTANEOUSLY!</div>
         let description = null;
         if (this.props.gameStarted) {

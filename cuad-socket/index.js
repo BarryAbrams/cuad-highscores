@@ -1,4 +1,6 @@
-var SerialPort = require('serialport');
+const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
+
 var WebSocketServer = require('ws').Server;
 
 var SERVER_PORT = 3002;               // port number for the webSocket server
@@ -25,20 +27,20 @@ function sendToSerial(data) {
     myPort.write(data);
 }
 
-// This function broadcasts messages to all webSocket clients
 function broadcast(data) {
-    for (myConnection in connections) {   // iterate over the array of connections
-     connections[myConnection].send(data); // send the data to each connection
-    }
+   for (myConnection in connections) {   // iterate over the array of connections
+      connections[myConnection].send(data); // send the data to each connection
    }
+}
 
-var portName = "/dev/cu.usbmodemHIDNB1";
+const portName = "/dev/ttyACM0";
 
-var myPort = new SerialPort(portName, 9600);
+// const portName = "/dev/tty.usbmodem14401";
+// const portName = "/dev/tty.usbmodem1101";
+const myPort = new SerialPort({ path: portName, baudRate: 9600 });
 
-var Readline = SerialPort.parsers.Readline; // make instance of Readline parser
-var parser = new Readline(); // make a new parser to read ASCII lines
-myPort.pipe(parser); // pipe the serial stream to the parser
+const parser = new ReadlineParser({ delimiter: '\n' });
+myPort.pipe(parser);
 
 myPort.on('open', showPortOpen);
 parser.on('data', readSerialData);
@@ -56,6 +58,25 @@ function showPortOpen() {
     broadcast(data);
   }
  }
+
+ function sendToSerial(data) {
+   const message = data.toString();
+
+   console.log(message)
+
+   // Check if the data is for an LED command
+   if (message.startsWith("L")) {
+       // Parse the command
+       const parts = message.split(' '); // ["L12", "1"]
+       const ledPin = parts[0].substring(1); // "12"
+       const ledState = parts[1] === "1" ? "HIGH" : "LOW"; // "HIGH" or "LOW"
+
+       // Construct the command string for Arduino
+       const command = `L${ledPin} ${ledState}\n`;
+
+       myPort.write(command);
+   }
+}
   
  function showPortClose() {
     console.log('port closed.');

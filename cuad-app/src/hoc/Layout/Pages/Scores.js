@@ -104,11 +104,11 @@ class Scores extends Component {
             output = Object.keys(storageArray).map((item) => {
                 let count = 0;
                 let scores = Object.keys(storageArray[item]).map((scoreitem) => {
-                    if (count == 0) {
+                    if (count === 0) {
                         console.log(scores)
                         if (storageArray[item][scoreitem].field_icons) {
                             var url = "https://cuadventures.com/" + storageArray[item][scoreitem].field_icons;
-                            icons = <div className="icons"> <img src={url} /></div>;
+                            icons = <div className="icons"> <img alt={count} src={url} /></div>;
                         }
                     }
 
@@ -123,7 +123,7 @@ class Scores extends Component {
                     }
 
                     let noHints = null;
-                    if (scoreObject.no_hints == "Yes") {
+                    if (scoreObject.no_hints === "Yes") {
                         noHints = (
                             <div className="no-hints">
                                 No Hints!
@@ -132,7 +132,7 @@ class Scores extends Component {
                     }
 
                     let bonusPuzzle = null;
-                    if (scoreObject.bonus_puzzle == "True") {
+                    if (scoreObject.bonus_puzzle === "True") {
                         bonusPuzzle = (
                             <div className="no-hints">
                                 Bonus Puzzle!

@@ -171,7 +171,7 @@ p {
   display: flex;
   position: relative;
   opacity: 0;
-  transition: opacity 0.75s ease-in-out, left 0.75s ease-in-out, right 0.75s ease-in-out;
+  transition: opacity 0.25s ease-in-out, left 0.25s ease-in-out, right 0.25s ease-in-out;
 }
 .scores .room ul li.score.right {
   right: 100%;

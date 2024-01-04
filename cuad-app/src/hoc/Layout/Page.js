@@ -6,26 +6,27 @@ import WinnersDrugs from "./Pages/WinnersDrugs";
 import GameStart from "./Pages/GameStart";
 import Game from "./Pages/Game";
 import Slide from "./Pages/Slide";
+import Calibrate from "./Pages/Calibrate";
 // import Calibrate from "./Pages/Calibrate";
 
 import Coinage from "./Elements/Coinage";
 
 import axios from '../../config/axios';
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 
-var socket = new WebSocket("ws://localhost:3002/");
-function setup() {
-    socket.onopen = openSocket;
-    socket.onmessage = showData;
-}
-function openSocket() {
-    console.log("Socket open");
-    socket.send("Hello server");
-}
+// var socket = new WebSocket("ws://localhost:3002/");
+// function setup() {
+//     socket.onopen = openSocket;
+//     socket.onmessage = showData;
+// }
+// function openSocket() {
+//     console.log("Socket open");
+//     socket.send("Hello server");
+// }
 
-function showData(result) {
-    console.log("showData");
-}
+// function showData(result) {
+//     console.log("showData");
+// }
 
 class Page extends Component {
     state = {
@@ -48,7 +49,7 @@ class Page extends Component {
        
         this.timeout = setTimeout(function() {
             let newSlide = this.state.currentSlide;
-            if (newAction == "slide") {
+            if (newAction === "slide") {
                 newSlide = this.state.currentSlide+1;
                 if (newSlide >= this.state.slides.length) {
                     newSlide = 0;
@@ -141,48 +142,48 @@ class Page extends Component {
         // DEMO MODE
         // AD FOR ROOM (1|2|3)
         // -> LOOP REPEAT
-        let music = null;
+        // let music = null;
 
 
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        var existingOrder = null;
-        for (var i=0;i<vars.length;i++) {
-            var pair = vars[i].split("=");
-            if(pair[0] == "order"){
-                existingOrder = pair[1];
-            }
-        }
+        // var query = window.location.search.substring(1);
+        // var vars = query.split("&");
+        // var existingOrder;
+        // for (var i=0;i<vars.length;i++) {
+        //     // var pair = vars[i].split("=");
+        //     // if(pair[0] === "order"){
+        //     //     existingOrder = pair[1];
+        //     // }
+        // }
 
         // if (existingOrder != null && this.state.action === "calibrate") {
         //     this.controllerOrder = existingOrder.split("").map(Number);
         //     this.setState({action: "testscreen"});
         // }
         
-        // if (this.state.action === "calibrate") {
-        //     page = <Calibrate nextAction={this.changeAction} setGlobalControllerValue={this.setGlobalControllerValue} />
+        if (this.state.action === "calibrate") {
+            page = <Calibrate nextAction={this.changeAction} setGlobalControllerValue={this.setGlobalControllerValue} />
             
-        //     let interval = setInterval(function() {
-        //         if (socket.readyState) {
-        //             clearInterval(interval);
-        //             // socket.send("Intro");
-        //         }
-        //     }, 300)
-        //     buttonDisabled = true;
+            // let interval = setInterval(function() {
+            //     // if (socket.readyState) {
+            //     //     clearInterval(interval);
+            //     //     // socket.send("Intro");
+            //     // }
+            // }, 300)
+            buttonDisabled = true;
 
-        //     // this.changeAction(500, "testscreen")
-        // }
+            // this.changeAction(500, "testscreen")
+        }
 
         if (this.state.action === "testscreen") {
             page = <TestScreen nextAction={this.changeAction} />
             
-            let interval = setInterval(function() {
-                if (socket.readyState) {
-                    clearInterval(interval);
-                    // socket.send("P1 Start Button, P2 Start Button");
-                    socket.send("Intro");
-                }
-            }, 300)
+            // let interval = setInterval(function() {
+            //     // if (socket.readyState) {
+            //     //     clearInterval(interval);
+            //     //     // socket.send("P1 Start Button, P2 Start Button");
+            //     //     socket.send("Intro");
+            //     // }
+            // }, 300)
             buttonDisabled = true;
 
             this.changeAction(500, "slide")
@@ -213,12 +214,12 @@ class Page extends Component {
 
         if (this.state.action === "slide") {
             const slide = this.state.slides[this.state.currentSlide];
-            console.log(slide)
+            // console.log(slide)
             var totalSlideLength = 0;
             for (var i = 0; i<slide.view.length; i++) {
                 totalSlideLength += parseInt(slide.view[i].millis, 10);
             }
-            console.log("total Slidle Length", totalSlideLength)
+            // console.log("total Slidle Length", totalSlideLength)
             page = <Slide gif="cuadventures" slideIncrement={this.currentSlide} totalSlideLength={totalSlideLength} slideInfo={slide} nextAction={this.changeAction} />
             if (this.globalCoinage) {
                 this.changeAction(totalSlideLength, "gamestart");
