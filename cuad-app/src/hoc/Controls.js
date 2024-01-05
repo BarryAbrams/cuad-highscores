@@ -25,10 +25,10 @@ class Controls extends Component {
             "i" : {"pin":25, "player":"P2", "joystick":"blue", "direction":"Left"},
             "o" : {"pin":30, "player":"P2", "joystick":"red", "direction":"Left"},
             "p" : {"pin":32, "player":"P2", "joystick":"red", "direction":"Right"},
-            "[" : {"pin":8, "output_led":16, "player":"P2", "joystick":"green", "direction":"Right", "button":"none"},
-            "]" : {"pin":9, "output_led":16, "player":"P2", "joystick":"green", "direction":"Left" , "button":"none"},
-            "a" : {"pin":15, "output_led":17, "player":"P2", "joystick":"yellow", "direction":"Right", "button":"none"},
-            "s" : {"pin":12, "output_led":17, "player":"P2", "joystick":"yellow", "direction":"Left", "button":"none"},
+            "[" : {"pin":8, "output_led":16, "player":"P2", "joystick":"green", "direction":"Right"},
+            "]" : {"pin":9, "output_led":16, "player":"P2", "joystick":"green", "direction":"Left" },
+            "a" : {"pin":15, "output_led":17, "player":"P2", "joystick":"yellow", "direction":"Right"},
+            "s" : {"pin":12, "output_led":17, "player":"P2", "joystick":"yellow", "direction":"Left"},
 
             "d" : {"pin":50, "output_led":43, "player":"P1", "button":"start"},
             "f" : {"pin":67, "output_led":57, "player":"P1", "button":"blue"},
@@ -40,10 +40,10 @@ class Controls extends Component {
             "z" : {"pin":69, "player":"P1", "joystick":"blue", "direction":"Left"},
             "x" : {"pin":29, "player":"P1", "joystick":"red", "direction":"Left"},
             "c" : {"pin":52, "player":"P1", "joystick":"red", "direction":"Right"},
-            "v" : {"pin":65,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Right", "button":"none"},
-            "b" : {"pin":55,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Left", "button":"none"},
-            "n" : {"pin":64,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Right", "button":"none"},
-            "m" : {"pin":63,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Left", "button":"none"},
+            "v" : {"pin":65,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Right"},
+            "b" : {"pin":55,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Left"},
+            "n" : {"pin":64,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Right"},
+            "m" : {"pin":63,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Left"},
     };
     
     connectHandler(gamepadIndex) {
@@ -477,10 +477,10 @@ class Controls extends Component {
             console.log(keycode)
             if (type == "button") {
                 if (keycode.player === player && keycode.button === button && keycode.output_led) {
-                    // this.sendLEDCommand(keycode.output_led, state);
+                    this.sendLEDCommand(keycode.output_led, state);
                 }
             } else if (type == "joystick") {
-                if (keycode.player === player && keycode.button === "none" && keycode.joystick == button && keycode.output_led) {
+                if (keycode.player === player && keycode.joystick && keycode.joystick == button && keycode.output_led) {
                     this.sendLEDCommand(keycode.output_led, state);
                 }
             }

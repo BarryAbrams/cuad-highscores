@@ -33,9 +33,9 @@ function broadcast(data) {
    }
 }
 
-const portName = "/dev/ttyACM0";
+// const portName = "/dev/ttyACM0";
 
-// const portName = "/dev/tty.usbmodem14401";
+const portName = "/dev/tty.usbmodem114401";
 // const portName = "/dev/tty.usbmodem1101";
 const myPort = new SerialPort({ path: portName, baudRate: 9600 });
 
