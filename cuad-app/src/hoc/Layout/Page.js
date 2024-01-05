@@ -44,6 +44,7 @@ class Page extends Component {
     globalCoinage = false;
     globalCoinCount = 0;
 
+
     changeAction = (delay, newAction) => {
         this.interuptAction();
        
@@ -135,6 +136,8 @@ class Page extends Component {
         let showCoinage = false;
         let  buttonDisabled = false;
 
+
+
         // TEST SCREEN
         // -> LOOP START
         // WINNERS DON'T USE DRUGS
@@ -161,7 +164,13 @@ class Page extends Component {
         // }
         
         if (this.state.action === "calibrate") {
-            page = <Calibrate nextAction={this.changeAction} setGlobalControllerValue={this.setGlobalControllerValue} />
+            page = <Calibrate 
+                nextAction={this.changeAction} 
+                setGlobalControllerValue={this.setGlobalControllerValue} 
+                controls={this.props.controls}  // Pass controls as a prop
+                buttonHandler={this.props.buttonHandler} 
+                setCurrentButtonHandler={this.props.setCurrentButtonHandler} 
+             />
             
             // let interval = setInterval(function() {
             //     // if (socket.readyState) {
@@ -175,7 +184,8 @@ class Page extends Component {
         }
 
         if (this.state.action === "testscreen") {
-            page = <TestScreen nextAction={this.changeAction} />
+            page = <TestScreen nextAction={this.changeAction}                           // Pass controls as a prop
+            />
             
             // let interval = setInterval(function() {
             //     // if (socket.readyState) {
@@ -246,6 +256,9 @@ class Page extends Component {
             gameStarted={this.state.gameStarted}
             startGame={this.startGame}
             controllers={this.controllerOrder}
+            controls={this.props.controls} 
+            buttonHandler={this.props.buttonHandler} 
+            setCurrentButtonHandler={this.props.setCurrentButtonHandler} 
             />
             showCoinage = false;
             buttonDisabled = true;
@@ -266,7 +279,17 @@ class Page extends Component {
             if (this.idleTimeout) {
                 clearTimeout(this.idleTimeout);
             }
-            page = <Game nextAction={this.changeAction} controllers={this.controllerOrder} stopMusic={this.stopMusic} hardMode={this.hardMode} playSoundCallback={this.playSound} />
+            page = <Game 
+            nextAction={this.changeAction} 
+            controllers={this.controllerOrder} 
+            stopMusic={this.stopMusic} 
+            hardMode={this.hardMode} 
+            playSoundCallback={this.playSound} 
+            controls={this.props.controls}  // Pass controls as a prop
+            buttonHandler={this.props.buttonHandler} 
+            setCurrentButtonHandler={this.props.setCurrentButtonHandler} 
+            
+            />
             showCoinage = false;
             // this.coinage = null;
 
@@ -293,7 +316,12 @@ class Page extends Component {
             controllers={this.controllerOrder}
             startGame={this.startGame}
             disableButton={buttonDisabled}
-            controller={this.controllerOrder[3]}/>;
+            controller={this.controllerOrder[3]}            
+            controls={this.props.controls}  // Pass controls as a prop
+            buttonHandler={this.props.buttonHandler} 
+            setCurrentButtonHandler={this.props.setCurrentButtonHandler} 
+            
+            />;
         // }
         
         return (

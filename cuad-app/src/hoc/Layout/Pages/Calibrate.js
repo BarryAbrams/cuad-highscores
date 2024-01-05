@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Controls from '../../Controls';
+// import Controls from '../../Controls';
 
 function toCamelCase(str) {
     return str
@@ -19,11 +19,26 @@ class Calibrate extends Component {
         },
     }
 
-    controllerOrder = [];
-
     constructor(props) {
         super(props);
-        this.controlsRef = React.createRef(); // Creating a ref
+
+        // Bind the localButtonHandler
+        this.localHandler = this.localHandler.bind(this);
+    }
+
+    controllerOrder = [];
+
+    // constructor(props) {
+    //     super(props);
+    //     this.controlsRef = React.createRef(); // Creating a ref
+    // }
+
+    componentDidMount(){
+        this.props.setCurrentButtonHandler(this.localHandler);
+    }
+
+    componentWillUnmount(){
+        this.props.setCurrentButtonHandler(this.localHandler);
     }
 
     connectHandler(gamepadIndex) {
@@ -36,21 +51,21 @@ class Calibrate extends Component {
 
     callControlFunction = (player, buttonName, down) => {
         const modifiedButtonName = buttonName.replace("button-", "");
-        if (this.controlsRef.current) {
+        if (this.props.controls) {
             console.log("LED", player, modifiedButtonName, down)
 
             if (down == "down") {
-                this.controlsRef.current.switchLED(player, modifiedButtonName, true); // Calling the function
+                this.props.controls.switchLED(player, modifiedButtonName, true); // Calling the function
 
             } else {
-                this.controlsRef.current.switchLED(player, modifiedButtonName, false); // Calling the function
+                this.props.controls.switchLED(player, modifiedButtonName, false); // Calling the function
 
             }
 
         }
     }  
 
-    buttonHandler(player, buttonName, down) {
+    localHandler(player, buttonName, down) {
         const camelCaseButtonName = toCamelCase(buttonName);
         this.setState({ lastInput: `${player}: Button ${camelCaseButtonName} ${down}` }); // Update the state
         
@@ -184,7 +199,7 @@ class Calibrate extends Component {
     
         return (
             <div>
-            <Controls ref={this.controlsRef} buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+            {/* <Controls ref={this.controlsRef} buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}> */}
 
               
                 <div className="calibrate" onKeyDown={this.handleKeyPress} tabIndex="0">
@@ -196,7 +211,7 @@ class Calibrate extends Component {
                     
                     </div>
                 </div>
-            </Controls>
+            {/* </Controls> */}
              
 
              </div>

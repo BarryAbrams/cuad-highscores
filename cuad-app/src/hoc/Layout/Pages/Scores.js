@@ -166,8 +166,6 @@ class Scores extends Component {
                     )
                 });
 
-              
-                
                 return (
                         <div className="room"  key={item} >
                             <h3 dangerouslySetInnerHTML={{__html:item}}></h3>

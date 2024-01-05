@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
-import Controls from "../../Controls";
+// import Controls from "../../Controls";
 import {Howl} from 'howler';
 
 // var socket = new WebSocket("ws://localhost:3002/");
@@ -73,9 +73,10 @@ class Game extends Component {
 
     constructor(props) {
         super(props);
-        this.controlsRef = React.createRef(); // Creating a ref
-    }
+        // this.controlsRef = React.createRef(); // Creating a ref
+        this.localHandler = this.localHandler.bind(this);
 
+    }
 
     componentDidMount() {
         if (this.debug) {
@@ -115,11 +116,13 @@ class Game extends Component {
             this.gameLoop();
         }.bind(this), this.baseSpeed);
 
-        this.controlsRef.current.turnOffLEDS();
+        // this.props.controls.turnOffLEDS();
+        this.props.setCurrentButtonHandler(this.localHandler);
 
     }
 
     componentWillUnmount() {
+        this.props.setCurrentButtonHandler(this.localHandler);
         clearInterval(this.ticker);
     }
     // buttonChangeHandler(buttonName, down) {
@@ -127,15 +130,15 @@ class Game extends Component {
     // }
 
     connectHandler(gamepadIndex) {
-    console.log(`Gamepad ${gamepadIndex} connected !`)
+    // console.log(`Gamepad ${gamepadIndex} connected !`)
     }
     
     disconnectHandler(gamepadIndex) {
-    console.log(`Gamepad ${gamepadIndex} disconnected !`)
+    // console.log(`Gamepad ${gamepadIndex} disconnected !`)
     }
     
     buttonChangeHandler(buttonName, down) {
-        console.log("BUTTON", buttonName);
+        // console.log("BUTTON", buttonName);
         if (buttonName === "A" && down) {
             this.rotateActivePiece(+1);
         }
@@ -154,11 +157,11 @@ class Game extends Component {
     }
     
     buttonDownHandler(buttonName) {
-    console.log(buttonName, 'down')
+    // console.log(buttonName, 'down')
     }
     
     buttonUpHandler(buttonName) {
-    console.log(buttonName, 'up')
+    // console.log(buttonName, 'up')
     }
 
 
@@ -366,27 +369,24 @@ class Game extends Component {
         const landed = this.state.gameGrid;
 
         if (!this.removingRow) {
-            if (this.state.theRow === null && this.state.clump === null) {
+            if (this.state.theRow == null && this.state.clump == null) {
                 let filledRow = [];
                 for (var row = 0; row < landed.length; row++) {
                     let isFilled = true;
                     for (var col = 0; col < landed[row].length; col++) {
                         if (landed[row][col] === 0) {
                             isFilled = false;
-            
                         } 
                     }
                     
                     if (isFilled) {
-                        console.log("testing");
-
                         filledRow.push(row);
                     }
                     
                 }
 
                 if (filledRow.length > 0) {
-                    console.log("filled row", filledRow[filledRow.length - 1]);
+                    // console.log("filled row", filledRow[filledRow.length - 1]);
                     this.setState({removingRow:true, theRow:filledRow[filledRow.length - 1], removingRowInt:0})
                 }
             }
@@ -408,7 +408,7 @@ class Game extends Component {
                     $(".changingcontrols .text").text("Game Over");
                     $(".changingcontrols").addClass("active");
                     clearInterval(this.ticker);
-
+                    this.props.controls.resetLEDsCommand(); // Calling the function
                     this.playSound("gameover");
                     this.props.stopMusic();
                     this.setState({endGame:false, removingCol:false, removingRowInt:null})
@@ -612,11 +612,11 @@ class Game extends Component {
                     controls = this.state.newControls;
                 } else {
                     controls = this.changeControls();
-                    this.controlsRef.current.turnOffLEDS();
+                    // this.props.controls.turnOffLEDS();
 
                 }
 
-                // this.setLights(controls);
+                this.setLights(controls);
                 // this.socketControls(controls);
                 // console.log(controls);
                 $(".current-control .control").removeClass("active");
@@ -664,7 +664,9 @@ class Game extends Component {
 
     setLights(controls) {
 
-        console.log("CONTROLS", controls);
+        this.props.controls.resetLEDsCommand(); // Calling the function
+
+        // console.log("CONTROLS", controls);
         if (controls.p1) {
             controls.p1.forEach(item => {
                 // Split the item at the dash and take the second part, which should be the color
@@ -673,9 +675,19 @@ class Game extends Component {
                     const type = parts[0]; // "joystick" or "button"
                     const color = parts[1]; // The color
     
+                    console.log(type)
+
                     // Do something with the type and color
-                    console.log("Type:", type, "Color:", color);
-                    this.controlsRef.current.switchLED("P1", color, true); // Calling the function
+                    // console.log("Type:", type, "Color:", color);
+                    if (type === "button") {
+                        this.props.controls.switchLED("P2", color, true, type); // Calling the function
+                    }
+                    if (type === "joystick") {
+                        if (color == "green" || color == "yellow") {
+                            this.props.controls.switchLED("P2", color, true, type); // Calling the function
+
+                        }
+                    }
                 }
             });
         }
@@ -689,91 +701,21 @@ class Game extends Component {
                     const color = parts[1]; // The color
     
                     // Do something with the type and color
-                    console.log("Type:", type, "Color:", color);
-                    this.controlsRef.current.switchLED("P2", color, true); // Calling the function
+                    // console.log("Type:", type, "Color:", color);
+                    if (type === "button") {
+                        this.props.controls.switchLED("P1", color, true, type); // Calling the function
+                    }
+                    if (type === "joystick") {
+                        if (color == "green" || color == "yellow") {
+                            this.props.controls.switchLED("P1", color, true, type); // Calling the function
+
+                        }
+                    }
                 }
             });
         }
     }
 
-    socketControls(controls) {
-        console.log("new controls");
-        let socketString = "XXXXXXXXXXXXXXXXX";
-        if (controls.p1[0] === "joystick-blue") {
-            socketString += ", P1 Blue Joystick";
-        }
-
-        if (controls.p1[0] === "joystick-red") {
-            socketString += ", P1 Red Joystick";
-        }
-
-        if (controls.p1[0] === "joystick-green") {
-            socketString += ", P1 Green Joystick";
-        }
-
-        if (controls.p1[0] === "joystick-yellow") {
-            socketString += ", P1 Yellow Joystick";
-        }
-
-        if (controls.p1[0] === "joystick-black") {
-            socketString += ", P1 Black Joystick";
-        }
-
-        if (controls.p1[1] === "button-blue") {
-            socketString += ", P1 Blue Button";
-        }
-
-        if (controls.p1[1] === "button-red") {
-            socketString += ", P1 Red Button";
-        }
-
-        if (controls.p1[1] === "button-green") {
-            socketString += ", P1 Green Button";
-        }
-
-        if (controls.p1[1] === "button-yellow") {
-            socketString += ", P1 Yellow Button";
-        }
-
-        if (controls.p2[0] === "joystick-blue") {
-            socketString += ", P2 Blue Joystick";
-        }
-
-        if (controls.p2[0] === "joystick-red") {
-            socketString += ", P2 Red Joystick";
-        }
-
-        if (controls.p2[0] === "joystick-green") {
-            socketString += ", P2 Green Joystick";
-        }
-
-        if (controls.p2[0] === "joystick-yellow") {
-            socketString += ", P2 Yellow Joystick";
-        }
-
-        if (controls.p2[0] === "joystick-black") {
-            socketString += ", P2 Black Joystick";
-        }
-
-        if (controls.p2[1] === "button-blue") {
-            socketString += ", P2 Blue Button";
-        }
-
-        if (controls.p2[1] === "button-red") {
-            socketString += ", P2 Red Button";
-        }
-
-        if (controls.p2[1] === "button-green") {
-            socketString += ", P2 Green Button";
-        }
-
-        if (controls.p2[1] === "button-yellow") {
-            socketString += ", P2 Yellow Button";
-        }
-
-    console.log(socketString);
-    // socket.send(socketString);
-    }
 
     addNewPiece() {
         // if (this.ledOn) {
@@ -783,7 +725,7 @@ class Game extends Component {
         //     this.ledOn = true;
         //     socket.send("P2 Start Button"); 
         // }
-        console.log("add new piece")
+        // console.log("add new piece")
         if (!this.state.nextPiece) {
             this.generateNextPiece();
         }
@@ -792,7 +734,7 @@ class Game extends Component {
         let controls = this.changeControls();
         if (!this.arraysEqual(controls.p1, this.state.currentControls.p1) ||
             !this.arraysEqual(controls.p2, this.state.currentControls.p2)) {
-                console.log("arrays aren't the same")
+                // console.log("arrays aren't the same")
 
 
             this.setState({activePiece:tetromino, changingControls:true, newControls:controls, score:this.state.score+10});
@@ -944,13 +886,13 @@ class Game extends Component {
     }
 
     calculateShapes(shapeInt, shapes) {
-        console.log("CALCULATE SHAPES");
+        // console.log("CALCULATE SHAPES");
         var shapeTexture_1 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
         var shapeTexture_2 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
         var shapeTexture_3 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
         var shapeTexture_4 = shapeInt + 1 + (Math.floor(Math.random() * 16) * 10);
 
-        console.log("SHAPES:", shapeTexture_1, shapeTexture_2, shapeTexture_3, shapeTexture_4)
+        // console.log("SHAPES:", shapeTexture_1, shapeTexture_2, shapeTexture_3, shapeTexture_4)
 
         for (var subShape = 0; subShape<shapes.length; subShape++) {
             for (var x = 0; x<shapes[subShape].length; x++) {
@@ -976,7 +918,7 @@ class Game extends Component {
             }
         }
 
-        console.log(shapes);
+        // console.log(shapes);
 
         return shapes;
     }
@@ -1171,38 +1113,22 @@ class Game extends Component {
          return <div className="changingcontrols"><div className="text">Get Ready!</div></div>;
     }
 
-    callControlFunction = (player, buttonName, down) => {
-        const modifiedButtonName = buttonName.replace("button-", "");
-        if (this.controlsRef.current) {
-            console.log("LED", player, modifiedButtonName, down)
 
-            if (down == "down") {
-                this.controlsRef.current.switchLED(player, modifiedButtonName, true); // Calling the function
 
-            } else {
-                this.controlsRef.current.switchLED(player, modifiedButtonName, false); // Calling the function
+    localHandler(player, value, action) {
+        // console.log(player, value, action, this.state.currentControls);
 
-            }
-
-        }
-    }  
-
-    buttonHandler(player, value, action) {
-        console.log(player, value, action, this.state.currentControls);
-
-        this.callControlFunction(player, value, action);
-
-        if (player === "P3" && value === "button-hard") {
-            if (!this.hardModeTriggered) {
-                this.hardModeTriggered = true;
-                this.props.hardMode();
-                clearInterval(this.ticker);
-                this.baseSpeed = this.baseSpeed/2;
-                this.ticker = setInterval(function() {
-                    this.gameLoop();
-                }.bind(this), this.baseSpeed);
-            }
-        }
+        // if (player === "P3" && value === "button-hard") {
+        //     if (!this.hardModeTriggered) {
+        //         this.hardModeTriggered = true;
+        //         this.props.hardMode();
+        //         clearInterval(this.ticker);
+        //         this.baseSpeed = this.baseSpeed/2;
+        //         this.ticker = setInterval(function() {
+        //             this.gameLoop();
+        //         }.bind(this), this.baseSpeed);
+        //     }
+        // }
 
         if (player === "P2") {
             if (value.includes("button-pedal")) {
@@ -1231,7 +1157,7 @@ class Game extends Component {
                         p1_heldButtons.splice(index, 1);
                     }
                 }
-                console.log("held buttons", p1_heldButtons)
+                // console.log("held buttons", p1_heldButtons)
 
             }
             if (this.state.currentControls) {
@@ -1262,7 +1188,7 @@ class Game extends Component {
                                 }
                             }
                         } else {
-                            console.log("hold button down");
+                            // console.log("hold button down");
                         }
                     } else {
                         if (action === "Right") {
@@ -1310,7 +1236,7 @@ class Game extends Component {
                         p2_heldButtons.splice(index, 1);
                     }
                 }
-                console.log("held buttons", p2_heldButtons)
+                // console.log("held buttons", p2_heldButtons)
 
             }
             if (this.state.currentControls.p2[0] === value) {
@@ -1341,7 +1267,7 @@ class Game extends Component {
                             }
                         }
                     } else {
-                        console.log("hold button down");
+                        // console.log("hold button down");
                     }
                 } else {
                     if (action === "Right") {
@@ -1364,7 +1290,7 @@ class Game extends Component {
     }
 
     finishedPlaying() {
-        console.log("finished playing")
+        // console.log("finished playing")
         this.thisSound = null;
     }
 
@@ -1411,7 +1337,7 @@ class Game extends Component {
         return (
             <div>
             {/* <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}> */}
-            <Controls ref={this.controlsRef} buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+            {/* <Controls ref={this.controlsRef} buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}> */}
 
             <div className="game">
                 
@@ -1447,7 +1373,7 @@ class Game extends Component {
                     <p>{score_output} Points</p>
                 </div>
             </div>
-            </Controls>
+            {/* </Controls> */}
             </div>
         )
     }

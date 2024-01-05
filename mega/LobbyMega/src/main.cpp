@@ -37,7 +37,7 @@ int buttonState[67];              // current state of the button
 int lastButtonState[67] = {LOW};  // previous state of the button
 unsigned long lastDebounceTime[67] = {0};  // last time the output pin was toggled
 
-int outputPins[] = {43, 57, 39, 41, 42, 26,59,60,19,58};
+int outputPins[] = {43, 57, 39, 41, 42, 26,59,60,19,58, 54, 16,17};
 int inputPins[] = {0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 23, 25, 27, 29, 30, 31, 32, 33, 35, 37, 46, 48, 50, 52, 55, 62, 63, 64, 65, 67, 68, 69};
 // int outputPins[] = {1, 2, 11, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 26, 28, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 47, 49, 51, 53, 54, 55, 56, 57, 58, 59, 60, 61, 66, 69};
 // int outputPins[] = {43, 57, 39, 41, 42}; // P1 lights
@@ -71,11 +71,19 @@ void setup() {
 void handleSerialCommand(String command) {
   // L39 0
   // L43 1
+  Serial.println(command);
+
   if (command.startsWith("L")) {
-
-
     int spaceIndex = command.indexOf(' ');
     int pin = command.substring(1, spaceIndex).toInt();
+
+    if (pin == 0) {
+  // Serial.println("RESETTING LEDS");
+    for (int i = 0; i < sizeof(outputPins)/sizeof(outputPins[0]); i++) {
+      digitalWrite(outputPins[i], LOW);   // Turn off the output pin
+    }
+    }
+
     String valueStr = command.substring(spaceIndex + 1);
 
     bool direction;
@@ -87,9 +95,6 @@ void handleSerialCommand(String command) {
       return; // Exit the function if the value is not valid
     }
 
-    for (int i = 0; i < sizeof(outputPins)/sizeof(outputPins[0]); i++) {
-      digitalWrite(outputPins[i], LOW);   // Turn off the output pin
-    }
 
     // Iterating through the outputPins array to check if the pin is within the LED range
     for (int i = 0; i < sizeof(outputPins)/sizeof(outputPins[0]); i++) {
@@ -100,15 +105,25 @@ void handleSerialCommand(String command) {
         break; // Break out of the loop once the match is found
       }
     }
+  } else if (command.startsWith("R")) {
+  
   }
+
 }
 
 
 void loop() {
 
-  // Sequentially light up each output pin
+  //   for (int i = 0; i < sizeof(outputPins)/sizeof(outputPins[0]); i++) {
+  //   digitalWrite(outputPins[i], HIGH);  // Turn on the output pin
+  //   Serial.println(outputPins[i]);
+  //   delay(500);                         // Keep it on for 500ms
+  //   digitalWrite(outputPins[i], LOW);   // Turn off the output pin
+  // }
+
 
   if (Serial.available() > 0) {
+    Serial.println("message found");
     String command = Serial.readStringUntil('\n');
     handleSerialCommand(command);
   }

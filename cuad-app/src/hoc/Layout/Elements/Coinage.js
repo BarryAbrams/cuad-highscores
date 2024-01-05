@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Howl} from 'howler';
-import Controls from '../../Controls';
+// import Controls from '../../Controls';
 
 class Coinage extends Component {
     state = {
@@ -23,7 +23,14 @@ class Coinage extends Component {
     //     document.removeEventListener("keyup", this.keyboardActionUp, false);
     // }
 
-    buttonHandler(player, value, action) {
+    constructor(props) {
+        super(props);
+
+        // Bind the localButtonHandler
+        this.localHandler = this.localHandler.bind(this);
+    }
+
+    localHandler(player, value, action) {
         // if (!this.props.disableButton) {
             // console.log("BUTTON HANDLER", player, value, action)
             if (player === "P3" && value === "button-coin" && action === "down") {
@@ -31,17 +38,26 @@ class Coinage extends Component {
                 this.props.toggleCoinageOn();
             }
 
-            console.log(value)
+            // console.log(value)
 
             if (player === "P3" && value === "button-calibrate" && action === "down") {
                 console.log("HEYYY")
                 this.buttonCalibrate();
-
             }
 
         // }
             
     }
+
+    componentDidMount(){
+        this.props.setCurrentButtonHandler(this.localHandler);
+    }
+
+    componentWillUnmount(){
+        console.log("unmount coins")
+        this.props.setCurrentButtonHandler(this.localHandler);
+    }
+
 
     decrementCoin = () => {
         if (this.state.credits) {
@@ -103,11 +119,11 @@ class Coinage extends Component {
         }
 
         return (
-            <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+            // <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
             <div className="coinage">
                  {coinage}
             </div>
-            </Controls>
+            // </Controls>
         )
     }    
 }

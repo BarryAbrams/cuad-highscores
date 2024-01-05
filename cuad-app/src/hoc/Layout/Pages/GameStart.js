@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
-import Controls from "../../Controls";
+// import Controls from "../../Controls";
 import {Howl} from 'howler';
 
 // var socket = new WebSocket("ws://localhost:3002/");
 
 class GameStart extends Component {
+    constructor(props) {
+        super(props);
 
+        // Bind the localButtonHandler
+        this.localHandler = this.localHandler.bind(this);
+    }
 
     buttonDownStart_left = false;
     buttonDownStart_right = false;
@@ -14,7 +19,17 @@ class GameStart extends Component {
     
     timerout = null;
 
+
     componentDidMount(){
+        this.props.setCurrentButtonHandler(this.localHandler);
+
+        var target = this
+        setTimeout(function() {
+            // console.log("CONTROLS", target.props.controls);
+            target.props.controls.switchLED("P1", "start", true); // Calling the function
+            target.props.controls.switchLED("P2", "start", true); // Calling the function
+        }, 100);
+
         // document.addEventListener("keydown", this.keyboardActionDown, false);
         // document.addEventListener("keyup", this.keyboardActionUp, false);
 
@@ -33,6 +48,8 @@ class GameStart extends Component {
     }
 
     componentWillUnmount(){
+        this.props.setCurrentButtonHandler(null);
+
         // document.removeEventListener("keydown", this.keyboardActionDown, false);
         // document.removeEventListener("keyup", this.keyboardActionUp, false);
     }
@@ -82,7 +99,7 @@ class GameStart extends Component {
 
     
 
-    buttonHandler(player, value, action) {
+    localHandler(player, value, action) {
         // console.log(player, value, action);
         if (player === "P2" && value === "button-start") {
             
@@ -137,14 +154,17 @@ class GameStart extends Component {
         coinSound.volume(1);
         coinSound.play();
         this.gameTriggerStart = true;
-        console.log("START GAME")
+        // console.log("START GAME")
         this.props.startGame();
+        this.props.controls.switchLED("P1", "start", false); // Calling the function
+        this.props.controls.switchLED("P2", "start", false); // Calling the function
         // this.props.decrementGlobalCoinage();
     }
 
 
 
     render() {
+
         // console.log("game triggered", this.gameTriggerStart)
         let message = <div className="message">LOCATE and PRESS the two start buttons SIMULTANEOUSLY!</div>
         let description = null;
@@ -170,7 +190,8 @@ class GameStart extends Component {
             }.bind(this), 1000)
         }
         return (
-            <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+            // <Controls buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
+            // <Controls ref={this.controlsRef} buttonHandler={this.buttonHandler.bind(this)} controllers={this.props.controllers}>
 
             <div className="gamestart">
                 <div className="header">
@@ -194,7 +215,7 @@ class GameStart extends Component {
               
             </div>
 
-            </Controls>
+            // </Controls>
         )
     }    
 }

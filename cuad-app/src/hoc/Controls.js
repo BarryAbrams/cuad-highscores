@@ -8,13 +8,11 @@ class Controls extends Component {
     keycodes = 
         {
             "1" : {"pin":0, "player":"P3", "button":"calibrate"},
-            "4" : {"pin":0, "player":"P3", "button":"hard"},
             "5" : {"pin":11, "player":"P3", "button":"coin"},
-            "6" : {"pin":0, "player":"P3", "button":"refresh"},
-            "7" : {"pin":33, "player":"P2", "joystick":"black", "direction":"Left"},
-            "8" : {"pin":31, "player":"P2", "joystick":"black", "direction":"Right"},
-            "9" : {"pin":35, "player":"P1", "joystick":"black", "direction":"Left"},
-            "0" : {"pin":37, "player":"P1", "joystick":"black", "direction":"Right"},
+            "7" : {"pin":33, "player":"P1", "joystick":"black", "direction":"Left"},
+            "8" : {"pin":31, "player":"P1", "joystick":"black", "direction":"Right"},
+            "9" : {"pin":35, "player":"P2", "joystick":"black", "direction":"Left"},
+            "0" : {"pin":37, "player":"P2", "joystick":"black", "direction":"Right"},
 
 
             "q" : {"pin":3, "output_led":26, "player":"P2", "button":"start"},
@@ -27,10 +25,10 @@ class Controls extends Component {
             "i" : {"pin":25, "player":"P2", "joystick":"blue", "direction":"Left"},
             "o" : {"pin":30, "player":"P2", "joystick":"red", "direction":"Left"},
             "p" : {"pin":32, "player":"P2", "joystick":"red", "direction":"Right"},
-            "[" : {"pin":8, "player":"P2", "joystick":"green", "direction":"Right"},
-            "]" : {"pin":9, "player":"P2", "joystick":"green", "direction":"Left"},
-            "a" : {"pin":15, "player":"P2", "joystick":"yellow", "direction":"Right"},
-            "s" : {"pin":12, "player":"P2", "joystick":"yellow", "direction":"Left"},
+            "[" : {"pin":8, "output_led":16, "player":"P2", "joystick":"green", "direction":"Right", "button":"none"},
+            "]" : {"pin":9, "output_led":16, "player":"P2", "joystick":"green", "direction":"Left" , "button":"none"},
+            "a" : {"pin":15, "output_led":17, "player":"P2", "joystick":"yellow", "direction":"Right", "button":"none"},
+            "s" : {"pin":12, "output_led":17, "player":"P2", "joystick":"yellow", "direction":"Left", "button":"none"},
 
             "d" : {"pin":50, "output_led":43, "player":"P1", "button":"start"},
             "f" : {"pin":67, "output_led":57, "player":"P1", "button":"blue"},
@@ -42,10 +40,10 @@ class Controls extends Component {
             "z" : {"pin":69, "player":"P1", "joystick":"blue", "direction":"Left"},
             "x" : {"pin":29, "player":"P1", "joystick":"red", "direction":"Left"},
             "c" : {"pin":52, "player":"P1", "joystick":"red", "direction":"Right"},
-            "v" : {"pin":65, "player":"P1", "joystick":"green", "direction":"Right"},
-            "b" : {"pin":55, "player":"P1", "joystick":"green", "direction":"Left"},
-            "n" : {"pin":64, "player":"P1", "joystick":"yellow", "direction":"Right"},
-            "m" : {"pin":63, "player":"P1", "joystick":"yellow", "direction":"Left"},
+            "v" : {"pin":65,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Right", "button":"none"},
+            "b" : {"pin":55,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Left", "button":"none"},
+            "n" : {"pin":64,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Right", "button":"none"},
+            "m" : {"pin":63,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Left", "button":"none"},
     };
     
     connectHandler(gamepadIndex) {
@@ -57,7 +55,7 @@ class Controls extends Component {
     }
     
     buttonChangeHandler_player1(buttonName, down) {  
-        console.log("button");
+        // console.log("button");
         
         let buttonColor = null;
         // ABXY
@@ -277,7 +275,7 @@ class Controls extends Component {
     }
 
     buttonChangeHandler_player3(buttonName, down) {
-        console.log(buttonName, down)
+        // console.log(buttonName, down)
         let player = null;
         let buttonColor = null;
         let joystickDirection = null;
@@ -416,6 +414,8 @@ class Controls extends Component {
         this.resetTimeout();
 
         this.ws = new WebSocket('ws://localhost:3002');
+        this.commandQueue = [];
+        this.isSending = false;
 
         this.ws.onopen = () => {
             console.log('Connected to the WebSocket');
@@ -471,22 +471,63 @@ class Controls extends Component {
         }
     }
 
-    switchLED(player, button, state) {
+    switchLED(player, button, state, type = "button") {
         Object.keys(this.keycodes).forEach(key => {
             const keycode = this.keycodes[key];
-            if (keycode.player === player && keycode.button === button && keycode.output_led) {
-                this.sendLEDCommand(keycode.output_led, state);
+            console.log(keycode)
+            if (type == "button") {
+                if (keycode.player === player && keycode.button === button && keycode.output_led) {
+                    // this.sendLEDCommand(keycode.output_led, state);
+                }
+            } else if (type == "joystick") {
+                if (keycode.player === player && keycode.button === "none" && keycode.joystick == button && keycode.output_led) {
+                    this.sendLEDCommand(keycode.output_led, state);
+                }
             }
+            
         });
     }
 
     sendLEDCommand(pin, state) {
-        console.log("SEND", pin, state)
+        // console.log("SEND", pin, state)
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             const command = `L${pin.toString().padStart(2, '0')} ${state ? '1' : '0'}`;
-            this.ws.send(command);
+            this.commandQueue.push(command);
+            this.processQueue();
         } else {
             console.log("WebSocket is not open.");
+        }
+    }
+
+    resetLEDsCommand() {
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            const command = `L0 0`;
+            this.commandQueue.push(command);
+            this.processQueue();
+        } else {
+            console.log("WebSocket is not open.");
+        }
+    }
+
+    processQueue() {
+        if (!this.isSending && this.commandQueue.length > 0) {
+            this.isSending = true;
+            const command = this.commandQueue.shift();
+            this.sendCommand(command);
+        }
+    }
+
+    sendCommand(command) {
+        if (this.ws.readyState === WebSocket.OPEN) {
+            // console.log("Sending command", command);
+            this.ws.send(command);
+            setTimeout(() => {
+                this.isSending = false;
+                this.processQueue();
+            }, 50); // Adjust the delay as needed
+        } else {
+            console.log("WebSocket is not open.");
+            this.isSending = false;
         }
     }
 
@@ -506,17 +547,17 @@ class Controls extends Component {
     firedArray = [];
 
     turnOffLEDS() {
-        this.sendLEDCommand(26, false);
-        this.sendLEDCommand(59, false);
-        this.sendLEDCommand(60, false);
-        this.sendLEDCommand(19, false);
-        this.sendLEDCommand(58, false);
+        // this.sendLEDCommand(26, false);
+        // this.sendLEDCommand(59, false);
+        // this.sendLEDCommand(60, false);
+        // this.sendLEDCommand(19, false);
+        // this.sendLEDCommand(58, false);
 
-        this.sendLEDCommand(43, false);
-        this.sendLEDCommand(57, false);
-        this.sendLEDCommand(39, false);
-        this.sendLEDCommand(41, false);
-        this.sendLEDCommand(42, false);
+        // this.sendLEDCommand(43, false);
+        // this.sendLEDCommand(57, false);
+        // this.sendLEDCommand(39, false);
+        // this.sendLEDCommand(41, false);
+        // this.sendLEDCommand(42, false);
     }
 
     handleKeyDown = (event) => {
