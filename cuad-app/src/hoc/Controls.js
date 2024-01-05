@@ -40,8 +40,8 @@ class Controls extends Component {
             "z" : {"pin":69, "player":"P1", "joystick":"blue", "direction":"Left"},
             "x" : {"pin":29, "player":"P1", "joystick":"red", "direction":"Left"},
             "c" : {"pin":52, "player":"P1", "joystick":"red", "direction":"Right"},
-            "v" : {"pin":65,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Right"},
-            "b" : {"pin":55,  "output_led":0, "player":"P1", "joystick":"green", "direction":"Left"},
+            "v" : {"pin":65,  "output_led":38, "player":"P1", "joystick":"green", "direction":"Right"},
+            "b" : {"pin":55,  "output_led":38, "player":"P1", "joystick":"green", "direction":"Left"},
             "n" : {"pin":64,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Right"},
             "m" : {"pin":63,  "output_led":54, "player":"P1", "joystick":"yellow", "direction":"Left"},
     };
