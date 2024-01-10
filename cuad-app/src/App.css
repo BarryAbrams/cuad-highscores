@@ -121,3 +121,7 @@
 .calibrate .buttons {
     display:flex;
 }
+
+.cache {
+    display:none;
+}
