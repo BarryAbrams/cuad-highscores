@@ -6,6 +6,7 @@ body {
   padding: 0px;
   font-size: 250%;
   overflow: hidden;
+  cursor:none;
 }
 h1,
 h2,
