@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 
 import TestScreen from "./Pages/TestScreen";
-import Scores from "./Pages/Scores";
+// import Scores from "./Pages/Scores";
+import Puzzlesaurus from "./Pages/Puzzlesaurus";
 import WinnersDrugs from "./Pages/WinnersDrugs";
 import GameStart from "./Pages/GameStart";
 import Game from "./Pages/Game";
@@ -11,7 +12,7 @@ import Calibrate from "./Pages/Calibrate";
 
 import Coinage from "./Elements/Coinage";
 
-import axios from '../../config/axios';
+// import axios from '../../config/axios';
 import {Howl} from 'howler';
 
 // var socket = new WebSocket("ws://localhost:3002/");
@@ -71,14 +72,13 @@ class Page extends Component {
 
     loadSlideData() {
         if ( !this.state.slides ) {
-            axios.get("/slides")
-            .then (response => {
-                
-            this.setState({slides:response.data})
-            }).catch(error => {
-                console.log("can't connect to site");
-                console.log(error);
-            })
+            fetch(`${process.env.PUBLIC_URL}/slides.json`)
+                 .then(res => {
+                   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                   return res.json();
+             })
+            .then(data => this.setState({ slides: data }))
+            .catch(err => console.error("Failed to load slides:", err));
         }
     }
 
@@ -234,20 +234,28 @@ class Page extends Component {
             if (this.globalCoinage) {
                 this.changeAction(totalSlideLength, "gamestart");
             } else {
-                this.changeAction(totalSlideLength, "scores");
+                this.changeAction(totalSlideLength, "puzzlesaurus");
             }
             buttonDisabled = false;
 
             showCoinage = true;
         }
 
-        if (this.state.action === "scores") {
-            page = <Scores nextAction={this.changeAction} />
+        if (this.state.action === "puzzlesaurus") {
+            page = <Puzzlesaurus nextAction={this.changeAction} />
             showCoinage = true;
-
             buttonDisabled = false;
-            // this.changeAction(5000, "testscreen")
+
+            this.changeAction(7100, "slide");
         }
+
+        // if (this.state.action === "scores") {
+        //     page = <Scores nextAction={this.changeAction} />
+        //     showCoinage = true;
+
+        //     buttonDisabled = false;
+        //     // this.changeAction(5000, "testscreen")
+        // }
 
         if (this.state.action === "gamestart") {
             page = <GameStart 

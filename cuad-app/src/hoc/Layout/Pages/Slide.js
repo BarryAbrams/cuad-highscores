@@ -34,7 +34,7 @@ class Slide extends Component {
         
         var subslide = this.props.slideInfo.view[this.state.currentSubSlide].image;
         
-        subslide = "https://cuadventures.com/" + subslide;
+        subslide = subslide;
         return (
             <div className="animatedgif">
                 <div><img alt="gif" src={subslide} /></div>
