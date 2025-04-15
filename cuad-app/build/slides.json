@@ -1,0 +1,385 @@
+[
+  
+    {
+      "name": "CU Adventures Logo",
+      "id": 18,
+      "view": [
+        {
+          "image": "/images/logoscreen.jpg",
+          "millis": "5000"
+        },
+        {
+          "image": "/images/wink.jpg",
+          "millis": "500"
+        },
+        {
+          "image": "/images/logoscreen.jpg",
+          "millis": "2000"
+        }
+      ]
+    },
+    {
+        "name": "Icarus",
+        "id": 17,
+        "view": [
+          {
+            "image": "/images/icarus0000.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0003.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0005.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0008.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0010.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0012.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0016.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0018.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0020.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0022.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0024.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0026.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0028.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0000.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0003.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0005.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0008.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0010.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0012.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0016.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0018.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0020.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0022.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0024.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0026.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0028.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0000.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0003.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0005.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0008.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0010.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0012.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0016.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0018.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0020.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0022.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0024.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0026.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0028.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0000.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0003.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0005.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0008.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0010.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0012.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0016.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0018.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0020.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0022.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0024.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0026.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0028.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0000.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0003.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0005.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0008.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0010.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0012.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0016.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0018.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0020.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0022.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0024.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0026.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0028.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0000.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0003.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0005.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0008.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0010.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0012.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0016.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0018.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0020.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0022.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0024.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0026.png",
+            "millis": "100"
+          },
+          {
+            "image": "/images/icarus0028.png",
+            "millis": "100"
+          }
+        ]
+      },
+    {
+      "name": "Curse of the Cabin",
+      "id": 17,
+      "view": [
+        {
+          "image": "/images/curse-1.png",
+          "millis": "1000"
+        },
+        {
+          "image": "/images/curse-2.png",
+          "millis": "300"
+        },
+        {
+          "image": "/images/curse-1.png",
+          "millis": "1000"
+        },
+        {
+          "image": "/images/curse-3.png",
+          "millis": "300"
+        },
+        {
+          "image": "/images/curse-1.png",
+          "millis": "2000"
+        },
+        {
+          "image": "/images/curse-4.png",
+          "millis": "300"
+        },
+        {
+          "image": "/images/curse-1.png",
+          "millis": "1000"
+        },
+        {
+          "image": "/images/curse-5.png",
+          "millis": "1000"
+        },
+        {
+          "image": "/images/curse-5b.png",
+          "millis": "1000"
+        },
+        {
+          "image": "/images/curse-5c.png",
+          "millis": "5000"
+        }
+      ]
+    }
+  ]
