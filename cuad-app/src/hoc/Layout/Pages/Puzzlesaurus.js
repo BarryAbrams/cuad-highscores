@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 
 class Puzzlesaurus extends Component {
-  // your pool of phrases
   phrases = [
-    "There's always room for more puzzles.",
-    "You're doing great!",
-    "You don't ever need to reach above 6ft to solve a puzzle.",
-    "Escape Rooms are hard when you're 4 tons and don't have hands!",
-    "Stuck in the tar pits? Ask for a hint!",
-    "Losing is just another form of winning!",
-    "With three horns together, no obstacle is too big—teamwork makes the herd work!"
+    "Even a Triceratops needs a little help sometimes!",
+    "You're roaring through these puzzles!",
+    "Don't get stuck in the tar pits—ask for a hint!",
+    "Escape Rooms are tough when your hands are hooves!",
+    "Keep stomping forward, you're doing great!",
+    "Every puzzle solved is a step closer to dino-victory!",
+    "Take a brontosaurus-sized breath and think it through!",
+    "Even the biggest dinosaurs needed teamwork to survive!",
+    "You don't ever need to reach above 6 feet to solve a puzzle!",
   ];
 
   state = {
